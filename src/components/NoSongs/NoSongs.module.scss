@@ -1,0 +1,14 @@
+.noSongs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.25);
+  position: relative;
+
+  .tagline {
+    font-size: 2rem;
+    font-weight: bold;
+  }
+}

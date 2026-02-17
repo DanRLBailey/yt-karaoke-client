@@ -1,0 +1,12 @@
+.dvdBounce {
+  font-size: 1.5rem;
+  font-weight: bold;
+  // opacity: 0.5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  max-width: 12rem;
+  text-align: center;
+  pointer-events: none;
+}

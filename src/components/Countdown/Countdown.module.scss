@@ -1,0 +1,11 @@
+.countdown {
+  height: 20px;
+  width: 100%;
+  background-color: var(--background-color-dark);
+
+  .progressBar {
+    height: 100%;
+    background: var(--accent-color);
+    transition: width 0.1s linear;
+  }
+}
