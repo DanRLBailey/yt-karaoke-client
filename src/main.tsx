@@ -6,6 +6,7 @@ import SearchPage from "./pages/SearchPage/SearchPage.tsx";
 import { QueueProvider } from "./context/QueueContext.tsx";
 import PlayerPage from "./pages/PlayerPage/PlayerPage.tsx";
 import { UserProvider } from "./context/UserContext.tsx";
+import HomePage from "./pages/HomePage/HomePage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,7 +14,8 @@ createRoot(document.getElementById("root")!).render(
       <QueueProvider>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<SearchPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/host" element={<PlayerPage />} />
           </Routes>
         </BrowserRouter>

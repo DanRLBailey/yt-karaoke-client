@@ -6,11 +6,19 @@ import React, {
 } from "react";
 
 // Types
-type State = string;
-type Action = { type: "SET_USER"; payload: string };
+type User = {
+  name: string;
+  avatar: string; // image URL
+};
+
+type State = User;
+
+type Action =
+  | { type: "SET_USER"; payload: User }
+  | { type: "SET_PROFILE_IMAGE"; payload: string };
 
 type ContextType = {
-  user: string;
+  user: User;
   dispatch: React.Dispatch<Action>;
 };
 
@@ -22,6 +30,10 @@ const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "SET_USER":
       return action.payload;
+
+    case "SET_PROFILE_IMAGE":
+      return { ...state, avatar: action.payload };
+
     default:
       return state;
   }
@@ -29,7 +41,12 @@ const reducer = (state: State, action: Action): State => {
 
 // Provider
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, dispatch] = useReducer(reducer, "");
+  const initialState: State = {
+    name: "",
+    avatar: "",
+  };
+
+  const [user, dispatch] = useReducer(reducer, initialState);
 
   return (
     <UserContext.Provider value={{ user: user, dispatch }}>

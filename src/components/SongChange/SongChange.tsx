@@ -4,6 +4,7 @@ import { useQueue } from "../../context/QueueContext";
 import { parseSongTitle } from "../../utils/Song";
 import Countdown from "../Countdown/Countdown";
 import type { SearchItem } from "../../pages/SearchPage/SearchPage";
+import ProfileImage from "../ProfileImage/ProfileImage";
 
 interface SongChangeProps {
   fadeToBlack?: boolean;
@@ -27,6 +28,9 @@ const SongChange = ({
           onCountdownEnd={onCountdownEnd}
         />
       )}
+      <div className={styles.profileImage}>
+        <ProfileImage />
+      </div>
       <span className={styles.songChangeRequester}>
         Get Ready, {songItem.requester}!
       </span>

@@ -1,0 +1,66 @@
+.webcamCapture {
+  --width: 100%;
+
+  position: relative;
+  width: var(--width);
+  height: var(--width);
+  border-radius: var(--width);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+
+  .capturedImage,
+  video,
+  .absolute {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  video {
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+
+  .capturedImage {
+    z-index: 2;
+    transform: scaleX(-1);
+  }
+
+  .buttons {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+
+    button {
+      --capture-button-width: 2.5rem;
+
+      width: var(--capture-button-width);
+      height: var(--capture-button-width);
+      border-radius: var(--capture-button-width);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+
+      & > .captureButtonInner {
+        --capture-button-width-inner: calc(var(--capture-button-width) * 0.8);
+
+        width: var(--capture-button-width-inner);
+        height: var(--capture-button-width-inner);
+        border-radius: var(--capture-button-width-inner);
+        background-color: #fff;
+      }
+
+      &:nth-child(2) {
+        transform: translateY(15px);
+      }
+    }
+  }
+}
