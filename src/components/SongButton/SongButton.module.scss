@@ -66,14 +66,16 @@
         opacity: 0.6;
       }
 
-      .user {
+      .users {
         position: absolute;
         bottom: 0;
         right: 0;
+        display: flex;
+        gap: 0.25rem;
 
         .profileImage {
-          width: 2rem;
-          height: 2rem;
+          width: 1.5rem;
+          height: 1.5rem;
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
       }

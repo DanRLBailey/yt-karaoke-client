@@ -4,9 +4,14 @@ import styles from "./HomePage.module.scss";
 import { useEffect, useState } from "react";
 import Input from "../../components/Input/Input";
 import { useUser } from "../../context/UserContext";
+import { useUserList } from "../../context/UserListContext";
+import type { User } from "../../interfaces/user";
+import { getUsers } from "../../utils/User";
+import Layout from "../../layouts/Layout";
 
 const HomePage = () => {
   const { user, dispatch } = useUser();
+  const { dispatch: dispatchUserList } = useUserList();
 
   const [name, setName] = useState<string>("");
   const [image, setImage] = useState<string>(user.avatar);
@@ -18,6 +23,9 @@ const HomePage = () => {
     if (e.key === "Enter") navigateToSearch();
   };
 
+  const onGetUsers = (users: User[]) =>
+    dispatchUserList({ type: "SET_USERS", payload: users });
+
   const navigateToSearch = () => {
     const newUser = { id: user.id, name: name, avatar: image };
 
@@ -27,12 +35,12 @@ const HomePage = () => {
     });
 
     const onboardUser = async () => {
-      const url = import.meta.env.VITE_API_URL + "/onboard";
+      const url = import.meta.env.VITE_API_URL + "/users/onboard";
       await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
-      });
+      }).then(() => getUsers(onGetUsers));
     };
 
     onboardUser();
@@ -44,22 +52,24 @@ const HomePage = () => {
   }, [user]);
 
   return (
-    <div className={styles.homePage}>
-      <span className={styles.heading}>{siteName}</span>
-      <div className={styles.profileImage}>
-        <WebcamCapture onAcceptImage={setImage} image={image} />
+    <Layout>
+      <div className={styles.homePage}>
+        <span className={styles.heading}>{siteName}</span>
+        <div className={styles.profileImage}>
+          <WebcamCapture onAcceptImage={setImage} image={image} />
+        </div>
+        <div className={styles.input}>
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={"Name"}
+            onKeyDown={onKeyDown}
+            onButtonPress={navigateToSearch}
+            enterKeyHint="enter"
+          />
+        </div>
       </div>
-      <div className={styles.input}>
-        <Input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder={"Name"}
-          onKeyDown={onKeyDown}
-          onButtonPress={navigateToSearch}
-          enterKeyHint="enter"
-        />
-      </div>
-    </div>
+    </Layout>
   );
 };
 

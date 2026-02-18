@@ -9,7 +9,9 @@ import type { User } from "../interfaces/user";
 // Types
 type State = User[];
 
-type Action = { type: "ADD_USER"; payload: User };
+type Action =
+  | { type: "ADD_USER"; payload: User }
+  | { type: "SET_USERS"; payload: User[] };
 
 type ContextType = {
   userList: User[];
@@ -36,6 +38,10 @@ const reducer = (state: State, action: Action): State => {
 
       // add new user
       return [...state, action.payload];
+    }
+
+    case "SET_USERS": {
+      return action.payload;
     }
 
     default:

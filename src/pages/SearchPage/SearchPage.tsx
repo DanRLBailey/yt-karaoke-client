@@ -3,6 +3,9 @@ import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
 import SongButton from "../../components/SongButton/SongButton";
 import Input from "../../components/Input/Input";
+import { useUserList } from "../../context/UserListContext";
+import useWebhooks from "../../hooks/useWebhooks";
+import Layout from "../../layouts/Layout";
 
 interface Search {
   items: SearchItem[];
@@ -16,6 +19,7 @@ export interface SearchItem {
   channelTitle: string;
   downloaded?: boolean;
   requester?: string;
+  team?: string[];
 }
 
 const SearchPage = () => {
@@ -23,8 +27,18 @@ const SearchPage = () => {
   const [results, setResults] = useState<Search>();
 
   const { user } = useUser();
+  const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const siteName = import.meta.env.VITE_SITE_NAME;
+
+  useWebhooks({
+    onAddUser: (update) => {
+      dispatch({
+        type: "ADD_USER",
+        payload: update,
+      });
+    },
+  });
 
   const handleSearch = async () => {
     const results: Search = { items: [] };
@@ -42,7 +56,11 @@ const SearchPage = () => {
     await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...song, requester: user.name }),
+      body: JSON.stringify({
+        ...song,
+        requester: user.name,
+        team: ["mobileDaniel"],
+      }),
     });
   };
 
@@ -51,31 +69,33 @@ const SearchPage = () => {
   };
 
   return (
-    <div className={styles.searchPage}>
-      <span className={styles.heading}>{siteName}</span>
+    <Layout>
+      <div className={styles.searchPage}>
+        <span className={styles.heading}>{siteName}</span>
 
-      <Input
-        onChange={(e) => setSearch(e.target.value)}
-        value={search}
-        placeholder={`What are you singing, ${user.name}?`}
-        onKeyDown={onKeyDown}
-        onButtonPress={handleSearch}
-        enterKeyHint="search"
-      />
+        <Input
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder={`What are you singing, ${user.name}?`}
+          onKeyDown={onKeyDown}
+          onButtonPress={handleSearch}
+          enterKeyHint="search"
+        />
 
-      <ul className={styles.resultList}>
-        {results?.items?.map((item, index) => (
-          <li key={index}>
-            <SongButton
-              item={item}
-              onSubmit={() => handleSongSelect(item)}
-              expandable
-              showThumbnail
-            ></SongButton>
-          </li>
-        ))}
-      </ul>
-    </div>
+        <ul className={styles.resultList}>
+          {results?.items?.map((item, index) => (
+            <li key={index}>
+              <SongButton
+                item={item}
+                onSubmit={() => handleSongSelect(item)}
+                expandable
+                showThumbnail
+              ></SongButton>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Layout>
   );
 };
 
