@@ -14,7 +14,7 @@ const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
   const [progress, setProgress] = useState<number>(0);
   const [currentShown, setCurrentShown] = useState<boolean>(false);
   const [nextShown, setNextShown] = useState<boolean>(false);
-  const [ending, setEnding] = useState<boolean>(false);
+  const [hover, setHover] = useState<boolean>(false);
 
   const songShownMin = 5;
   const songShownMax = 92;
@@ -34,10 +34,6 @@ const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
     );
     setNextShown(progress > songNextMax && progress < 99);
   }, [progress]);
-
-  useEffect(() => {
-    if (ending) onEnded();
-  }, [ending]);
 
   return (
     <div className={styles.videoPlayer}>
@@ -60,7 +56,14 @@ const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
         src={url}
         onTimeUpdate={handleTimeUpdate}
         onEnded={onEnded}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
       />
+      <div className={clsx(styles.overlay, hover && styles.active)}>
+        <button onClick={onEnded} onMouseEnter={() => setHover(true)}>
+          Skip
+        </button>
+      </div>
     </div>
   );
 };

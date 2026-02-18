@@ -12,7 +12,7 @@ const randomSpeed = () => BASE_SPEED * (0.75 + Math.random() * 0.5);
 const randomPos = () => Math.random() * 500;
 
 // Neon colors that pop on dark backgrounds
-const COLORS = [
+const colors = [
   "#FF3B3B",
   "#FF8C00",
   "#FFD700",
@@ -27,10 +27,12 @@ const COLORS = [
 const getRandomColor = (current: string | null) => {
   let next = current;
   while (next === current) {
-    next = COLORS[Math.floor(Math.random() * COLORS.length)];
+    next = colors[Math.floor(Math.random() * colors.length)];
   }
   return next!;
 };
+
+const randomSign = (): 1 | -1 => (Math.random() < 0.5 ? -1 : 1);
 
 const DvdBounce = ({ children }: DvdBounceProps) => {
   const divRef = useRef<HTMLDivElement | null>(null);
@@ -38,12 +40,12 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
 
   const posRef = useRef({ x: randomPos(), y: randomPos() });
   const velRef = useRef({
-    x: randomSpeed(),
-    y: randomSpeed(),
+    x: randomSpeed() * randomSign(),
+    y: randomSpeed() * randomSign(),
   });
   const sizeRef = useRef({ width: 0, height: 0 });
   const colorRef = useRef<string | null>(null);
-  const initialColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const initialColor = colors[Math.floor(Math.random() * colors.length)];
 
   useLayoutEffect(() => {
     if (!divRef.current) return;

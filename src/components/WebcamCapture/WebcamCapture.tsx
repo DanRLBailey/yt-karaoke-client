@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useUser } from "../../context/UserContext";
 import styles from "./WebcamCapture.module.scss";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import { IconX, IconCamera, IconCheck } from "@tabler/icons-react";
@@ -12,7 +11,6 @@ interface WebcamCaptureProps {
 const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const { dispatch } = useUser();
   const [ready, setReady] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string>("");
   const [webcamOpen, setWebcamOpen] = useState<boolean>(false);

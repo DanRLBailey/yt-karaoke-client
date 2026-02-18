@@ -10,19 +10,13 @@ import NoSongs from "../../components/NoSongs/NoSongs";
 import SongButton from "../../components/SongButton/SongButton";
 import type { User } from "../../interfaces/user";
 import { useUserList } from "../../context/UserListContext";
-
-// const nextSongTaglines = [
-//   "Get ready",
-//   "Grab the mic",
-//   "Warm up those vocal chords",
-//   "It's showtime",
-// ];
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const fadeOutTime = 1;
 
 const PlayerPage = () => {
   const { queue, dispatch } = useQueue();
-  const { userList, dispatch: dispatchUserList } = useUserList();
+  const { dispatch: dispatchUserList } = useUserList();
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [fadeToBlack, setFadeToBlack] = useState<boolean>(false);
@@ -128,7 +122,7 @@ const PlayerPage = () => {
           <>
             <ul>
               <li>
-                <SongButton item={queue[0]} />
+                <SongButton item={queue[0]} showThumbnail showStatus active />
               </li>
             </ul>
             <span>Next Up</span>
@@ -141,7 +135,14 @@ const PlayerPage = () => {
 
                 return (
                   <li key={index}>
-                    {<SongButton item={item} onSubmit={onSubmit} />}
+                    {
+                      <SongButton
+                        item={item}
+                        onSubmit={onSubmit}
+                        showThumbnail
+                        showStatus
+                      />
+                    }
                   </li>
                 );
               })}
@@ -167,7 +168,9 @@ const PlayerPage = () => {
             />
           )}
         {queue.length == 0 && <NoSongs />}
-        {queue.length > 0 && !queue[0].downloaded && <>LOADING SPINNER!!!!</>}
+        {queue.length > 0 && !queue[0].downloaded && (
+          <LoadingSpinner multiplier={2} />
+        )}
       </div>
     </div>
   );

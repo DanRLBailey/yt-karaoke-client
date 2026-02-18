@@ -6,6 +6,7 @@ import Countdown from "../Countdown/Countdown";
 import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import { useUserList } from "../../context/UserListContext";
+import { useEffect, useState } from "react";
 
 interface SongChangeProps {
   fadeToBlack?: boolean;
@@ -18,23 +19,37 @@ const SongChange = ({
   endOfSong,
   onCountdownEnd,
 }: SongChangeProps) => {
+  const nextSongTaglines = [
+    "Get ready",
+    "Grab the mic",
+    "Warm up those vocal chords",
+    "It's showtime",
+    "Take the stage",
+    "Your time to shine",
+    "Let it rip",
+    "Drop the beat",
+    "Sing it proud",
+    "Let's rock and roll",
+  ];
+  const randomTagline = () =>
+    nextSongTaglines[Math.floor(Math.random() * nextSongTaglines.length)];
+
+  const [tagline, setTagline] = useState<string>(randomTagline());
+
   const { queue } = useQueue();
   const { userList } = useUserList();
 
-  const content = (songItem: SearchItem) => {
-    console.log(
-      "WOOOOOO",
-      songItem.requester,
-      userList,
-      userList.find((u) => u.name == songItem.requester),
-    );
+  useEffect(() => {
+    if (fadeToBlack && endOfSong) setTagline(randomTagline());
+  }, [fadeToBlack, endOfSong]);
 
+  const content = (songItem: SearchItem) => {
     return (
       <>
         {endOfSong && (
           <Countdown
             className={styles.countdown}
-            seconds={1}
+            seconds={10}
             onCountdownEnd={onCountdownEnd}
           />
         )}
@@ -44,7 +59,7 @@ const SongChange = ({
           />
         </div>
         <span className={styles.songChangeRequester}>
-          Get Ready, {songItem.requester}!
+          {tagline}, {songItem.requester}!
         </span>
         <span className={styles.songChangeUpNext}>Up next: </span>
         <span className={styles.songChangeTitle}>

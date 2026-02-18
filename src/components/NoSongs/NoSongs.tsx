@@ -1,4 +1,3 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
 import styles from "./NoSongs.module.scss";
 import DvdBounce from "../DvdBounce/DvdBounce";
 import { useUserList } from "../../context/UserListContext";
@@ -8,11 +7,15 @@ const NoSongs = () => {
   const { userList } = useUserList();
   const siteName = import.meta.env.VITE_SITE_NAME;
 
+  const qotd = "Happy birthday, Linda! 🎉";
+
   return (
     <div className={styles.noSongs}>
-      <DvdBounce>
-        <span>Happy birthday, Linda! 🎉</span>
-      </DvdBounce>
+      {qotd && (
+        <DvdBounce>
+          <span>{qotd}</span>
+        </DvdBounce>
+      )}
       {userList.map((user) => (
         <DvdBounce>
           <ProfileImage avatar={user.avatar} className={styles.profileImage} />

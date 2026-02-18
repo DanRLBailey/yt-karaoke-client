@@ -48,4 +48,26 @@
     width: 100%;
     height: auto;
   }
+
+  .overlay {
+    position: fixed;
+    width: 100dvw;
+    height: 100dvh;
+    pointer-events: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-bottom: 4rem;
+    padding-right: 2rem;
+    transition: 0.2s ease;
+    opacity: 0;
+
+    &.active {
+      opacity: 1;
+    }
+
+    & > * {
+      pointer-events: all;
+    }
+  }
 }

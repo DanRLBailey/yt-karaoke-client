@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
 import SongButton from "../../components/SongButton/SongButton";
@@ -19,7 +19,7 @@ export interface SearchItem {
 }
 
 const SearchPage = () => {
-  const [search, setSearch] = useState<string>("phil collins");
+  const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<Search>();
 
   const { user } = useUser();
@@ -36,10 +36,6 @@ const SearchPage = () => {
     setResults(results);
     inputRef.current?.blur();
   };
-
-  useEffect(() => {
-    handleSearch(); //TEMP
-  }, []);
 
   const handleSongSelect = async (song: SearchItem) => {
     const url = import.meta.env.VITE_API_URL + "/queue";
