@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
 import SongButton from "../../components/SongButton/SongButton";
-import WebcamCapture from "../../components/WebcamCapture/WebcamCapture";
-import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import Input from "../../components/Input/Input";
 
 interface Search {
@@ -63,7 +61,7 @@ const SearchPage = () => {
       <Input
         onChange={(e) => setSearch(e.target.value)}
         value={search}
-        placeholder={`What are you singing, ${user}?`}
+        placeholder={`What are you singing, ${user.name}?`}
         onKeyDown={onKeyDown}
         onButtonPress={handleSearch}
         enterKeyHint="search"

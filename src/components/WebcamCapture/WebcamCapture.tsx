@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./WebcamCapture.module.scss";
 import ProfileImage from "../ProfileImage/ProfileImage";
+import { IconX, IconCamera, IconCheck } from "@tabler/icons-react";
 
 interface WebcamCaptureProps {
   image?: string;
@@ -111,7 +112,9 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
 
       {!webcamOpen && !capturedImage && (
         <div className={styles.buttons} onClick={() => setWebcamOpen(true)}>
-          <button>Capture new image</button>
+          <button>
+            <IconCamera />
+          </button>
         </div>
       )}
       {(webcamOpen || capturedImage) && (
@@ -123,7 +126,7 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
                 setWebcamOpen(true);
               }}
             >
-              Cross mark
+              <IconX />
             </button>
           )}
           <button className={styles.captureButton} onClick={capture}>
@@ -136,7 +139,7 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
                 setCapturedImage("");
               }}
             >
-              Tick mark
+              <IconCheck />
             </button>
           )}
         </div>

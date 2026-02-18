@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import styles from "./Input.module.scss";
+import { IconSearch } from "@tabler/icons-react";
 
 interface InputProps {
   value: string;
@@ -38,7 +39,7 @@ const Input = ({
   const getEnterKeyByHint = () => {
     switch (enterKeyHint) {
       case "search":
-        return "Q";
+        return <IconSearch />;
       default:
         return capitalizeFirst(enterKeyHint as string);
     }
