@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
 import SongButton from "../../components/SongButton/SongButton";
+import WebcamCapture from "../../components/WebcamCapture/WebcamCapture";
+import ProfileImage from "../../components/ProfileImage/ProfileImage";
+import Input from "../../components/Input/Input";
 
 interface Search {
   items: SearchItem[];
@@ -17,12 +20,13 @@ export interface SearchItem {
   requester?: string;
 }
 
-const HomePage = () => {
+const SearchPage = () => {
   const [search, setSearch] = useState<string>("phil collins");
   const [results, setResults] = useState<Search>();
 
-  const { user, dispatch } = useUser();
+  const { user } = useUser();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const siteName = import.meta.env.VITE_SITE_NAME;
 
   const handleSearch = async () => {
     const results: Search = { items: [] };
@@ -36,9 +40,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    handleSearch();
-    //MOVE TO HOME PAGE ON NAME SET
-    dispatch({ type: "SET_USER", payload: "dan" });
+    handleSearch(); //TEMP
   }, []);
 
   const handleSongSelect = async (song: SearchItem) => {
@@ -46,7 +48,7 @@ const HomePage = () => {
     await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(song),
+      body: JSON.stringify({ ...song, requester: user.name }),
     });
   };
 
@@ -56,20 +58,17 @@ const HomePage = () => {
 
   return (
     <div className={styles.searchPage}>
-      <span className={styles.heading}>KittDansKaraoke</span>
-      <div className={styles.input}>
-        <input
-          ref={inputRef}
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-          placeholder={`What are you singing, ${user}?`}
-          onKeyDown={onKeyDown}
-          enterKeyHint="search"
-        />
-        <button className={styles.searchButton} onClick={handleSearch}>
-          Q
-        </button>
-      </div>
+      <span className={styles.heading}>{siteName}</span>
+
+      <Input
+        onChange={(e) => setSearch(e.target.value)}
+        value={search}
+        placeholder={`What are you singing, ${user}?`}
+        onKeyDown={onKeyDown}
+        onButtonPress={handleSearch}
+        enterKeyHint="search"
+      />
+
       <ul className={styles.resultList}>
         {results?.items?.map((item, index) => (
           <li key={index}>
@@ -86,4 +85,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default SearchPage;

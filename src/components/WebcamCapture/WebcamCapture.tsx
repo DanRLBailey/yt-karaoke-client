@@ -3,7 +3,12 @@ import { useUser } from "../../context/UserContext";
 import styles from "./WebcamCapture.module.scss";
 import ProfileImage from "../ProfileImage/ProfileImage";
 
-const WebcamCapture = () => {
+interface WebcamCaptureProps {
+  image?: string;
+  onAcceptImage?: (image: string) => void;
+}
+
+const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const { dispatch } = useUser();
@@ -97,7 +102,9 @@ const WebcamCapture = () => {
   return (
     <div className={styles.webcamCapture}>
       <video ref={videoRef} autoPlay playsInline />
-      {!webcamOpen && <ProfileImage className={styles.absolute} />}
+      {!webcamOpen && (
+        <ProfileImage className={styles.absolute} avatar={image} />
+      )}
       {!webcamOpen && capturedImage && (
         <img className={styles.capturedImage} src={capturedImage} />
       )}
@@ -125,10 +132,7 @@ const WebcamCapture = () => {
           {capturedImage && (
             <button
               onClick={() => {
-                dispatch({
-                  type: "SET_PROFILE_IMAGE",
-                  payload: capturedImage,
-                });
+                onAcceptImage?.(capturedImage);
                 setCapturedImage("");
               }}
             >

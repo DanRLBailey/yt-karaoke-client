@@ -1,20 +1,18 @@
 import React, {
   createContext,
   useContext,
+  useEffect,
   useReducer,
   type ReactNode,
 } from "react";
+import type { User } from "../interfaces/user";
 
 // Types
-type User = {
-  name: string;
-  avatar: string; // image URL
-};
-
 type State = User;
 
 type Action =
   | { type: "SET_USER"; payload: User }
+  | { type: "SET_USER_NAME"; payload: string }
   | { type: "SET_PROFILE_IMAGE"; payload: string };
 
 type ContextType = {
@@ -31,6 +29,9 @@ const reducer = (state: State, action: Action): State => {
     case "SET_USER":
       return action.payload;
 
+    case "SET_USER_NAME":
+      return { ...state, name: action.payload };
+
     case "SET_PROFILE_IMAGE":
       return { ...state, avatar: action.payload };
 
@@ -39,17 +40,51 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-// Provider
+const randomString = (length = 10): string => {
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  return Array.from(bytes, (b) => chars[b % chars.length]).join("");
+};
+
+const STORAGE_KEY = "user";
+
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const initialState: State = {
-    name: "",
-    avatar: "",
+  const getInitialState = (): State => {
+    if (typeof window === "undefined") {
+      return {
+        id: randomString(),
+        name: "",
+        avatar: "",
+      };
+    }
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored) as State;
+      } catch {
+        // corrupted storage, reset it
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    }
+
+    return {
+      id: randomString(),
+      name: "",
+      avatar: "",
+    };
   };
 
-  const [user, dispatch] = useReducer(reducer, initialState);
+  const [user, dispatch] = useReducer(reducer, undefined, getInitialState);
+
+  // Persist on change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ user: user, dispatch }}>
+    <UserContext.Provider value={{ user, dispatch }}>
       {children}
     </UserContext.Provider>
   );

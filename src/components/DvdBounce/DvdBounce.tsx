@@ -3,6 +3,7 @@ import styles from "./DvdBounce.module.scss";
 
 interface DvdBounceProps {
   children: React.ReactNode;
+  onBounce?: (color: string) => void;
 }
 
 const BASE_SPEED = 2;
@@ -16,6 +17,7 @@ const COLORS = [
   "#FF8C00",
   "#FFD700",
   "#00FF87",
+  "#2ACCC9",
   "#00E5FF",
   "#1E90FF",
   "#8A2BE2",
@@ -31,7 +33,7 @@ const getRandomColor = (current: string | null) => {
 };
 
 const DvdBounce = ({ children }: DvdBounceProps) => {
-  const divRef = useRef<HTMLSpanElement | null>(null);
+  const divRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
 
   const posRef = useRef({ x: randomPos(), y: randomPos() });
@@ -41,6 +43,7 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
   });
   const sizeRef = useRef({ width: 0, height: 0 });
   const colorRef = useRef<string | null>(null);
+  const initialColor = COLORS[Math.floor(Math.random() * COLORS.length)];
 
   useLayoutEffect(() => {
     if (!divRef.current) return;
@@ -56,13 +59,19 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
     measure();
     window.addEventListener("resize", measure);
 
-    const initialColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const shadow = `0 0 12px ${initialColor}`;
+
     colorRef.current = initialColor;
     divRef.current.style.color = initialColor;
-    divRef.current.style.textShadow = `0 0 12px ${initialColor}`;
+    divRef.current.style.textShadow = shadow;
+
+    const child = divRef.current.children[0];
+    if (child instanceof HTMLDivElement) {
+      child.style.boxShadow = shadow;
+    }
 
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [children]);
 
   useEffect(() => {
     const tick = () => {
@@ -104,9 +113,16 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
 
       if (bounced && divRef.current) {
         const newColor = getRandomColor(colorRef.current);
+        const shadow = `0 0 12px ${newColor}`;
+
         colorRef.current = newColor;
         divRef.current.style.color = newColor;
-        divRef.current.style.textShadow = `0 0 12px ${newColor}`;
+        divRef.current.style.textShadow = shadow;
+        const child = divRef.current?.children[0] as HTMLElement | undefined;
+
+        if (child instanceof HTMLDivElement) {
+          child.style.boxShadow = shadow;
+        }
       }
 
       if (divRef.current) {
@@ -124,9 +140,9 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
   }, []);
 
   return (
-    <span className={styles.dvdBounce} ref={divRef}>
+    <div className={styles.dvdBounce} ref={divRef}>
       {children}
-    </span>
+    </div>
   );
 };
 

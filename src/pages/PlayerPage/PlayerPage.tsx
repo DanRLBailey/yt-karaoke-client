@@ -8,6 +8,8 @@ import clsx from "clsx";
 import SongChange from "../../components/SongChange/SongChange";
 import NoSongs from "../../components/NoSongs/NoSongs";
 import SongButton from "../../components/SongButton/SongButton";
+import type { User } from "../../interfaces/user";
+import { useUserList } from "../../context/UserListContext";
 
 // const nextSongTaglines = [
 //   "Get ready",
@@ -20,6 +22,7 @@ const fadeOutTime = 1;
 
 const PlayerPage = () => {
   const { queue, dispatch } = useQueue();
+  const { userList, dispatch: dispatchUserList } = useUserList();
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [fadeToBlack, setFadeToBlack] = useState<boolean>(false);
@@ -39,6 +42,13 @@ const PlayerPage = () => {
         type: "DOWNLOADED",
         id: update.videoId,
         downloaded: update.downloaded ?? false,
+      });
+    });
+    socket.on("add-user", (update: User) => {
+      console.log("update", update);
+      dispatchUserList({
+        type: "ADD_USER",
+        payload: update,
       });
     });
 
@@ -140,9 +150,9 @@ const PlayerPage = () => {
         )}
       </div>
       <SongChange
-        fadeToBlack={false}
-        endOfSong={true}
-        onCountdownEnd={() => {}}
+        fadeToBlack={fadeToBlack}
+        endOfSong={endOfSong}
+        onCountdownEnd={handleSongChange}
       />
       <div className={styles.video}>
         {queue.length > 0 &&
