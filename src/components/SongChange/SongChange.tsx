@@ -5,8 +5,8 @@ import { parseSongTitle } from "../../utils/Song";
 import Countdown from "../Countdown/Countdown";
 import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import { useUserList } from "../../context/UserListContext";
 import { useEffect, useState } from "react";
+import { getUserAvatarByName } from "../../utils/User";
 
 interface SongChangeProps {
   fadeToBlack?: boolean;
@@ -37,7 +37,6 @@ const SongChange = ({
   const [tagline, setTagline] = useState<string>(randomTagline());
 
   const { queue } = useQueue();
-  const { userList } = useUserList();
 
   useEffect(() => {
     if (fadeToBlack && endOfSong) setTagline(randomTagline());
@@ -55,7 +54,7 @@ const SongChange = ({
         )}
         <div className={styles.profileImage}>
           <ProfileImage
-            avatar={userList.find((u) => u.name == songItem.requester)?.avatar}
+            avatar={getUserAvatarByName(songItem.requester ?? "")}
           />
         </div>
         <span className={styles.songChangeRequester}>

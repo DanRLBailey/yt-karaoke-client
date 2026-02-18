@@ -4,6 +4,8 @@ import { parseSongTitle } from "../../utils/Song";
 import styles from "./SongButton.module.scss";
 import clsx from "clsx";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
+import ProfileImage from "../ProfileImage/ProfileImage";
+import { getUserAvatarByName } from "../../utils/User";
 
 interface SongButtonProps {
   item: SearchItem;
@@ -55,12 +57,17 @@ const SongButton = ({
       <div className={styles.details}>
         <span className={styles.song}>{song}</span>
         <span className={styles.artist}>{artist}</span>
-        {item.requester && (
-          <span className={styles.requester}>{item.requester}</span>
-        )}
         {item.channelTitle && (
           <span className={styles.requester}>{item.channelTitle}</span>
         )}
+        <div className={styles.user}>
+          {item.requester && (
+            <ProfileImage
+              avatar={getUserAvatarByName(item.requester)}
+              className={styles.profileImage}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

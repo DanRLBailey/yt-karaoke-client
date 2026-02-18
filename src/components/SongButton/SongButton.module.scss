@@ -45,6 +45,7 @@
       flex-direction: column;
       flex: 1;
       padding-block: 0.5rem;
+      position: relative;
 
       & > span {
         text-align: start;
@@ -63,6 +64,18 @@
       .requester {
         font-size: 0.8rem;
         opacity: 0.6;
+      }
+
+      .user {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+
+        .profileImage {
+          width: 2rem;
+          height: 2rem;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
       }
     }
   }

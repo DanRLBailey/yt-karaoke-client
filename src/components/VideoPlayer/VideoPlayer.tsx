@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./VideoPlayer.module.scss";
 import clsx from "clsx";
+import { IconPlayerSkipForward } from "@tabler/icons-react";
 
 interface VideoPlayerProps {
   url: string;
@@ -61,7 +62,7 @@ const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
       />
       <div className={clsx(styles.overlay, hover && styles.active)}>
         <button onClick={onEnded} onMouseEnter={() => setHover(true)}>
-          Skip
+          <IconPlayerSkipForward />
         </button>
       </div>
     </div>
