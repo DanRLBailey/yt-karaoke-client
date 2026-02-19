@@ -1,0 +1,19 @@
+import type { SearchItem } from "../pages/SearchPage/SearchPage";
+
+export const getQueue = async (callback?: (queue: SearchItem[]) => void) => {
+  const url = import.meta.env.VITE_API_URL + "/queue";
+  const response = await fetch(url);
+  const { result } = await response.json();
+
+  callback?.(result.queue);
+};
+
+export const removeFirstFromQueue = async (callback?: () => void) => {
+  const url = import.meta.env.VITE_API_URL + "/queue";
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+  await response.json();
+
+  callback?.();
+};

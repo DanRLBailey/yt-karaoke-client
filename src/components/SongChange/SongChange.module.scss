@@ -42,8 +42,12 @@
     top: 0;
   }
 
-  .profileImage {
-    width: 10rem;
-    height: 10rem;
+  .profileImageContainer {
+    display: flex;
+    gap: 1rem;
+
+    .profileImage {
+      width: 8rem;
+    }
   }
 }

@@ -10,19 +10,19 @@ import HomePage from "./pages/HomePage/HomePage.tsx";
 import { UserListProvider } from "./context/UserListContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <UserListProvider>
-      <UserProvider>
-        <QueueProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/host" element={<PlayerPage />} />
-            </Routes>
-          </BrowserRouter>
-        </QueueProvider>
-      </UserProvider>
-    </UserListProvider>
-  </StrictMode>,
+  // <StrictMode>
+  <UserListProvider>
+    <UserProvider>
+      <QueueProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/host" element={<PlayerPage />} />
+          </Routes>
+        </BrowserRouter>
+      </QueueProvider>
+    </UserProvider>
+  </UserListProvider>,
+  // </StrictMode>,
 );

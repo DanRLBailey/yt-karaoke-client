@@ -42,24 +42,53 @@ const SongChange = ({
     if (fadeToBlack && endOfSong) setTagline(randomTagline());
   }, [fadeToBlack, endOfSong]);
 
+  const joinWithLast = (
+    arr: string[],
+    lastSeparator: string,
+    separator: string = ", ",
+  ): string => {
+    if (arr.length === 0) return "";
+    if (arr.length === 1) return arr[0];
+    if (arr.length === 2) return arr.join(lastSeparator);
+
+    return `${arr.slice(0, -1).join(separator)}${lastSeparator}${arr[arr.length - 1]}`;
+  };
+
   const content = (songItem: SearchItem) => {
     return (
       <>
         {endOfSong && (
           <Countdown
             className={styles.countdown}
-            seconds={10}
+            seconds={1}
             onCountdownEnd={onCountdownEnd}
           />
         )}
-        <div className={styles.profileImage}>
+        <div className={styles.profileImageContainer}>
           <ProfileImage
             avatar={getUserAvatarByName(songItem.requester ?? "")}
+            className={styles.profileImage}
           />
+          {songItem.team?.map((u, index) => {
+            return (
+              <ProfileImage
+                avatar={getUserAvatarByName(u ?? "")}
+                className={styles.profileImage}
+                key={index}
+              />
+            );
+          })}
         </div>
-        <span className={styles.songChangeRequester}>
-          {tagline}, {songItem.requester}!
-        </span>
+        {songItem.requester && (
+          <span className={styles.songChangeRequester}>
+            {tagline},{" "}
+            {joinWithLast(
+              [songItem.requester, ...(songItem.team ?? [])],
+              " & ",
+            )}
+            !
+          </span>
+        )}
         <span className={styles.songChangeUpNext}>Up next: </span>
         <span className={styles.songChangeTitle}>
           {parseSongTitle(songItem.title).song} -{" "}

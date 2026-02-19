@@ -16,8 +16,8 @@ const NoSongs = () => {
           <span>{qotd}</span>
         </DvdBounce>
       )}
-      {userList.map((user) => (
-        <DvdBounce>
+      {userList.map((user, index) => (
+        <DvdBounce key={index}>
           <ProfileImage avatar={user.avatar} className={styles.profileImage} />
           <span>{user.name}</span>
         </DvdBounce>

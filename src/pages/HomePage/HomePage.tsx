@@ -44,7 +44,7 @@ const HomePage = () => {
     };
 
     onboardUser();
-    if (user.name) navigate("/search");
+    navigate("/search");
   };
 
   useEffect(() => {

@@ -7,14 +7,16 @@ type UseWebhooksProps = {
   url?: string;
   onConnect?: () => void;
   onQueue?: (update: SearchItem) => void;
+  onQueueSync?: (update: SearchItem[]) => void;
   onDownload?: (update: SearchItem) => void;
   onAddUser?: (update: User) => void;
 };
 
 const useWebhooks = ({
-  url = "http://localhost:3000",
+  url = "http://192.168.1.122:3000",
   onConnect,
   onQueue,
+  onQueueSync,
   onDownload,
   onAddUser,
 }: UseWebhooksProps) => {
@@ -25,6 +27,8 @@ const useWebhooks = ({
 
     if (onQueue) socket.on("queue", onQueue);
 
+    if (onQueueSync) socket.on("queueSync", onQueueSync);
+
     if (onDownload) socket.on("download", onDownload);
 
     if (onAddUser) socket.on("add-user", onAddUser);
@@ -32,7 +36,7 @@ const useWebhooks = ({
     return () => {
       socket.disconnect();
     };
-  }, [url, onConnect, onQueue, onDownload, onAddUser]);
+  }, []);
 
   return <></>;
 };

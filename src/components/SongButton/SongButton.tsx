@@ -13,7 +13,7 @@ import type { User } from "../../interfaces/user";
 
 interface SongButtonProps {
   item: SearchItem;
-  onSubmit?: () => void;
+  onSubmit?: (selectedBandmates: User[]) => void;
   children?: React.ReactNode;
   expandable?: boolean;
   showThumbnail?: boolean;
@@ -33,6 +33,7 @@ const SongButton = ({
   const { user } = useUser();
   const { userList } = useUserList();
   const [otherUsers, setOtherUsers] = useState<User[]>([]);
+  const [selectedBandmates, setSelectedBandmates] = useState<User[]>();
 
   const { song, artist } = parseSongTitle(item.title);
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -52,8 +53,25 @@ const SongButton = ({
     isLoading && styles.loading,
   );
 
-  const content = (
-    <div className={styles.content}>
+  const toggleBandmate = (user: User) => {
+    setSelectedBandmates((prev) => {
+      const exists = prev?.find((u) => u.id === user.id);
+      if (exists) {
+        return prev?.filter((u) => u.id !== user.id);
+      } else {
+        return [...(prev ?? []), user];
+      }
+    });
+  };
+
+  const handleSubmit = () => {
+    onSubmit?.(selectedBandmates ?? []);
+    setSelectedBandmates([]);
+    setExpanded(false);
+  };
+
+  const content = () => (
+    <div className={styles.content} onClick={() => setExpanded(!expanded)}>
       {showThumbnail && (
         <div className={styles.thumbnail}>
           {isLoading && (
@@ -76,10 +94,11 @@ const SongButton = ({
             />
           )}
           {item.team &&
-            item.team.map((user) => (
+            item.team.map((user, index) => (
               <ProfileImage
                 avatar={getUserAvatarByName(user)}
                 className={styles.profileImage}
+                key={index}
               />
             ))}
         </div>
@@ -89,20 +108,48 @@ const SongButton = ({
 
   if (children || expandable)
     return (
-      <div className={className} onClick={() => setExpanded(!expanded)}>
-        {content}
-        <div className={clsx(styles.drawer, expanded && styles.active)}>
+      <div className={className}>
+        <button
+          className={clsx(styles.addButton, expanded && styles.active)}
+          onClick={handleSubmit}
+        >
+          <IconPlus />
+        </button>
+        {content()}
+        <div
+          className={clsx(
+            styles.drawer,
+            expanded && otherUsers.length > 0 && styles.active,
+          )}
+        >
           {children}
-          <button onClick={() => onSubmit?.()}>
-            <IconPlus />
-          </button>
+          <span>Add some bandmates</span>
+          <div className={styles.bandmates}>
+            {otherUsers.map((user, index) => (
+              <div
+                className={styles.bandmate}
+                onClick={() => toggleBandmate(user)}
+                key={index}
+              >
+                <ProfileImage
+                  avatar={getUserAvatarByName(user.name)}
+                  className={clsx(
+                    styles.profileImage,
+                    selectedBandmates?.some((u) => u.id == user.id) &&
+                      styles.active,
+                  )}
+                />
+                <span>{user.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
 
   return (
-    <button className={className} onClick={() => onSubmit?.()}>
-      {content}
+    <button className={className} onClick={handleSubmit}>
+      {content()}
     </button>
   );
 };

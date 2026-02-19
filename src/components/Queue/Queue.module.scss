@@ -1,0 +1,62 @@
+.queue {
+  width: 100vw;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  overflow: hidden;
+  pointer-events: none;
+  transition: 0.2s ease;
+
+  &.open {
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: all;
+  }
+
+  .queueContent {
+    --min-width: 20dvw;
+    --max-width: 25dvw;
+
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+    height: 100%;
+    box-shadow: var(--box-shadow);
+    background-color: var(--background-color-dark);
+    padding-block: 1rem;
+    overflow: scroll;
+    position: fixed;
+    z-index: 10;
+    transition: 0.2s ease;
+    margin-left: calc(-1 * var(--max-width));
+
+    &.open {
+      margin-left: 0;
+    }
+
+    & > span {
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding-inline: 1rem;
+    }
+
+    ul {
+      padding: 0;
+      padding-inline: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      li {
+        list-style-type: none;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .queue {
+    .queueContent {
+      --min-width: 80dvw;
+      --max-width: 85dvw;
+    }
+  }
+}

@@ -5,10 +5,12 @@ import React, {
   type ReactNode,
 } from "react";
 import type { SearchItem } from "../pages/SearchPage/SearchPage";
+import { removeFirstFromQueue } from "../utils/Queue";
 
 // Types
 type State = SearchItem[];
 type Action =
+  | { type: "SET_QUEUE"; payload: SearchItem[] }
   | { type: "ADD"; payload: SearchItem }
   | { type: "REMOVE_FIRST" }
   | { type: "REMOVE_AT"; index: number }
@@ -27,16 +29,22 @@ const QueueContext = createContext<ContextType | undefined>(undefined);
 // Reducer
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
+    case "SET_QUEUE":
+      return action.payload;
+
     case "ADD":
       return [...state, action.payload];
+
     case "REMOVE_FIRST":
       return state.slice(1);
+
     case "REMOVE_AT":
       if (action.index < 0 || action.index >= state.length) return state;
       return [
         ...state.slice(0, action.index),
         ...state.slice(action.index + 1),
       ];
+
     case "MOVE":
       const { from, to } = action;
       if (
@@ -50,12 +58,14 @@ const reducer = (state: State, action: Action): State => {
       const item = state[from];
       const newState = [...state.slice(0, from), ...state.slice(from + 1)];
       return [...newState.slice(0, to), item, ...newState.slice(to)];
+
     case "DOWNLOADED": {
       const { id, downloaded } = action;
       return state.map((item) =>
         item.videoId === id ? { ...item, downloaded } : item,
       );
     }
+
     case "OVERRIDE": {
       const { index } = action;
 

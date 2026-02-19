@@ -6,6 +6,11 @@ import Input from "../../components/Input/Input";
 import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
 import Layout from "../../layouts/Layout";
+import type { User } from "../../interfaces/user";
+import { IconMicrophone2, IconPlaylist } from "@tabler/icons-react";
+import ProfileImage from "../../components/ProfileImage/ProfileImage";
+import Queue from "../../components/Queue/Queue";
+import clsx from "clsx";
 
 interface Search {
   items: SearchItem[];
@@ -25,6 +30,7 @@ export interface SearchItem {
 const SearchPage = () => {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<Search>();
+  const [queueOpen, setQueueOpen] = useState<boolean>(false);
 
   const { user } = useUser();
   const { dispatch } = useUserList();
@@ -51,7 +57,7 @@ const SearchPage = () => {
     inputRef.current?.blur();
   };
 
-  const handleSongSelect = async (song: SearchItem) => {
+  const handleSongSelect = async (song: SearchItem, bandmates?: User[]) => {
     const url = import.meta.env.VITE_API_URL + "/queue";
     await fetch(url, {
       method: "POST",
@@ -59,7 +65,7 @@ const SearchPage = () => {
       body: JSON.stringify({
         ...song,
         requester: user.name,
-        team: ["mobileDaniel"],
+        ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
     });
   };
@@ -70,8 +76,15 @@ const SearchPage = () => {
 
   return (
     <Layout>
-      <div className={styles.searchPage}>
-        <span className={styles.heading}>{siteName}</span>
+      <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
+      <div className={clsx(styles.searchPage, queueOpen && styles.noScroll)}>
+        <div className={styles.header}>
+          <ProfileImage className={styles.profileImage} />
+          <span className={styles.heading}>{siteName}</span>
+          <button onClick={() => setQueueOpen(!queueOpen)}>
+            <IconPlaylist />
+          </button>
+        </div>
 
         <Input
           onChange={(e) => setSearch(e.target.value)}
@@ -82,18 +95,30 @@ const SearchPage = () => {
           enterKeyHint="search"
         />
 
-        <ul className={styles.resultList}>
-          {results?.items?.map((item, index) => (
-            <li key={index}>
-              <SongButton
-                item={item}
-                onSubmit={() => handleSongSelect(item)}
-                expandable
-                showThumbnail
-              ></SongButton>
-            </li>
-          ))}
-        </ul>
+        {results && (
+          <ul className={styles.resultList}>
+            {results?.items?.map((item, index) => (
+              <li key={index}>
+                <SongButton
+                  item={item}
+                  onSubmit={(bandmates) => handleSongSelect(item, bandmates)}
+                  expandable
+                  showThumbnail
+                ></SongButton>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {(results == undefined || results?.items.length == 0) && (
+          <div className={styles.noResults}>
+            <IconMicrophone2 />
+            <span className={styles.heading}>Get mic-ready!</span>
+            <span className={styles.subHeading}>
+              Search for a song to add to the queue
+            </span>
+          </div>
+        )}
       </div>
     </Layout>
   );
