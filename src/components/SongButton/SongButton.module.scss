@@ -72,6 +72,10 @@
       .artist {
         font-size: 0.75rem;
         opacity: 0.6;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 75%;
+        word-break: break-all;
       }
 
       .users {
@@ -81,10 +85,8 @@
         display: flex;
         gap: 0.25rem;
 
-        .profileImage {
-          width: 1.5rem;
+        .profileImageRow {
           height: 1.5rem;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
         }
       }
     }
@@ -121,6 +123,8 @@
         width: var(--image-width);
 
         span {
+          max-width: 100%;
+          white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           font-size: 0.8rem;
@@ -140,7 +144,7 @@
     }
   }
 
-  .addButton {
+  .actionButton {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -152,13 +156,18 @@
     transition: 0.2s ease;
     opacity: 0;
     pointer-events: none;
-    z-index: 5;
+    z-index: 4;
     background-color: rgba(var(--accent-color-rgb), 0.1);
     color: var(--accent-color);
 
     &.active {
       opacity: 1;
       pointer-events: all;
+    }
+
+    &.delete {
+      background-color: rgba(var(--warning-color-rgb), 0.1);
+      color: var(--warning-color);
     }
   }
 

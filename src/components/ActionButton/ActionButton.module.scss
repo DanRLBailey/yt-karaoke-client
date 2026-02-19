@@ -1,0 +1,36 @@
+.actionButton {
+  border-radius: 50rem;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  color: var(--accent-color);
+  position: relative;
+  background-color: var(--background-color-dark);
+
+  svg {
+    z-index: 5;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50rem;
+    z-index: 3;
+
+    background-color: rgba(var(--accent-color-rgb), 0.1);
+  }
+
+  &[data-variant="error"] {
+    color: var(--warning-color);
+
+    &::before {
+      background-color: rgba(var(--warning-color-rgb), 0.1);
+    }
+  }
+}

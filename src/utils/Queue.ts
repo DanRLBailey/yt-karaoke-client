@@ -17,3 +17,16 @@ export const removeFirstFromQueue = async (callback?: () => void) => {
 
   callback?.();
 };
+
+export const removeIndexFromQueue = async (
+  index: number,
+  callback?: () => void,
+) => {
+  const url = import.meta.env.VITE_API_URL + "/queue/" + index;
+  const response = await fetch(url, {
+    method: "DELETE",
+  });
+  await response.json();
+
+  callback?.();
+};

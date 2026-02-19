@@ -10,6 +10,8 @@
 
   --accent-color-rgb: 100, 100, 255;
   --accent-color: rgb(var(--accent-color-rgb));
+  --warning-color-rgb: 255, 100, 100;
+  --warning-color: rgb(var(--warning-color-rgb));
 
   --font-color: #e3e3fb;
   --svg-color: #9b9bbf;
@@ -30,7 +32,10 @@
   );
   --box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-family:
+    "Red Hat Display", system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  font-family: var(--font-family);
   line-height: 1.5;
   font-weight: 400;
 
@@ -66,7 +71,7 @@ body {
   min-height: 100vh;
 }
 
-.no-scroll {
+body.no-scroll {
   overflow: hidden;
 }
 
@@ -92,6 +97,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+input {
+  font-family: var(--font-family);
 }
 
 @media (prefers-color-scheme: light) {

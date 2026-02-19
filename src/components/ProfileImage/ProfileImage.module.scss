@@ -10,6 +10,11 @@
   background-color: #dadada;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  &.clickable {
+    cursor: pointer;
+  }
 
   img {
     width: 100%;
@@ -37,5 +42,19 @@
     bottom: -50%;
     left: 50%;
     transform: translateX(-50%);
+  }
+
+  span {
+    font-weight: bold;
+    opacity: 0.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: var(--accent-color);
+    color: #000;
+    letter-spacing: -0.01rem;
+    padding-right: 0.1rem;
   }
 }

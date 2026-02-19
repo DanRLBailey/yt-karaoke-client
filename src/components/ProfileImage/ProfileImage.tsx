@@ -4,33 +4,36 @@ import styles from "./ProfileImage.module.scss";
 
 interface ProfileImageProps {
   className?: string;
-  name?: string;
   avatar?: string;
+  onClick?: () => void;
+  text?: string;
 }
 
-const ProfileImage = ({ className, name, avatar }: ProfileImageProps) => {
+const ProfileImage = ({
+  className,
+  avatar,
+  onClick,
+  text,
+}: ProfileImageProps) => {
   const { user } = useUser();
 
-  if (avatar)
-    return (
-      <div className={clsx(styles.profileImage, className)}>
-        <img src={avatar} />
-        <span>{name}</span>
-      </div>
-    );
-
-  if (user.avatar)
-    return (
-      <div className={clsx(styles.profileImage, className)}>
-        <img src={user.avatar} />
-        <span>{name}</span>
-      </div>
-    );
+  const classNames = clsx(
+    styles.profileImage,
+    onClick && styles.clickable,
+    className,
+  );
 
   return (
-    <div className={clsx(styles.profileImage, className)}>
-      <div className={styles.head}></div>
-      <div className={styles.body}></div>
+    <div className={classNames} onClick={() => onClick?.()}>
+      {avatar && <img src={avatar} />}
+      {text && <span>{text}</span>}
+      {user.avatar && avatar !== "" && !text && <img src={user.avatar} />}
+      {avatar === "" && (
+        <>
+          <div className={styles.head}></div>
+          <div className={styles.body}></div>
+        </>
+      )}
     </div>
   );
 };

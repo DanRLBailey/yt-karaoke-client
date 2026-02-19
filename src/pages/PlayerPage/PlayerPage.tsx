@@ -73,9 +73,7 @@ const PlayerPage = () => {
 
     setTimeout(() => {
       setFadeToBlack(false);
-      removeFirstFromQueue(() => {
-        dispatch({ type: "REMOVE_FIRST" });
-      });
+      removeFirstFromQueue();
     }, fadeOutTime * 1000);
   };
 

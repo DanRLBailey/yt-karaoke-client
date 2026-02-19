@@ -4,6 +4,8 @@ import styles from "./Queue.module.scss";
 import { useEffect, useState } from "react";
 import SongButton from "../SongButton/SongButton";
 import useWebhooks from "../../hooks/useWebhooks";
+import DeletableSongButton from "../DeletableSongButton/DeletableSongButton";
+import { removeIndexFromQueue } from "../../utils/Queue";
 
 interface QueueProps {
   open?: boolean;
@@ -23,7 +25,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
   useEffect(() => {
     setIsOpen(open ?? false);
 
-    if (isOpen) {
+    if (open) {
       document.body.classList.add("no-scroll");
     } else {
       document.body.classList.remove("no-scroll");
@@ -37,14 +39,14 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
   return (
     <div
       className={clsx(styles.queue, isOpen ? styles.open : "")}
-      onClick={(e) => {
-        e.stopPropagation();
+      onClick={() => {
         onMouseLeave?.(false);
       }}
     >
       <div
         className={clsx(styles.queueContent, isOpen ? styles.open : "")}
         onMouseLeave={() => onMouseLeave?.(false)}
+        onClick={(e) => e.stopPropagation()}
       >
         <span>Now Playing</span>
         {queue.length > 0 && (
@@ -59,17 +61,19 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
               {queue.map((item, index) => {
                 if (index == 0) return null;
 
+                //SYNC ON SERVER
                 const onSubmit = () =>
                   index ? dispatch({ type: "MOVE", from: index, to: 0 }) : {};
 
                 return (
                   <li key={index}>
                     {
-                      <SongButton
+                      <DeletableSongButton
                         item={item}
                         onSubmit={onSubmit}
                         showThumbnail
                         showStatus
+                        onDelete={() => removeIndexFromQueue(index)}
                       />
                     }
                   </li>

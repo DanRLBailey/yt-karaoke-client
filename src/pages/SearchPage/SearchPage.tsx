@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
-import SongButton from "../../components/SongButton/SongButton";
 import Input from "../../components/Input/Input";
 import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
@@ -12,6 +11,8 @@ import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import Queue from "../../components/Queue/Queue";
 import clsx from "clsx";
 import SiteName from "../../components/SiteName/SiteName";
+import { useNavigate } from "react-router";
+import ExpandableSongButton from "../../components/ExpandableSongButton/ExpandableSongButton";
 
 interface Search {
   items: SearchItem[];
@@ -36,6 +37,7 @@ const SearchPage = () => {
   const { user } = useUser();
   const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const navigate = useNavigate();
 
   useWebhooks({
     onAddUser: (update) => {
@@ -78,33 +80,37 @@ const SearchPage = () => {
     <Layout>
       <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
       <div className={clsx(styles.searchPage, queueOpen && styles.noScroll)}>
-        <div className={styles.header}>
-          <ProfileImage className={styles.profileImage} />
-          <SiteName />
-          <button onClick={() => setQueueOpen(!queueOpen)}>
-            <IconPlaylist />
-          </button>
-        </div>
+        <div className={styles.headerContainer}>
+          <div className={styles.header}>
+            <ProfileImage
+              className={styles.profileImage}
+              onClick={() => navigate("/")}
+            />
+            <SiteName />
+            <button onClick={() => setQueueOpen(!queueOpen)}>
+              <IconPlaylist />
+            </button>
+          </div>
 
-        <Input
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-          placeholder={`What are you singing, ${user.name}?`}
-          onKeyDown={onKeyDown}
-          onButtonPress={handleSearch}
-          enterKeyHint="search"
-        />
+          <Input
+            onChange={(e) => setSearch(e.target.value)}
+            value={search}
+            placeholder={`What are you singing, ${user.name}?`}
+            onKeyDown={onKeyDown}
+            onButtonPress={handleSearch}
+            enterKeyHint="search"
+          />
+        </div>
 
         {results && (
           <ul className={styles.resultList}>
             {results?.items?.map((item, index) => (
               <li key={index}>
-                <SongButton
+                <ExpandableSongButton
                   item={item}
                   onSubmit={(bandmates) => handleSongSelect(item, bandmates)}
-                  expandable
                   showThumbnail
-                ></SongButton>
+                ></ExpandableSongButton>
               </li>
             ))}
           </ul>
