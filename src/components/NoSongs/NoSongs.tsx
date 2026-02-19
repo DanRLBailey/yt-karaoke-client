@@ -2,10 +2,10 @@ import styles from "./NoSongs.module.scss";
 import DvdBounce from "../DvdBounce/DvdBounce";
 import { useUserList } from "../../context/UserListContext";
 import ProfileImage from "../ProfileImage/ProfileImage";
+import SiteName from "../SiteName/SiteName";
 
 const NoSongs = () => {
   const { userList } = useUserList();
-  const siteName = import.meta.env.VITE_SITE_NAME;
 
   const qotd = "Happy birthday, Linda! 🎉";
 
@@ -22,7 +22,7 @@ const NoSongs = () => {
           <span>{user.name}</span>
         </DvdBounce>
       ))}
-      <span className={styles.tagline}>{siteName}</span>
+      <SiteName size="xl" />
       <span className={styles.tagline}>Queue some songs to start singing!</span>
     </div>
   );

@@ -8,6 +8,7 @@ import { useUserList } from "../../context/UserListContext";
 import type { User } from "../../interfaces/user";
 import { getUsers } from "../../utils/User";
 import Layout from "../../layouts/Layout";
+import SiteName from "../../components/SiteName/SiteName";
 
 const HomePage = () => {
   const { user, dispatch } = useUser();
@@ -17,7 +18,6 @@ const HomePage = () => {
   const [image, setImage] = useState<string>(user.avatar);
 
   let navigate = useNavigate();
-  const siteName = import.meta.env.VITE_SITE_NAME;
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") navigateToSearch();
@@ -54,7 +54,7 @@ const HomePage = () => {
   return (
     <Layout>
       <div className={styles.homePage}>
-        <span className={styles.heading}>{siteName}</span>
+        <SiteName />
         <div className={styles.profileImage}>
           <WebcamCapture onAcceptImage={setImage} image={image} />
         </div>

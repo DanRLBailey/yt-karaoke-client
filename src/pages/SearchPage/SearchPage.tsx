@@ -11,6 +11,7 @@ import { IconMicrophone2, IconPlaylist } from "@tabler/icons-react";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import Queue from "../../components/Queue/Queue";
 import clsx from "clsx";
+import SiteName from "../../components/SiteName/SiteName";
 
 interface Search {
   items: SearchItem[];
@@ -35,7 +36,6 @@ const SearchPage = () => {
   const { user } = useUser();
   const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const siteName = import.meta.env.VITE_SITE_NAME;
 
   useWebhooks({
     onAddUser: (update) => {
@@ -80,7 +80,7 @@ const SearchPage = () => {
       <div className={clsx(styles.searchPage, queueOpen && styles.noScroll)}>
         <div className={styles.header}>
           <ProfileImage className={styles.profileImage} />
-          <span className={styles.heading}>{siteName}</span>
+          <SiteName />
           <button onClick={() => setQueueOpen(!queueOpen)}>
             <IconPlaylist />
           </button>

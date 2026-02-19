@@ -16,16 +16,6 @@
       height: 2rem;
     }
 
-    .heading {
-      font-size: 1.5rem;
-      font-weight: bold;
-      background: var(--gradient-background-color-2-fallback);
-      background: var(--gradient-background-color-2);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
     button {
       padding: 0.5rem;
       display: flex;

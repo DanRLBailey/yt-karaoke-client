@@ -1,0 +1,17 @@
+.siteName {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: var(--gradient-background-color-2-fallback);
+  background: var(--gradient-background-color-2);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  &.sm {
+    font-size: 1rem;
+  }
+
+  &.xl {
+    font-size: 2rem;
+  }
+}
