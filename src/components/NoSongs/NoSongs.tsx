@@ -3,6 +3,7 @@ import DvdBounce from "../DvdBounce/DvdBounce";
 import { useUserList } from "../../context/UserListContext";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import SiteName from "../SiteName/SiteName";
+import QrCode from "../QrCode/QrCode";
 
 const NoSongs = () => {
   const { userList } = useUserList();
@@ -24,6 +25,7 @@ const NoSongs = () => {
       ))}
       <SiteName size="xl" />
       <span className={styles.tagline}>Queue some songs to start singing!</span>
+      <QrCode />
     </div>
   );
 };

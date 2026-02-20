@@ -1,0 +1,17 @@
+.qrCode {
+  background-color: var(--accent-color);
+  display: inline-flex;
+  padding: 1rem;
+  padding-bottom: 0.5rem;
+  border-radius: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+
+  span {
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+}
