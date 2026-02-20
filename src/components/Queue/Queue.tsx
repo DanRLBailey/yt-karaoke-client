@@ -6,6 +6,7 @@ import SongButton from "../SongButton/SongButton";
 import useWebhooks from "../../hooks/useWebhooks";
 import DeletableSongButton from "../DeletableSongButton/DeletableSongButton";
 import { removeIndexFromQueue } from "../../utils/Queue";
+import { IconMicrophone2 } from "@tabler/icons-react";
 
 interface QueueProps {
   open?: boolean;
@@ -48,9 +49,9 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
         onMouseLeave={() => onMouseLeave?.(false)}
         onClick={(e) => e.stopPropagation()}
       >
-        <span>Now Playing</span>
         {queue.length > 0 && (
           <>
+            <span>Now Playing</span>
             <ul>
               <li>
                 <SongButton item={queue[0]} showThumbnail showStatus active />
@@ -81,6 +82,15 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
               })}
             </ul>
           </>
+        )}
+        {queue.length == 0 && (
+          <div className={styles.noResults}>
+            <IconMicrophone2 />
+            <span className={styles.heading}>No songs in queue</span>
+            <span className={styles.subHeading}>
+              Search for a song to add to the queue
+            </span>
+          </div>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./SearchPage.module.scss";
 import Input from "../../components/Input/Input";
@@ -6,13 +6,15 @@ import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
 import Layout from "../../layouts/Layout";
 import type { User } from "../../interfaces/user";
-import { IconMicrophone2, IconPlaylist } from "@tabler/icons-react";
+import { IconMicrophone2, IconPlaylist, IconPlus } from "@tabler/icons-react";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import Queue from "../../components/Queue/Queue";
 import clsx from "clsx";
 import SiteName from "../../components/SiteName/SiteName";
 import { useNavigate } from "react-router";
 import ExpandableSongButton from "../../components/ExpandableSongButton/ExpandableSongButton";
+import { parseSongTitle } from "../../utils/Song";
+import { useNotification } from "../../context/NotificationContext";
 
 interface Search {
   items: SearchItem[];
@@ -38,6 +40,13 @@ const SearchPage = () => {
   const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
+
+  const siteTitle = import.meta.env.VITE_SITE_NAME;
+
+  useEffect(() => {
+    document.title = `Search - ${siteTitle}`;
+  }, []);
 
   useWebhooks({
     onAddUser: (update) => {
@@ -69,6 +78,25 @@ const SearchPage = () => {
         requester: user.name,
         ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
+    }).then(() => {
+      const { song: title, artist } = parseSongTitle(song.title);
+
+      showNotification({
+        children: (
+          <>
+            <span>{title}</span>
+            <span>{artist}</span>
+          </>
+        ),
+        active: true,
+        className: styles.notification,
+        subtitle: (
+          <>
+            <IconPlus />
+            Added to queue
+          </>
+        ),
+      });
     });
   };
 

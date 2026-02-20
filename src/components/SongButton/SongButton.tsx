@@ -5,6 +5,8 @@ import clsx from "clsx";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { getUserAvatarByName } from "../../utils/User";
 import ProfileImageRow from "../ProfileImageRow/ProfileImageRow";
+import ActionButton from "../ActionButton/ActionButton";
+import { IconPlayerPlay } from "@tabler/icons-react";
 
 interface SongButtonProps {
   item: SearchItem;
@@ -35,35 +37,46 @@ const SongButton = ({
 
   const content = () => {
     return (
-      <div className={styles.content}>
-        {showThumbnail && (
-          <div className={styles.thumbnail}>
-            {isLoading && (
-              <div className={styles.loadingOverlay}>
-                <LoadingSpinner />
-              </div>
-            )}
-            <img src={item.thumbnail.url} />
-          </div>
-        )}
-        <span>{item.downloaded}</span>
-        <div className={styles.details}>
-          <span className={styles.song}>{song}</span>
-          <span className={styles.artist}>{artist}</span>
-          <div className={styles.users}>
-            {item.requester && (
-              <ProfileImageRow
-                avatars={[
-                  getUserAvatarByName(item.requester),
-                  ...(item.team?.map((user) => getUserAvatarByName(user)) ??
-                    ([] as string[])),
-                ]}
-                className={styles.profileImageRow}
-              />
-            )}
+      <>
+        <div className={styles.content}>
+          {showThumbnail && (
+            <div className={styles.thumbnail}>
+              <img src={item.thumbnail.url} />
+            </div>
+          )}
+          <span>{item.downloaded}</span>
+          <div className={styles.details}>
+            <span className={styles.song}>{song}</span>
+            <span className={styles.artist}>{artist}</span>
+            <div className={styles.users}>
+              {item.requester && (
+                <ProfileImageRow
+                  avatars={[
+                    getUserAvatarByName(item.requester),
+                    ...(item.team?.map((user) => getUserAvatarByName(user)) ??
+                      ([] as string[])),
+                  ]}
+                  className={styles.profileImageRow}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+        {isLoading && (
+          <div className={styles.loadingSpinner}>
+            <LoadingSpinner multiplier={0.5} />
+          </div>
+        )}
+        {active && (
+          <ActionButton
+            onSubmit={() => {}}
+            icon={<IconPlayerPlay />}
+            variant="success"
+            absolute
+            isStatic
+          />
+        )}
+      </>
     );
   };
 

@@ -4,7 +4,6 @@ import styles from "./PlayerPage.module.scss";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import SongChange from "../../components/SongChange/SongChange";
 import NoSongs from "../../components/NoSongs/NoSongs";
-import { useUserList } from "../../context/UserListContext";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Layout from "../../layouts/Layout";
 import Queue from "../../components/Queue/Queue";
@@ -13,7 +12,7 @@ import { removeFirstFromQueue } from "../../utils/Queue";
 const fadeOutTime = 1;
 
 const PlayerPage = () => {
-  const { queue, dispatch } = useQueue();
+  const { queue } = useQueue();
   const [videoUrl, setVideoUrl] = useState<string>("");
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [fadeToBlack, setFadeToBlack] = useState<boolean>(false);
@@ -21,25 +20,33 @@ const PlayerPage = () => {
   const [startOfQueue, setStartOfQueue] = useState<boolean>(true);
 
   useEffect(() => {
-    if (queue.length > 1 && queue[0].downloaded) {
-      setVideoUrl(
-        encodeURIComponent(
-          `https://www.youtube.com/watch?v=${queue[0].videoId}`,
-        ),
-      );
-      setStartOfQueue(false);
+    if (queue.length === 0) {
+      setStartOfQueue(true);
+      setVideoUrl("");
+      return;
     }
-    if (queue.length == 1 && queue[0].downloaded && startOfQueue) {
+
+    const firstSong = queue[0];
+
+    // If the first song is downloaded and we're at the start of the queue
+    if (firstSong.downloaded && startOfQueue) {
       handleStartOfQueue(() =>
         setVideoUrl(
           encodeURIComponent(
-            `https://www.youtube.com/watch?v=${queue[0].videoId}`,
+            `https://www.youtube.com/watch?v=${firstSong.videoId}`,
           ),
         ),
       );
     }
-    if (queue.length == 0) setStartOfQueue(true);
-  }, [queue]);
+    // If the first song is downloaded and we're NOT at the start
+    else if (firstSong.downloaded && !startOfQueue) {
+      setVideoUrl(
+        encodeURIComponent(
+          `https://www.youtube.com/watch?v=${firstSong.videoId}`,
+        ),
+      );
+    }
+  }, [queue, startOfQueue]);
 
   const handleStartOfQueue = (callback?: () => void) => {
     setEndOfSong(true);

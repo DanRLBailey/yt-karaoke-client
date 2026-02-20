@@ -8,6 +8,13 @@
   color: var(--accent-color);
   position: relative;
   background-color: var(--background-color-dark);
+  transition: 0.2s ease;
+
+  &.absolute {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
 
   svg {
     z-index: 5;
@@ -31,6 +38,14 @@
 
     &::before {
       background-color: rgba(var(--warning-color-rgb), 0.1);
+    }
+  }
+
+  &[data-variant="success"] {
+    color: var(--success-color);
+
+    &::before {
+      background-color: rgba(var(--success-color-rgb), 0.1);
     }
   }
 }

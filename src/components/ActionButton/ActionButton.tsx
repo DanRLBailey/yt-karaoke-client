@@ -3,9 +3,11 @@ import styles from "./ActionButton.module.scss";
 
 interface ActionButtonProps {
   classNames?: string;
-  onSubmit: () => void;
+  onSubmit?: () => void;
   icon: React.ReactNode;
-  variant?: "default" | "warning" | "error";
+  variant?: "default" | "success" | "warning" | "error";
+  absolute?: boolean;
+  isStatic?: boolean;
 }
 
 const ActionButton = ({
@@ -13,11 +15,32 @@ const ActionButton = ({
   onSubmit,
   icon,
   variant = "default",
+  absolute,
+  isStatic,
 }: ActionButtonProps) => {
+  if (isStatic)
+    return (
+      <div
+        className={clsx(
+          styles.actionButton,
+          absolute && styles.absolute,
+          classNames,
+        )}
+        onClick={() => onSubmit?.()}
+        data-variant={variant}
+      >
+        {icon}
+      </div>
+    );
+
   return (
     <button
-      className={clsx(styles.actionButton, classNames)}
-      onClick={onSubmit}
+      className={clsx(
+        styles.actionButton,
+        absolute && styles.absolute,
+        classNames,
+      )}
+      onClick={() => onSubmit?.()}
       data-variant={variant}
     >
       {icon}

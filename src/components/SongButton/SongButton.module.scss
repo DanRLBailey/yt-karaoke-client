@@ -1,7 +1,7 @@
 .songButton {
   width: 100%;
   border-radius: 1rem;
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   padding: 1rem;
   font-weight: 500;
   font-family: inherit;
@@ -35,16 +35,6 @@
         object-fit: cover;
         display: block;
       }
-
-      .loadingOverlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.5);
-      }
     }
 
     .details {
@@ -57,16 +47,14 @@
 
       & > span {
         text-align: start;
-      }
-
-      .song,
-      .artist {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
         line-clamp: 1;
         overflow: hidden;
         text-overflow: ellipsis;
+        max-width: 80%;
+        word-break: break-all;
       }
 
       .artist {
@@ -74,8 +62,6 @@
         opacity: 0.6;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 75%;
-        word-break: break-all;
       }
 
       .users {
@@ -92,91 +78,17 @@
     }
   }
 
-  .drawer {
-    height: 0px;
-    overflow: hidden;
-    transition: 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8rem;
-    justify-content: flex-end;
-
-    &.active {
-      height: 6rem;
-    }
-
-    button {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
-
-    .bandmates {
-      display: flex;
-      gap: 0.5rem;
-      margin-block-start: 0.5rem;
-      margin-inline-start: 0.2rem;
-
-      .bandmate {
-        --image-width: 2.5rem;
-
-        display: flex;
-        flex-direction: column;
-        width: var(--image-width);
-
-        span {
-          max-width: 100%;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          font-size: 0.8rem;
-        }
-
-        .profileImage {
-          --shadow: 0 0 0 3px;
-
-          height: var(--image-width);
-          box-shadow: var(--shadow) transparent;
-
-          &.active {
-            box-shadow: var(--shadow) var(--accent-color);
-          }
-        }
-      }
-    }
-  }
-
-  .actionButton {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    border-radius: 50rem;
-    padding: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: 0.2s ease;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 4;
-    background-color: rgba(var(--accent-color-rgb), 0.1);
-    color: var(--accent-color);
-
-    &.active {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    &.delete {
-      background-color: rgba(var(--warning-color-rgb), 0.1);
-      color: var(--warning-color);
-    }
-  }
-
   &.active {
-    background-color: var(--accent-color);
-    color: black;
+    border: 2px solid var(--accent-color);
   }
 
   &.loading {
-    background-color: #d19525;
+    opacity: 0.5;
+
+    .loadingSpinner {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
   }
 }

@@ -12,6 +12,8 @@
   --accent-color: rgb(var(--accent-color-rgb));
   --warning-color-rgb: 255, 100, 100;
   --warning-color: rgb(var(--warning-color-rgb));
+  --success-color-rgb: 100, 255, 113;
+  --success-color: rgb(var(--success-color-rgb));
 
   --font-color: #e3e3fb;
   --svg-color: #9b9bbf;
@@ -71,6 +73,17 @@ body {
   min-height: 100vh;
 }
 
+.notificationContainer {
+  position: fixed;
+  top: 0;
+  height: 0;
+  width: 100dvw;
+  height: 100dvh;
+  overflow: hidden;
+  z-index: 20;
+  pointer-events: none;
+}
+
 body.no-scroll {
   overflow: hidden;
 }
@@ -87,12 +100,11 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--accent-color);
 }
 button:focus,
 button:focus-visible {

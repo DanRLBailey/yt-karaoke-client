@@ -18,6 +18,11 @@ const HomePage = () => {
   const [image, setImage] = useState<string>(user.avatar);
 
   let navigate = useNavigate();
+  const siteTitle = import.meta.env.VITE_SITE_NAME;
+
+  useEffect(() => {
+    document.title = `Home - ${siteTitle}`;
+  }, []);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") navigateToSearch();

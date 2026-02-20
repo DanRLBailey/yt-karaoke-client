@@ -60,7 +60,7 @@ const SongChange = ({
         {endOfSong && (
           <Countdown
             className={styles.countdown}
-            seconds={1}
+            seconds={10}
             onCountdownEnd={onCountdownEnd}
           />
         )}

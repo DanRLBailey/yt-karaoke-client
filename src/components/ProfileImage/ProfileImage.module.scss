@@ -7,7 +7,7 @@
   height: var(--width);
   border-radius: var(--width);
   border-radius: var(--width);
-  background-color: #dadada;
+  background-color: rgba(var(--accent-color-rgb), 1);
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -26,7 +26,7 @@
     width: var(--head-width);
     height: var(--head-width);
     border-radius: var(--width);
-    background-color: #c2c2c2;
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 15%;
     left: 50%;
@@ -37,7 +37,7 @@
     width: var(--body-width);
     height: var(--body-width);
     border-radius: var(--width);
-    background-color: #c2c2c2;
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     bottom: -50%;
     left: 50%;

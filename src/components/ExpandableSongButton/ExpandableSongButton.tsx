@@ -80,6 +80,7 @@ const ExpandableSongButton = ({
           classNames={clsx(styles.actionButton, expanded && styles.active)}
           onSubmit={handleSubmit}
           icon={<IconPlus />}
+          absolute
         />
         <div
           className={clsx(
@@ -89,7 +90,7 @@ const ExpandableSongButton = ({
           onClick={(e) => e.stopPropagation()}
         >
           {children}
-          <span>Add some bandmates</span>
+          <span>Add some bandmates?</span>
           <div className={styles.bandmates}>
             {otherUsers.map((user, index) => (
               <div

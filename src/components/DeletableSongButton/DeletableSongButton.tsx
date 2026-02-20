@@ -5,13 +5,14 @@ import clsx from "clsx";
 import { IconTrash } from "@tabler/icons-react";
 import SongButton from "../SongButton/SongButton";
 import ActionButton from "../ActionButton/ActionButton";
+import { useUser } from "../../context/UserContext";
+import { useLocation } from "react-router";
 
 interface DeletableSongButtonProps {
   item: SearchItem;
   showThumbnail?: boolean;
   showStatus?: boolean;
   onDelete: () => void;
-  onSubmit: () => void;
 }
 
 const DeletableSongButton = ({
@@ -19,8 +20,9 @@ const DeletableSongButton = ({
   showThumbnail,
   showStatus,
   onDelete,
-  onSubmit,
 }: DeletableSongButtonProps) => {
+  const { user } = useUser();
+  const location = useLocation();
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const isLoading = !item.downloaded && showStatus;
@@ -39,12 +41,15 @@ const DeletableSongButton = ({
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
       >
-        <ActionButton
-          classNames={clsx(styles.actionButton, expanded && styles.active)}
-          onSubmit={onDelete}
-          icon={<IconTrash />}
-          variant="error"
-        />
+        {(user.name == item.requester || location.pathname == "/host") && (
+          <ActionButton
+            classNames={clsx(styles.actionButton, expanded && styles.active)}
+            onSubmit={onDelete}
+            icon={<IconTrash />}
+            variant="error"
+            absolute
+          />
+        )}
       </SongButton>
     </div>
   );

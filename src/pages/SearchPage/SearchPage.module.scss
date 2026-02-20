@@ -51,6 +51,20 @@
     }
   }
 
+  .notification {
+    & > span {
+      max-width: 60dvw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      word-break: break-all;
+
+      &:last-of-type {
+        opacity: 0.5;
+      }
+    }
+  }
+
   .noResults {
     position: absolute;
     top: 0;
