@@ -72,7 +72,7 @@ const SearchPage = () => {
     inputRef.current?.blur();
   };
 
-  const showQueueNotification = (song: SearchItem) => {
+  const showQueueNotification = (song: SearchItem, text?: string) => {
     const { song: title, artist } = parseSongTitle(song.title);
 
     showNotification({
@@ -87,7 +87,7 @@ const SearchPage = () => {
       subtitle: (
         <>
           <IconPlus />
-          Added to queue
+          {text ?? "Added to queue"}
         </>
       ),
     });
@@ -108,7 +108,9 @@ const SearchPage = () => {
         requester: user.name,
         ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
-    }).then(() => showQueueNotification(song));
+    }).then(() =>
+      showQueueNotification(song, addedToQueue ? "Updated" : undefined),
+    );
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
