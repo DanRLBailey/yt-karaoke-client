@@ -22,25 +22,33 @@
     box-shadow: var(--box-shadow);
     background-color: var(--background-color);
     padding-block: 1rem;
-    overflow: scroll;
+    // overflow: scroll;
     position: fixed;
     z-index: 10;
     transition: 0.2s ease;
     margin-left: calc(-1 * var(--max-width));
+    display: flex;
+    flex-direction: column;
+
+    .queueList {
+      padding-inline: 1rem;
+      flex: 1;
+      max-height: 100%;
+      overflow: scroll;
+
+      & > span {
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding-inline: 1rem;
+      }
+    }
 
     &.open {
       margin-left: 0;
     }
 
-    & > span {
-      font-size: 1.2rem;
-      font-weight: bold;
-      padding-inline: 1rem;
-    }
-
     ul {
       padding: 0;
-      padding-inline: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -52,11 +60,7 @@
   }
 
   .noResults {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;

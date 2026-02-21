@@ -3,8 +3,8 @@ import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import styles from "./ExpandableSongButton.module.scss";
 import clsx from "clsx";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import { getUserAvatarByName } from "../../utils/User";
-import { IconPlus } from "@tabler/icons-react";
+import { getUserAvatarByName, getUserByName } from "../../utils/User";
+import { IconPlus, IconCheck } from "@tabler/icons-react";
 import { useUserList } from "../../context/UserListContext";
 import { useUser } from "../../context/UserContext";
 import type { User } from "../../interfaces/user";
@@ -13,7 +13,7 @@ import ActionButton from "../ActionButton/ActionButton";
 
 interface ExpandableSongButtonProps {
   item: SearchItem;
-  onSubmit?: (selectedBandmates: User[]) => void;
+  onSubmit?: (selectedBandmates: User[], addedToQueue: boolean) => void;
   children?: React.ReactNode;
   showThumbnail?: boolean;
   showStatus?: boolean;
@@ -32,7 +32,16 @@ const ExpandableSongButton = ({
   const { user } = useUser();
   const { userList } = useUserList();
   const [otherUsers, setOtherUsers] = useState<User[]>([]);
-  const [selectedBandmates, setSelectedBandmates] = useState<User[]>();
+  const [selectedBandmates, setSelectedBandmates] = useState<User[]>(
+    item.team
+      ? item.team
+          .map((name) => getUserByName(name))
+          .filter((u): u is User => u !== undefined)
+      : [],
+  );
+  const [addedToQueue, setAddedToQueue] = useState<boolean>(
+    Boolean(item.requester),
+  );
 
   const [expanded, setExpanded] = useState<boolean>(false);
 
@@ -63,9 +72,12 @@ const ExpandableSongButton = ({
   };
 
   const handleSubmit = () => {
-    onSubmit?.(selectedBandmates ?? []);
-    setSelectedBandmates([]);
-    setExpanded(false);
+    onSubmit?.(selectedBandmates ?? [], addedToQueue);
+    setAddedToQueue(true);
+    // if (!addedToQueue) {
+    // setSelectedBandmates([]);
+    // setExpanded(false);
+    // }
   };
 
   return (
@@ -75,13 +87,27 @@ const ExpandableSongButton = ({
         showThumbnail={showThumbnail}
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
+        overlayIcon={
+          addedToQueue && (
+            <ActionButton
+              classNames={clsx(styles.actionButton, styles.active)}
+              onSubmit={handleSubmit}
+              icon={<IconCheck />}
+              variant="success"
+              absolute
+            />
+          )
+        }
       >
-        <ActionButton
-          classNames={clsx(styles.actionButton, expanded && styles.active)}
-          onSubmit={handleSubmit}
-          icon={<IconPlus />}
-          absolute
-        />
+        {!addedToQueue && (
+          <ActionButton
+            classNames={clsx(styles.actionButton, expanded && styles.active)}
+            onSubmit={handleSubmit}
+            icon={<IconPlus />}
+            absolute
+          />
+        )}
+
         <div
           className={clsx(
             styles.drawer,

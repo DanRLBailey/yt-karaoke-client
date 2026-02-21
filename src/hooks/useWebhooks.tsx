@@ -9,15 +9,17 @@ type UseWebhooksProps = {
   onQueue?: (update: SearchItem) => void;
   onQueueSync?: (update: SearchItem[]) => void;
   onDownload?: (update: SearchItem) => void;
+  onDownloadFailed?: (update: SearchItem) => void;
   onAddUser?: (update: User) => void;
 };
 
 const useWebhooks = ({
-  url = "http://192.168.1.122:3000",
+  url = import.meta.env.VITE_WEBHOOK_URL,
   onConnect,
   onQueue,
   onQueueSync,
   onDownload,
+  onDownloadFailed,
   onAddUser,
 }: UseWebhooksProps) => {
   useEffect(() => {
@@ -30,6 +32,8 @@ const useWebhooks = ({
     if (onQueueSync) socket.on("queueSync", onQueueSync);
 
     if (onDownload) socket.on("download", onDownload);
+
+    if (onDownloadFailed) socket.on("downloadFailed", onDownloadFailed);
 
     if (onAddUser) socket.on("add-user", onAddUser);
 

@@ -10,6 +10,7 @@ import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 
 const fadeOutTime = 1;
+const countdown = 2;
 
 const PlayerPage = () => {
   const { queue } = useQueue();
@@ -19,6 +20,17 @@ const PlayerPage = () => {
   const [endOfSong, setEndOfSong] = useState<boolean>(false);
   const [startOfQueue, setStartOfQueue] = useState<boolean>(true);
 
+  const siteTitle = import.meta.env.VITE_SITE_NAME;
+
+  useEffect(() => {
+    if (!queue || queue.length == 0) {
+      document.title = `Player - ${siteTitle}`;
+      return;
+    }
+
+    document.title = `${queue[0].title} - ${siteTitle}`;
+  }, [queue]);
+
   useEffect(() => {
     if (queue.length === 0) {
       setStartOfQueue(true);
@@ -26,9 +38,14 @@ const PlayerPage = () => {
       return;
     }
 
+    if (queue.length > 0 && !queue[0].downloaded) {
+      return;
+    }
+
     const firstSong = queue[0];
 
-    // If the first song is downloaded and we're at the start of the queue
+    if (firstSong.failed) removeFirstFromQueue();
+
     if (firstSong.downloaded && startOfQueue) {
       handleStartOfQueue(() =>
         setVideoUrl(
@@ -37,9 +54,7 @@ const PlayerPage = () => {
           ),
         ),
       );
-    }
-    // If the first song is downloaded and we're NOT at the start
-    else if (firstSong.downloaded && !startOfQueue) {
+    } else if (firstSong.downloaded && !startOfQueue) {
       setVideoUrl(
         encodeURIComponent(
           `https://www.youtube.com/watch?v=${firstSong.videoId}`,
@@ -51,10 +66,13 @@ const PlayerPage = () => {
   const handleStartOfQueue = (callback?: () => void) => {
     setEndOfSong(true);
 
-    setTimeout(() => {
-      setStartOfQueue(false);
-      callback?.();
-    }, fadeOutTime * 1000);
+    setTimeout(
+      () => {
+        setStartOfQueue(false);
+        callback?.();
+      },
+      fadeOutTime * (countdown + 1) * 1000,
+    );
   };
 
   const handleEndOfSong = () => {
@@ -93,9 +111,11 @@ const PlayerPage = () => {
         ></div>
         <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
         <SongChange
+          countdown={countdown}
           fadeToBlack={fadeToBlack}
           endOfSong={endOfSong}
           onCountdownEnd={handleSongChange}
+          startOfQueue={startOfQueue}
         />
         <div className={styles.video}>
           {queue.length > 0 &&

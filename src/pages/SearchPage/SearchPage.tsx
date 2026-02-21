@@ -15,6 +15,8 @@ import { useNavigate } from "react-router";
 import ExpandableSongButton from "../../components/ExpandableSongButton/ExpandableSongButton";
 import { parseSongTitle } from "../../utils/Song";
 import { useNotification } from "../../context/NotificationContext";
+import { checkIfItemInQueue } from "../../utils/Queue";
+import { useQueue } from "../../context/QueueContext";
 
 interface Search {
   items: SearchItem[];
@@ -29,6 +31,7 @@ export interface SearchItem {
   downloaded?: boolean;
   requester?: string;
   team?: string[];
+  failed?: boolean;
 }
 
 const SearchPage = () => {
@@ -37,6 +40,7 @@ const SearchPage = () => {
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
 
   const { user } = useUser();
+  const { queue } = useQueue();
   const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -68,8 +72,34 @@ const SearchPage = () => {
     inputRef.current?.blur();
   };
 
-  const handleSongSelect = async (song: SearchItem, bandmates?: User[]) => {
-    const url = import.meta.env.VITE_API_URL + "/queue";
+  const showQueueNotification = (song: SearchItem) => {
+    const { song: title, artist } = parseSongTitle(song.title);
+
+    showNotification({
+      children: (
+        <>
+          <span>{title}</span>
+          <span>{artist}</span>
+        </>
+      ),
+      active: true,
+      className: styles.notification,
+      subtitle: (
+        <>
+          <IconPlus />
+          Added to queue
+        </>
+      ),
+    });
+  };
+
+  const handleSongSelect = async (
+    song: SearchItem,
+    bandmates: User[],
+    addedToQueue: boolean,
+  ) => {
+    const url =
+      import.meta.env.VITE_API_URL + "/queue" + (addedToQueue ? "/update" : "");
     await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -78,26 +108,7 @@ const SearchPage = () => {
         requester: user.name,
         ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
-    }).then(() => {
-      const { song: title, artist } = parseSongTitle(song.title);
-
-      showNotification({
-        children: (
-          <>
-            <span>{title}</span>
-            <span>{artist}</span>
-          </>
-        ),
-        active: true,
-        className: styles.notification,
-        subtitle: (
-          <>
-            <IconPlus />
-            Added to queue
-          </>
-        ),
-      });
-    });
+    }).then(() => showQueueNotification(song));
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -135,8 +146,10 @@ const SearchPage = () => {
             {results?.items?.map((item, index) => (
               <li key={index}>
                 <ExpandableSongButton
-                  item={item}
-                  onSubmit={(bandmates) => handleSongSelect(item, bandmates)}
+                  item={checkIfItemInQueue(item, queue)}
+                  onSubmit={(bandmates, addedToQueue) =>
+                    handleSongSelect(item, bandmates, addedToQueue)
+                  }
                   showThumbnail
                 ></ExpandableSongButton>
               </li>

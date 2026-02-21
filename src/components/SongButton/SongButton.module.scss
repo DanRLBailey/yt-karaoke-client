@@ -82,13 +82,20 @@
     border: 2px solid var(--accent-color);
   }
 
-  &.loading {
+  &.loading,
+  &.failedDownload {
     opacity: 0.5;
+  }
 
+  &.loading {
     .loadingSpinner {
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
     }
+  }
+
+  &.failedDownload {
+    cursor: not-allowed;
   }
 }

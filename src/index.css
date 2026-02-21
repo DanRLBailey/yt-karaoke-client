@@ -10,8 +10,8 @@
 
   --accent-color-rgb: 100, 100, 255;
   --accent-color: rgb(var(--accent-color-rgb));
-  --warning-color-rgb: 255, 100, 100;
-  --warning-color: rgb(var(--warning-color-rgb));
+  --error-color-rgb: 255, 100, 100;
+  --error-color: rgb(var(--error-color-rgb));
   --success-color-rgb: 100, 255, 113;
   --success-color: rgb(var(--success-color-rgb));
 

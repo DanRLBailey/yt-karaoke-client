@@ -6,7 +6,7 @@ import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { getUserAvatarByName } from "../../utils/User";
 import ProfileImageRow from "../ProfileImageRow/ProfileImageRow";
 import ActionButton from "../ActionButton/ActionButton";
-import { IconPlayerPlay } from "@tabler/icons-react";
+import { IconPlayerPlay, IconX } from "@tabler/icons-react";
 
 interface SongButtonProps {
   item: SearchItem;
@@ -15,6 +15,7 @@ interface SongButtonProps {
   showStatus?: boolean;
   active?: boolean;
   onClick?: () => void;
+  overlayIcon?: React.ReactNode;
 }
 
 const SongButton = ({
@@ -24,15 +25,18 @@ const SongButton = ({
   showStatus,
   active,
   onClick,
+  overlayIcon,
 }: SongButtonProps) => {
   const { song, artist } = parseSongTitle(item.title);
 
   const isLoading = !item.downloaded && showStatus;
+  const isFailedDownload = item.failed;
 
   const className = clsx(
     styles.songButton,
     active && styles.active,
     isLoading && styles.loading,
+    isFailedDownload && styles.failedDownload,
   );
 
   const content = () => {
@@ -76,20 +80,36 @@ const SongButton = ({
             isStatic
           />
         )}
+        {isFailedDownload && (
+          <ActionButton
+            onSubmit={() => {}}
+            icon={<IconX />}
+            variant="error"
+            absolute
+            isStatic
+          />
+        )}
       </>
     );
   };
 
   if (children)
     return (
-      <div className={className} onClick={() => onClick?.()}>
+      <div
+        className={className}
+        onClick={() => !isFailedDownload && onClick?.()}
+      >
         {content()}
         {children && children}
+        {overlayIcon && overlayIcon}
       </div>
     );
 
   return (
-    <button className={className} onClick={() => onClick?.()}>
+    <button
+      className={className}
+      onClick={() => !isFailedDownload && onClick?.()}
+    >
       {content()}
     </button>
   );

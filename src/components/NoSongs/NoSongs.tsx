@@ -25,7 +25,7 @@ const NoSongs = () => {
       ))}
       <SiteName size="xl" />
       <span className={styles.tagline}>Queue some songs to start singing!</span>
-      <QrCode />
+      <QrCode className={styles.zIndex} />
     </div>
   );
 };

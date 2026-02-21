@@ -4,14 +4,14 @@ import { getUsers } from "../utils/User";
 import { useUserList } from "../context/UserListContext";
 import useWebhooks from "../hooks/useWebhooks";
 import { useQueue } from "../context/QueueContext";
-import { getQueue, removeFirstFromQueue } from "../utils/Queue";
+import { getQueue } from "../utils/Queue";
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => {
-  const { queue, dispatch } = useQueue();
+  const { dispatch } = useQueue();
   const { dispatch: dispatchUserList } = useUserList();
 
   useWebhooks({

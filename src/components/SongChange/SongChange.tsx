@@ -9,15 +9,19 @@ import { useEffect, useState } from "react";
 import { getUserAvatarByName } from "../../utils/User";
 
 interface SongChangeProps {
+  countdown?: number;
   fadeToBlack?: boolean;
   endOfSong?: boolean;
   onCountdownEnd?: () => void;
+  startOfQueue?: boolean;
 }
 
 const SongChange = ({
+  countdown,
   fadeToBlack,
   endOfSong,
   onCountdownEnd,
+  startOfQueue,
 }: SongChangeProps) => {
   const nextSongTaglines = [
     "Get ready",
@@ -33,14 +37,23 @@ const SongChange = ({
   ];
   const randomTagline = () =>
     nextSongTaglines[Math.floor(Math.random() * nextSongTaglines.length)];
+  const { queue } = useQueue();
 
   const [tagline, setTagline] = useState<string>(randomTagline());
+  const [currentSong, setCurrentSong] = useState<SearchItem>(queue[0]);
 
-  const { queue } = useQueue();
+  useEffect(() => {
+    if (!currentSong && queue.length > 0) setCurrentSong(queue[0]);
+  }, [queue]);
 
   useEffect(() => {
     if (fadeToBlack && endOfSong) setTagline(randomTagline());
   }, [fadeToBlack, endOfSong]);
+
+  useEffect(() => {
+    if (fadeToBlack && endOfSong && startOfQueue) setCurrentSong(queue[0]);
+    if (fadeToBlack && endOfSong && !startOfQueue) setCurrentSong(queue[1]);
+  }, [fadeToBlack, endOfSong, startOfQueue]);
 
   const joinWithLast = (
     arr: string[],
@@ -60,7 +73,7 @@ const SongChange = ({
         {endOfSong && (
           <Countdown
             className={styles.countdown}
-            seconds={10}
+            seconds={countdown ?? 10}
             onCountdownEnd={onCountdownEnd}
           />
         )}
@@ -109,8 +122,7 @@ const SongChange = ({
         )}
       ></div>
       <div className={clsx(styles.songChange, endOfSong && styles.active)}>
-        {queue[1] && content(queue[1])}
-        {queue[0] && !queue[1] && content(queue[0])}
+        {currentSong && content(currentSong)}
       </div>
     </>
   );
