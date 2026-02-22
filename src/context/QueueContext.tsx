@@ -5,7 +5,6 @@ import React, {
   type ReactNode,
 } from "react";
 import type { SearchItem } from "../pages/SearchPage/SearchPage";
-import { removeFirstFromQueue } from "../utils/Queue";
 
 // Types
 type State = SearchItem[];
