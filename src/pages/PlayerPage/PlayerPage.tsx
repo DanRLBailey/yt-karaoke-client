@@ -123,7 +123,7 @@ const PlayerPage = () => {
             queue[0].downloaded &&
             !endOfSong && (
               <VideoPlayer
-                url={`http://localhost:3000/api/stream?url=${videoUrl}`}
+                url={`${import.meta.env.VITE_API_URL}/stream?url=${videoUrl}`}
                 title={queue[0].title}
                 next={queue[1]?.title}
                 onEnded={handleEndOfSong}
