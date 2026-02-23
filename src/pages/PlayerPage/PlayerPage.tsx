@@ -127,6 +127,7 @@ const PlayerPage = () => {
                 title={queue[0].title}
                 next={queue[1]?.title}
                 onEnded={handleEndOfSong}
+                paused={fadeToBlack}
               />
             )}
           {queue.length == 0 && <NoSongs />}

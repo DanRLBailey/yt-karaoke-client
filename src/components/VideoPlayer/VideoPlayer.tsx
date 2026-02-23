@@ -10,6 +10,7 @@ interface VideoPlayerProps {
   title?: string;
   next?: string;
   onEnded: () => void;
+  paused?: boolean;
 }
 
 interface SongArtist {
@@ -17,7 +18,13 @@ interface SongArtist {
   artist: string;
 }
 
-const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
+const VideoPlayer = ({
+  url,
+  title,
+  next,
+  onEnded,
+  paused,
+}: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [progress, setProgress] = useState<number>(0);
   const [currentShown, setCurrentShown] = useState<boolean>(false);
@@ -85,7 +92,7 @@ const VideoPlayer = ({ url, title, next, onEnded }: VideoPlayerProps) => {
     <div className={styles.videoPlayer}>
       <video
         ref={videoRef}
-        autoPlay
+        autoPlay={!paused}
         controls
         src={url}
         onTimeUpdate={handleTimeUpdate}
