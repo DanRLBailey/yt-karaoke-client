@@ -7,6 +7,8 @@ interface DvdBounceProps {
 }
 
 const BASE_SPEED = 2;
+const CORNER_RADIUS = 150;
+const CORNER_TOLERANCE = 5;
 
 const randomSpeed = () => BASE_SPEED * (0.75 + Math.random() * 0.5);
 const randomPos = () => Math.random() * 500;
@@ -81,37 +83,72 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
       const vel = velRef.current;
       const size = sizeRef.current;
 
-      let bounced = false;
-
-      pos.x += vel.x;
-      pos.y += vel.y;
-
       const maxX = window.innerWidth - size.width;
       const maxY = window.innerHeight - size.height;
+
+      // Predict next frame
+      const nextX = pos.x + vel.x;
+      const nextY = pos.y + vel.y;
+
+      // Determine which corner we're heading toward
+      const targetCornerX = vel.x > 0 ? maxX : 0;
+      const targetCornerY = vel.y > 0 ? maxY : 0;
+
+      // Distance from next position to that true corner
+      const dx = targetCornerX - nextX;
+      const dy = targetCornerY - nextY;
+      const distanceToCorner = Math.sqrt(dx * dx + dy * dy);
+
+      const withinCornerRadius = distanceToCorner <= CORNER_RADIUS;
+
+      if (withinCornerRadius) {
+        console.log("🔥 Within corner radius:", Math.round(distanceToCorner));
+      }
+
+      // Apply movement
+      pos.x = nextX;
+      pos.y = nextY;
+
+      let hitX = false;
+      let hitY = false;
 
       if (pos.x >= maxX) {
         pos.x = maxX;
         vel.x = -randomSpeed();
-        bounced = true;
+        hitX = true;
       }
 
       if (pos.x <= 0) {
         pos.x = 0;
         vel.x = randomSpeed();
-        bounced = true;
+        hitX = true;
       }
 
       if (pos.y >= maxY) {
         pos.y = maxY;
         vel.y = -randomSpeed();
-        bounced = true;
+        hitY = true;
       }
 
       if (pos.y <= 0) {
         pos.y = 0;
         vel.y = randomSpeed();
-        bounced = true;
+        hitY = true;
       }
+
+      // --- TRUE CORNER (WITH TOLERANCE) ---
+      const nearLeft = pos.x <= CORNER_TOLERANCE;
+      const nearRight = Math.abs(pos.x - maxX) <= CORNER_TOLERANCE;
+      const nearTop = pos.y <= CORNER_TOLERANCE;
+      const nearBottom = Math.abs(pos.y - maxY) <= CORNER_TOLERANCE;
+
+      const hitCorner = (nearLeft || nearRight) && (nearTop || nearBottom);
+
+      if (hitCorner) {
+        console.log("💥 CORNER (within 5px)");
+      }
+
+      const bounced = hitX || hitY;
 
       if (bounced && divRef.current) {
         const newColor = getRandomColor(colorRef.current);
@@ -120,8 +157,8 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
         colorRef.current = newColor;
         divRef.current.style.color = newColor;
         divRef.current.style.textShadow = shadow;
-        const child = divRef.current?.children[0] as HTMLElement | undefined;
 
+        const child = divRef.current?.children[0] as HTMLElement | undefined;
         if (child instanceof HTMLDivElement) {
           child.style.boxShadow = shadow;
         }
