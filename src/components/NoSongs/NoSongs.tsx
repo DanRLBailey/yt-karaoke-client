@@ -8,7 +8,7 @@ import QrCode from "../QrCode/QrCode";
 const NoSongs = () => {
   const { userList } = useUserList();
 
-  const qotd = "Happy birthday, Linda! 🎉";
+  const qotd = import.meta.env.VITE_QOTD ?? "";
 
   return (
     <div className={styles.noSongs}>
