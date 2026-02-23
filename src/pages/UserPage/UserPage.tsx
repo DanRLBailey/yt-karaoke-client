@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router";
-import styles from "./HomePage.module.scss";
+import styles from "./UserPage.module.scss";
 import { useEffect } from "react";
 import Layout from "../../layouts/Layout";
-import SiteName from "../../components/SiteName/SiteName";
 import UserEdit from "../../components/UserEdit/UserEdit";
 
-const HomePage = () => {
+const UserPage = () => {
   let navigate = useNavigate();
   const siteTitle = import.meta.env.VITE_SITE_NAME;
 
@@ -23,12 +22,12 @@ const HomePage = () => {
 
   return (
     <Layout>
-      <div className={styles.homePage}>
-        <SiteName />
+      <div className={styles.userPage}>
         <UserEdit onKeyDown={onKeyDown} onButtonPress={navigateToSearch} />
+        <button onClick={navigateToSearch}>Cancel</button>
       </div>
     </Layout>
   );
 };
 
-export default HomePage;
+export default UserPage;

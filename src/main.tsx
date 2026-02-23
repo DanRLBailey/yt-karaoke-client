@@ -8,6 +8,7 @@ import { UserProvider } from "./context/UserContext.tsx";
 import HomePage from "./pages/HomePage/HomePage.tsx";
 import { UserListProvider } from "./context/UserListContext.tsx";
 import { NotificationProvider } from "./context/NotificationContext.tsx";
+import UserPage from "./pages/UserPage/UserPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   // <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/" element={<HomePage />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/host" element={<PlayerPage />} />
+              <Route path="/user" element={<UserPage />} />
             </Routes>
           </BrowserRouter>
         </QueueProvider>

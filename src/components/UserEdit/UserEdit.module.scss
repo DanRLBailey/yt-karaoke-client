@@ -1,0 +1,14 @@
+.userEdit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
+  .profileImage {
+    height: 65dvw;
+    width: 65dvw;
+
+    max-height: 300px;
+    max-width: 300px;
+  }
+}

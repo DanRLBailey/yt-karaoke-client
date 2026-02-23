@@ -125,7 +125,7 @@ const SearchPage = () => {
           <div className={styles.header}>
             <ProfileImage
               className={styles.profileImage}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/user")}
             />
             <SiteName />
             <button onClick={() => setQueueOpen(!queueOpen)}>
