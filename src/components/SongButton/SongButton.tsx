@@ -71,7 +71,7 @@ const SongButton = ({
             <LoadingSpinner multiplier={0.5} />
           </div>
         )}
-        {active && (
+        {active && !isLoading && (
           <ActionButton
             onSubmit={() => {}}
             icon={<IconPlayerPlay />}
