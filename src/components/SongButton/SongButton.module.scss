@@ -14,10 +14,12 @@
   flex-direction: column;
   position: relative;
   color: var(--font-color);
+  align-items: flex-start;
 
   .content {
     display: flex;
     gap: 0.5rem;
+    width: 100%;
 
     .thumbnail {
       width: 6rem;
