@@ -9,7 +9,7 @@ interface VideoPlayerProps {
   url: string;
   title?: string;
   next?: string;
-  onEnded: () => void;
+  onEnded?: () => void;
   paused?: boolean;
 }
 

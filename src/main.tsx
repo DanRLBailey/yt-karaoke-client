@@ -10,26 +10,27 @@ import { UserListProvider } from "./context/UserListContext.tsx";
 import { NotificationProvider } from "./context/NotificationContext.tsx";
 import UserPage from "./pages/UserPage/UserPage.tsx";
 import { SoundEffectProvider } from "./context/SoundEffectContext.tsx";
+import { StrictMode } from "react";
 
 createRoot(document.getElementById("root")!).render(
-  // <StrictMode>
-  <NotificationProvider>
-    <UserListProvider>
-      <UserProvider>
-        <QueueProvider>
-          <SoundEffectProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/host" element={<PlayerPage />} />
-                <Route path="/user" element={<UserPage />} />
-              </Routes>
-            </BrowserRouter>
-          </SoundEffectProvider>
-        </QueueProvider>
-      </UserProvider>
-    </UserListProvider>
-  </NotificationProvider>,
-  // </StrictMode>,
+  <StrictMode>
+    <NotificationProvider>
+      <UserListProvider>
+        <UserProvider>
+          <QueueProvider>
+            <SoundEffectProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/host" element={<PlayerPage />} />
+                  <Route path="/user" element={<UserPage />} />
+                </Routes>
+              </BrowserRouter>
+            </SoundEffectProvider>
+          </QueueProvider>
+        </UserProvider>
+      </UserListProvider>
+    </NotificationProvider>
+  </StrictMode>,
 );

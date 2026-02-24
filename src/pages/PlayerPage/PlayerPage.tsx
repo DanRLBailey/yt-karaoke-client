@@ -8,17 +8,19 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Layout from "../../layouts/Layout";
 import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
+import type { SearchItem } from "../SearchPage/SearchPage";
 
-const fadeOutTime = 1;
 const countdown = 2;
+
+const getVideoUrl = (videoId: string) =>
+  encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
 
 const PlayerPage = () => {
   const { queue } = useQueue();
-  const [videoUrl, setVideoUrl] = useState<string>("");
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
-  const [fadeToBlack, setFadeToBlack] = useState<boolean>(false);
   const [endOfSong, setEndOfSong] = useState<boolean>(false);
-  const [startOfQueue, setStartOfQueue] = useState<boolean>(true);
+  const [currentSong, setCurrentSong] = useState<SearchItem>();
+  const [nextSong, setNextSong] = useState<SearchItem>();
 
   const siteTitle = import.meta.env.VITE_SITE_NAME;
 
@@ -32,74 +34,28 @@ const PlayerPage = () => {
   }, [queue]);
 
   useEffect(() => {
-    if (queue.length === 0) {
-      setStartOfQueue(true);
-      setVideoUrl("");
+    if (queue.length === 0) return;
+    if (!currentSong || currentSong !== queue[0]) setCurrentSong(queue[0]);
+
+    if (queue.length === 1) {
+      setNextSong(undefined);
       return;
     }
+    if (queue.length >= 2 && nextSong !== queue[1]) setNextSong(queue[1]);
+  }, [queue]);
 
-    if (queue.length > 0 && !queue[0].downloaded) {
-      return;
-    }
-
-    const firstSong = queue[0];
-
-    if (firstSong.failed) removeFirstFromQueue();
-
-    if (firstSong.downloaded && startOfQueue) {
-      handleStartOfQueue(() =>
-        setVideoUrl(
-          encodeURIComponent(
-            `https://www.youtube.com/watch?v=${firstSong.videoId}`,
-          ),
-        ),
-      );
-    } else if (firstSong.downloaded && !startOfQueue) {
-      setVideoUrl(
-        encodeURIComponent(
-          `https://www.youtube.com/watch?v=${firstSong.videoId}`,
-        ),
-      );
-    }
-  }, [queue, startOfQueue]);
-
-  const handleStartOfQueue = (callback?: () => void) => {
-    setEndOfSong(true);
-
-    setTimeout(
-      () => {
-        setStartOfQueue(false);
-        callback?.();
-      },
-      fadeOutTime * (countdown + 1) * 1000,
-    );
-  };
-
-  const handleEndOfSong = () => {
-    setFadeToBlack(true);
+  useEffect(() => {
+    if (!endOfSong) return;
 
     if (queue.length == 1) {
-      handleSongChange();
-      return;
+      removeFirstFromQueue();
+      setEndOfSong(false);
     }
-
-    setTimeout(() => {
-      setEndOfSong(true);
-    }, fadeOutTime * 1000);
-  };
+  }, [endOfSong]);
 
   const handleSongChange = () => {
+    removeFirstFromQueue();
     setEndOfSong(false);
-
-    if (startOfQueue) {
-      setStartOfQueue(false);
-      return;
-    }
-
-    setTimeout(() => {
-      setFadeToBlack(false);
-      removeFirstFromQueue();
-    }, fadeOutTime * 1000);
   };
 
   return (
@@ -110,26 +66,23 @@ const PlayerPage = () => {
           onMouseEnter={() => setQueueOpen(true)}
         ></div>
         <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
-        <SongChange
-          countdown={countdown}
-          fadeToBlack={fadeToBlack}
-          endOfSong={endOfSong}
-          onCountdownEnd={handleSongChange}
-          startOfQueue={startOfQueue}
-        />
+        {endOfSong && nextSong && (
+          <SongChange
+            countdown={countdown}
+            onCountdownEnd={handleSongChange}
+            nextSong={nextSong}
+          />
+        )}
         <div className={styles.video}>
-          {queue.length > 0 &&
-            videoUrl != "" &&
-            queue[0].downloaded &&
-            !endOfSong && (
-              <VideoPlayer
-                url={`${import.meta.env.VITE_API_URL}/stream?url=${videoUrl}`}
-                title={queue[0].title}
-                next={queue[1]?.title}
-                onEnded={handleEndOfSong}
-                paused={fadeToBlack}
-              />
-            )}
+          {queue.length > 0 && currentSong?.videoId && (
+            <VideoPlayer
+              url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
+              title={currentSong?.title}
+              next={nextSong?.title}
+              onEnded={() => setEndOfSong(true)}
+              paused={endOfSong}
+            />
+          )}
           {queue.length == 0 && <NoSongs />}
           {queue.length > 0 && !queue[0].downloaded && (
             <LoadingSpinner multiplier={2} />
