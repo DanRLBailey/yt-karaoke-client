@@ -14,7 +14,7 @@ export const getUserAvatarByName = (name: string) => {
   return userList.find((u) => u.name == name)?.avatar ?? "";
 };
 
-export const getUserByName = (name: string) => {
-  const { userList } = useUserList();
-  return userList.find((u) => u.name == name) ?? "";
+export const getUserByName = (userList: User[], name?: string) => {
+  if (!name) return undefined;
+  return userList.find((u) => u.name === name);
 };

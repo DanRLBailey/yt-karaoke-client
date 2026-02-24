@@ -102,7 +102,7 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
       const withinCornerRadius = distanceToCorner <= CORNER_RADIUS;
 
       if (withinCornerRadius) {
-        console.log("🔥 Within corner radius:", Math.round(distanceToCorner));
+        // console.log("🔥 Within corner radius:", Math.round(distanceToCorner));
       }
 
       // Apply movement

@@ -13,7 +13,8 @@ type State = User;
 type Action =
   | { type: "SET_USER"; payload: User }
   | { type: "SET_USER_NAME"; payload: string }
-  | { type: "SET_PROFILE_IMAGE"; payload: string };
+  | { type: "SET_PROFILE_IMAGE"; payload: string }
+  | { type: "SET_SOUND_EFFECT"; payload: string };
 
 type ContextType = {
   user: User;
@@ -34,6 +35,9 @@ const reducer = (state: State, action: Action): State => {
 
     case "SET_PROFILE_IMAGE":
       return { ...state, avatar: action.payload };
+
+    case "SET_SOUND_EFFECT":
+      return { ...state, soundEffect: action.payload };
 
     default:
       return state;

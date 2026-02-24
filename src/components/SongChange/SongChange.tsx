@@ -6,7 +6,9 @@ import Countdown from "../Countdown/Countdown";
 import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import ProfileImage from "../ProfileImage/ProfileImage";
 import { useEffect, useState } from "react";
-import { getUserAvatarByName } from "../../utils/User";
+import { getUserAvatarByName, getUserByName } from "../../utils/User";
+import { useSoundEffect } from "../../context/SoundEffectContext";
+import { useUserList } from "../../context/UserListContext";
 
 interface SongChangeProps {
   countdown?: number;
@@ -23,6 +25,7 @@ const SongChange = ({
   onCountdownEnd,
   startOfQueue,
 }: SongChangeProps) => {
+  // All hooks must be called at the top level, not inside any function or conditional
   const nextSongTaglines = [
     "Get ready",
     "Grab the mic",
@@ -38,9 +41,12 @@ const SongChange = ({
   const randomTagline = () =>
     nextSongTaglines[Math.floor(Math.random() * nextSongTaglines.length)];
   const { queue } = useQueue();
+  const { userList } = useUserList();
+  const { playSoundEffect } = useSoundEffect();
 
-  const [tagline, setTagline] = useState<string>(randomTagline());
-  const [currentSong, setCurrentSong] = useState<SearchItem>(queue[0]);
+  // Always initialize state safely
+  const [tagline, setTagline] = useState<string>(() => randomTagline());
+  const [currentSong, setCurrentSong] = useState<SearchItem>(() => queue[0]);
 
   useEffect(() => {
     if (!currentSong && queue.length > 0) setCurrentSong(queue[0]);
@@ -55,6 +61,8 @@ const SongChange = ({
     if (fadeToBlack && endOfSong && !startOfQueue) setCurrentSong(queue[1]);
   }, [fadeToBlack, endOfSong, startOfQueue]);
 
+  // Move all hooks to top level, do not call hooks in content()
+
   const joinWithLast = (
     arr: string[],
     lastSeparator: string,
@@ -66,6 +74,15 @@ const SongChange = ({
 
     return `${arr.slice(0, -1).join(separator)}${lastSeparator}${arr[arr.length - 1]}`;
   };
+
+  useEffect(() => {
+    if (!currentSong) return;
+
+    const user = getUserByName(userList, currentSong?.requester ?? "");
+    if (user && user.soundEffect) {
+      playSoundEffect(user.soundEffect);
+    }
+  }, [currentSong]);
 
   const content = (songItem: SearchItem) => {
     return (
@@ -82,15 +99,13 @@ const SongChange = ({
             avatar={getUserAvatarByName(songItem.requester ?? "")}
             className={styles.profileImage}
           />
-          {songItem.team?.map((u, index) => {
-            return (
-              <ProfileImage
-                avatar={getUserAvatarByName(u ?? "")}
-                className={styles.profileImage}
-                key={index}
-              />
-            );
-          })}
+          {songItem.team?.map((u, index) => (
+            <ProfileImage
+              avatar={getUserAvatarByName(u ?? "")}
+              className={styles.profileImage}
+              key={index}
+            />
+          ))}
         </div>
         {songItem.requester && (
           <span className={styles.songChangeRequester}>

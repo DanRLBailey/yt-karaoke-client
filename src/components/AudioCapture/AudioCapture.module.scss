@@ -1,0 +1,64 @@
+.audioCapture {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+  width: 80dvw;
+  height: 7.5rem;
+
+  .title {
+    opacity: 0.5;
+  }
+
+  .microphoneButton {
+    padding: 1rem;
+    position: relative;
+
+    svg {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50rem;
+      background-color: rgba(var(--accent-color-rgb), 0.5);
+      transform: scale(0);
+    }
+
+    &.active {
+      &::before {
+        transform: scale(0.75);
+        animation: pulse 2s infinite;
+      }
+    }
+  }
+
+  .listener {
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
+
+    audio {
+      width: 100%;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.75);
+  }
+  50% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.75);
+  }
+}

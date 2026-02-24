@@ -35,7 +35,7 @@ const ExpandableSongButton = ({
   const [selectedBandmates, setSelectedBandmates] = useState<User[]>(
     item.team
       ? item.team
-          .map((name) => getUserByName(name))
+          .map((name) => getUserByName(userList, name))
           .filter((u): u is User => u !== undefined)
       : [],
   );
