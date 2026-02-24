@@ -146,7 +146,7 @@ const SearchPage = () => {
         {results && (
           <ul className={styles.resultList}>
             {results?.items?.map((item, index) => (
-              <li key={index}>
+              <li key={item.videoId + index}>
                 <ExpandableSongButton
                   item={checkIfItemInQueue(item, queue)}
                   onSubmit={(bandmates, addedToQueue) =>
