@@ -3,7 +3,7 @@ import { parseSongTitle } from "../../utils/Song";
 import Countdown from "../Countdown/Countdown";
 import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getUserAvatarByName, getUserByName } from "../../utils/User";
 import { useSoundEffect } from "../../context/SoundEffectContext";
 import { useUserList } from "../../context/UserListContext";
@@ -50,7 +50,7 @@ const SongChange = ({
   const { playSoundEffect } = useSoundEffect();
   const { userList } = useUserList();
 
-  const tagline = randomTagline();
+  const [tagline] = useState<string>(randomTagline());
 
   useEffect(() => {
     const players = [
