@@ -75,7 +75,7 @@ const PlayerPage = () => {
             nextSong={nextSong}
           />
         )}
-        {startOfQueue && currentSong && nextSong === undefined && (
+        {startOfQueue && currentSong && (
           <SongChange
             countdown={countdown}
             onCountdownEnd={() => setStartOfQueue(false)}
