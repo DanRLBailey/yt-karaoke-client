@@ -32,6 +32,9 @@ export const removeIndexFromQueue = async (
 };
 
 ///
-export const checkIfItemInQueue = (item: SearchItem, queue: SearchItem[]) => {
-  return queue.find((q) => q.videoId == item.videoId) ?? item;
+export const checkIfItemInQueue = (
+  item: SearchItem,
+  queue: SearchItem[],
+): boolean => {
+  return queue.find((q) => q.videoId == item.videoId) !== undefined;
 };

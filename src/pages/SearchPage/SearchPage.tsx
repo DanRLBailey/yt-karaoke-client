@@ -15,8 +15,6 @@ import { useNavigate } from "react-router";
 import ExpandableSongButton from "../../components/ExpandableSongButton/ExpandableSongButton";
 import { parseSongTitle } from "../../utils/Song";
 import { useNotification } from "../../context/NotificationContext";
-import { checkIfItemInQueue } from "../../utils/Queue";
-import { useQueue } from "../../context/QueueContext";
 
 interface Search {
   items: SearchItem[];
@@ -40,7 +38,6 @@ const SearchPage = () => {
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
 
   const { user } = useUser();
-  const { queue } = useQueue();
   const { dispatch } = useUserList();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
@@ -148,7 +145,7 @@ const SearchPage = () => {
             {results?.items?.map((item, index) => (
               <li key={item.videoId + index}>
                 <ExpandableSongButton
-                  item={checkIfItemInQueue(item, queue)}
+                  item={item}
                   onSubmit={(bandmates, addedToQueue) =>
                     handleSongSelect(item, bandmates, addedToQueue)
                   }

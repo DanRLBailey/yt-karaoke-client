@@ -10,6 +10,8 @@ import { useUser } from "../../context/UserContext";
 import type { User } from "../../interfaces/user";
 import SongButton from "../SongButton/SongButton";
 import ActionButton from "../ActionButton/ActionButton";
+import { useQueue } from "../../context/QueueContext";
+import { checkIfItemInQueue } from "../../utils/Queue";
 
 interface ExpandableSongButtonProps {
   item: SearchItem;
@@ -31,6 +33,7 @@ const ExpandableSongButton = ({
 }: ExpandableSongButtonProps) => {
   const { user } = useUser();
   const { userList } = useUserList();
+  const { queue } = useQueue();
   const [otherUsers, setOtherUsers] = useState<User[]>([]);
   const [selectedBandmates, setSelectedBandmates] = useState<User[]>(
     item.team
@@ -40,10 +43,13 @@ const ExpandableSongButton = ({
       : [],
   );
   const [addedToQueue, setAddedToQueue] = useState<boolean>(
-    Boolean(item.requester),
+    checkIfItemInQueue(item, queue),
   );
-
   const [expanded, setExpanded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setAddedToQueue(checkIfItemInQueue(item, queue));
+  }, [queue]);
 
   useEffect(() => {
     const other =
@@ -74,10 +80,6 @@ const ExpandableSongButton = ({
   const handleSubmit = () => {
     onSubmit?.(selectedBandmates ?? [], addedToQueue);
     setAddedToQueue(true);
-    // if (!addedToQueue) {
-    // setSelectedBandmates([]);
-    // setExpanded(false);
-    // }
   };
 
   return (
