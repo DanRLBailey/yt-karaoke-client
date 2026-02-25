@@ -53,13 +53,17 @@ const SongChange = ({
   const tagline = randomTagline();
 
   useEffect(() => {
-    if (!nextSong?.requester) return;
-    const user = getUserByName(userList, nextSong.requester);
+    const players = [
+      nextSong.requester,
+      ...(nextSong && nextSong.team ? nextSong.team : []),
+    ];
 
-    console.log(user?.soundEffect);
+    players.forEach((player) => {
+      const user = getUserByName(userList, player);
 
-    if (!user?.soundEffect) return;
-    playSoundEffect(user?.soundEffect);
+      if (!user?.soundEffect) return;
+      playSoundEffect(user?.soundEffect);
+    });
   }, []);
 
   return (
