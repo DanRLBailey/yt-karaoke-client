@@ -10,7 +10,7 @@ import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 
-const countdown = 2;
+const countdown = 10;
 
 const getVideoUrl = (videoId: string) =>
   encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
@@ -19,6 +19,7 @@ const PlayerPage = () => {
   const { queue } = useQueue();
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [endOfSong, setEndOfSong] = useState<boolean>(false);
+  const [startOfQueue, setStartOfQueue] = useState<boolean>(false);
   const [currentSong, setCurrentSong] = useState<SearchItem>();
   const [nextSong, setNextSong] = useState<SearchItem>();
 
@@ -39,6 +40,7 @@ const PlayerPage = () => {
 
     if (queue.length === 1) {
       setNextSong(undefined);
+      setStartOfQueue(true);
       return;
     }
     if (queue.length >= 2 && nextSong !== queue[1]) setNextSong(queue[1]);
@@ -73,6 +75,13 @@ const PlayerPage = () => {
             nextSong={nextSong}
           />
         )}
+        {startOfQueue && currentSong && nextSong === undefined && (
+          <SongChange
+            countdown={countdown}
+            onCountdownEnd={() => setStartOfQueue(false)}
+            nextSong={currentSong}
+          />
+        )}
         <div className={styles.video}>
           {queue.length > 0 && currentSong?.videoId && (
             <VideoPlayer
@@ -80,7 +89,7 @@ const PlayerPage = () => {
               title={currentSong?.title}
               next={nextSong?.title}
               onEnded={() => setEndOfSong(true)}
-              paused={endOfSong}
+              paused={startOfQueue || endOfSong}
             />
           )}
           {queue.length == 0 && <NoSongs />}
