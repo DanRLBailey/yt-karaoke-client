@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import styles from "./SiteName.module.scss";
-import Logo from "../../assets/logo-transparent.svg";
 
 interface SiteNameProps {
   className?: string;

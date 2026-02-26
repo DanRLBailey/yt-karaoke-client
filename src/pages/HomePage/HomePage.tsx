@@ -2,7 +2,6 @@ import { useNavigate } from "react-router";
 import styles from "./HomePage.module.scss";
 import { useEffect } from "react";
 import Layout from "../../layouts/Layout";
-import SiteName from "../../components/SiteName/SiteName";
 import UserEdit from "../../components/UserEdit/UserEdit";
 import SplashScreen from "../../components/SplashScreen/SplashScreen";
 
