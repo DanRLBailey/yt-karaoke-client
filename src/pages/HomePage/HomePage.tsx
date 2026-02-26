@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Layout from "../../layouts/Layout";
 import SiteName from "../../components/SiteName/SiteName";
 import UserEdit from "../../components/UserEdit/UserEdit";
+import SplashScreen from "../../components/SplashScreen/SplashScreen";
 
 const HomePage = () => {
   let navigate = useNavigate();
@@ -24,7 +25,7 @@ const HomePage = () => {
   return (
     <Layout>
       <div className={styles.homePage}>
-        <SiteName />
+        <SplashScreen />
         <UserEdit onKeyDown={onKeyDown} onButtonPress={navigateToSearch} />
       </div>
     </Layout>

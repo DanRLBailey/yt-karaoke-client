@@ -5,6 +5,7 @@ import {
   IconMicrophoneFilled,
   IconX,
   IconCheck,
+  IconPlayerPlay,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 
@@ -33,7 +34,7 @@ const AudioCapture = ({
     soundEffectB64 ?? null,
   );
 
-  const MAX_DURATION_MS = 5000;
+  const MAX_DURATION = 5;
 
   const startRecording = async () => {
     if (isRecording) return;
@@ -76,7 +77,7 @@ const AudioCapture = ({
     // Auto-stop after 5 seconds
     timeoutRef.current = window.setTimeout(() => {
       mediaRecorder.stop();
-    }, MAX_DURATION_MS);
+    }, MAX_DURATION * 1000);
   };
 
   const stopRecording = () => {
@@ -91,8 +92,18 @@ const AudioCapture = ({
     onAcceptSoundEffect?.(audioBlob);
   };
 
+  const playAudio = () => {
+    if (!audioUrl) return;
+
+    const audio = new Audio(audioUrl);
+    audio.play();
+  };
+
   return (
-    <div className={styles.audioCapture}>
+    <div
+      className={styles.audioCapture}
+      style={{ "--animation-time": MAX_DURATION + "s" } as React.CSSProperties}
+    >
       {!audioUrl && (
         <>
           <span className={styles.title}>Record a sound effect?</span>
@@ -102,10 +113,10 @@ const AudioCapture = ({
               styles.microphoneButton,
               isRecording && styles.active,
             )}
-            onMouseDown={startRecording}
-            onTouchStart={startRecording}
-            onMouseUp={stopRecording}
-            onTouchEnd={stopRecording}
+            onClick={() => (!isRecording ? startRecording() : stopRecording())}
+            onTouchStart={() =>
+              !isRecording ? startRecording() : stopRecording()
+            }
           >
             {!isRecording && <IconMicrophone />}
             {isRecording && <IconMicrophoneFilled />}
@@ -125,7 +136,10 @@ const AudioCapture = ({
             <IconX />
           </button>
 
-          <audio controls src={audioUrl} />
+          <button className={styles.playButton} onClick={playAudio}>
+            <IconPlayerPlay />
+          </button>
+
           {!acceptedRecording && (
             <button onClick={uploadAudio}>
               <IconCheck />
