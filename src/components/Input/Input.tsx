@@ -1,10 +1,11 @@
 import { useRef } from "react";
-import styles from "./Input.module.scss";
 import { IconSearch } from "@tabler/icons-react";
+import InputWrapper from "../InputWrapper/InputWrapper";
 
 interface InputProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
+  label?: string;
   placeholder?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onButtonPress?: () => void;
@@ -28,6 +29,7 @@ const capitalizeFirst = (value: string): string => {
 const Input = ({
   value,
   onChange,
+  label,
   placeholder,
   onKeyDown,
   onButtonPress,
@@ -46,19 +48,22 @@ const Input = ({
   };
 
   return (
-    <div className={styles.input}>
+    <InputWrapper label={label}>
       <input
         ref={inputRef}
+        id={label + "-input"}
         onChange={(e) => onChange?.(e)}
         value={value}
         placeholder={placeholder}
         onKeyDown={onKeyDown}
         enterKeyHint={enterKeyHint}
       />
-      <button className={styles.searchButton} onClick={() => onButtonPress?.()}>
-        {enterKeyText ?? getEnterKeyByHint()}
-      </button>
-    </div>
+      {(onButtonPress || enterKeyHint) && (
+        <button onClick={() => onButtonPress?.()}>
+          {enterKeyText ?? getEnterKeyByHint()}
+        </button>
+      )}
+    </InputWrapper>
   );
 };
 

@@ -1,12 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./AudioCapture.module.scss";
 import {
   IconMicrophone,
-  IconMicrophoneFilled,
   IconX,
-  IconCheck,
   IconPlayerPlay,
+  IconPlayerPause,
 } from "@tabler/icons-react";
+import InputWrapper from "../InputWrapper/InputWrapper";
+import WavesurferPlayer from "@wavesurfer/react";
+import WaveSurfer from "wavesurfer.js";
 import clsx from "clsx";
 
 interface AudioCaptureProps {
@@ -27,12 +29,16 @@ const AudioCapture = ({
 
   const [isRecording, setIsRecording] = useState(false);
   const [acceptedRecording, setAcceptedRecording] = useState<boolean>(
-    soundEffectB64 != "",
+    soundEffectB64 != "" && soundEffectB64 !== undefined,
   );
-  const [audioBlob, setAudioBlob] = useState<Blob | null>(soundEffect ?? null);
+  const [audioBlob, setAudioBlob] = useState<Blob | undefined>(
+    soundEffect ?? undefined,
+  );
   const [audioUrl, setAudioUrl] = useState<string | null>(
     soundEffectB64 ?? null,
   );
+  const [playing, setPlaying] = useState<boolean>(false);
+  const [wavesurfer, setWavesurfer] = useState<WaveSurfer>();
 
   const MAX_DURATION = 5;
 
@@ -60,6 +66,7 @@ const AudioCapture = ({
 
       setAudioBlob(blob);
       setAudioUrl(URL.createObjectURL(blob));
+      uploadAudio();
 
       stream.getTracks().forEach((track) => track.stop());
 
@@ -85,6 +92,10 @@ const AudioCapture = ({
     mediaRecorderRef.current?.stop();
   };
 
+  useEffect(() => {
+    uploadAudio();
+  }, [audioBlob]);
+
   const uploadAudio = async () => {
     if (!audioBlob) return;
 
@@ -92,61 +103,73 @@ const AudioCapture = ({
     onAcceptSoundEffect?.(audioBlob);
   };
 
-  const playAudio = () => {
-    if (!audioUrl) return;
-
-    const audio = new Audio(audioUrl);
-    audio.play();
+  const onReady = (ws: WaveSurfer) => {
+    setWavesurfer(ws);
+    setPlaying(false);
   };
 
+  const onPlayPause = () => {
+    wavesurfer && wavesurfer.playPause();
+  };
+
+  const waveColor =
+    getComputedStyle(document.documentElement).getPropertyValue(
+      "--accent-color",
+    ) || "#00f";
+
   return (
-    <div
-      className={styles.audioCapture}
-      style={{ "--animation-time": MAX_DURATION + "s" } as React.CSSProperties}
-    >
-      {!audioUrl && (
-        <>
-          <span className={styles.title}>Record a sound effect?</span>
-
-          <button
-            className={clsx(
-              styles.microphoneButton,
-              isRecording && styles.active,
-            )}
-            onClick={() => (!isRecording ? startRecording() : stopRecording())}
-            onTouchStart={() =>
-              !isRecording ? startRecording() : stopRecording()
-            }
-          >
-            {!isRecording && <IconMicrophone />}
-            {isRecording && <IconMicrophoneFilled />}
-          </button>
-        </>
-      )}
-
-      {audioUrl && (
-        <div className={styles.listener}>
-          <button
-            onClick={() => {
-              setAudioUrl("");
-              setAcceptedRecording(false);
-            }}
-            disabled={isRecording}
-          >
-            <IconX />
-          </button>
-
-          <button className={styles.playButton} onClick={playAudio}>
-            <IconPlayerPlay />
-          </button>
-
-          {!acceptedRecording && (
-            <button onClick={uploadAudio}>
-              <IconCheck />
+    <div className={styles.audioCapture}>
+      <InputWrapper label="Sound Effect?">
+        {!acceptedRecording && (
+          <>
+            <button
+              className={clsx(
+                styles.recordButton,
+                isRecording && styles.recording,
+              )}
+              onClick={
+                !acceptedRecording
+                  ? () => (!isRecording ? startRecording() : stopRecording())
+                  : undefined
+              }
+            >
+              <IconMicrophone />
             </button>
-          )}
-        </div>
-      )}
+            <span>{isRecording ? "Recording..." : "Tap to record"}</span>
+          </>
+        )}
+        {acceptedRecording && (
+          <>
+            <button onClick={onPlayPause}>
+              {playing && <IconPlayerPause />}
+              {!playing && <IconPlayerPlay />}
+            </button>
+            <div style={{ flex: 1 }}>
+              {audioUrl && (
+                <WavesurferPlayer
+                  height={35}
+                  waveColor={waveColor}
+                  url={audioUrl}
+                  onReady={onReady}
+                  onPlay={() => setPlaying(true)}
+                  onPause={() => setPlaying(false)}
+                  barWidth={2}
+                />
+              )}
+            </div>
+            <button
+              onClick={() => {
+                setAudioUrl("");
+                setAudioBlob(undefined);
+                setAcceptedRecording(false);
+              }}
+              disabled={isRecording}
+            >
+              <IconX />
+            </button>
+          </>
+        )}
+      </InputWrapper>
     </div>
   );
 };

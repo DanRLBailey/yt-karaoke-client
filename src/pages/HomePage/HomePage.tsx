@@ -13,10 +13,6 @@ const HomePage = () => {
     document.title = `Home - ${siteTitle}`;
   }, []);
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") navigateToSearch();
-  };
-
   const navigateToSearch = () => {
     navigate("/search");
   };
@@ -25,7 +21,7 @@ const HomePage = () => {
     <Layout>
       <div className={styles.homePage}>
         <SplashScreen />
-        <UserEdit onKeyDown={onKeyDown} onButtonPress={navigateToSearch} />
+        <UserEdit onButtonPress={navigateToSearch} saveKeyText="Join" />
       </div>
     </Layout>
   );

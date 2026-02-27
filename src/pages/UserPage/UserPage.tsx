@@ -12,10 +12,6 @@ const UserPage = () => {
     document.title = `Home - ${siteTitle}`;
   }, []);
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") navigateToSearch();
-  };
-
   const navigateToSearch = () => {
     navigate("/search");
   };
@@ -23,8 +19,10 @@ const UserPage = () => {
   return (
     <Layout>
       <div className={styles.userPage}>
-        <UserEdit onKeyDown={onKeyDown} onButtonPress={navigateToSearch} />
-        <button onClick={navigateToSearch}>Cancel</button>
+        <UserEdit
+          onButtonPress={navigateToSearch}
+          onCancel={navigateToSearch}
+        />
       </div>
     </Layout>
   );

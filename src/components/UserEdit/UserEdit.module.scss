@@ -2,13 +2,47 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 3rem;
+  flex: 1;
+  padding-top: 6rem;
 
   .profileImage {
-    height: 65dvw;
-    width: 65dvw;
+    height: 15rem;
+    width: 15rem;
 
     max-height: 300px;
     max-width: 300px;
+    margin-bottom: 1.25rem;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem;
+    margin-top: auto;
+    margin-bottom: 5rem;
+    justify-content: center;
+
+    button {
+      color: white;
+      font-weight: bold;
+      min-width: 120px;
+      padding-block: 0.875rem;
+      padding-inline: 1.125rem;
+
+      &:last-of-type {
+        background-color: var(--accent-color);
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .userEdit {
+    .profileImage {
+      height: 10rem;
+      width: 10rem;
+    }
   }
 }

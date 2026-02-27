@@ -40,30 +40,36 @@ interface SongChangeProps {
   countdown: number;
   onCountdownEnd?: () => void;
   nextSong: SearchItem;
+  c?: string;
 }
 
 const SongChange = ({
   countdown,
   onCountdownEnd,
   nextSong,
+  c,
 }: SongChangeProps) => {
   const { playSoundEffect } = useSoundEffect();
   const { userList } = useUserList();
 
+  console.log(c);
+
   const [tagline] = useState<string>(randomTagline());
 
   useEffect(() => {
-    const players = [
-      nextSong.requester,
-      ...(nextSong && nextSong.team ? nextSong.team : []),
-    ];
+    setTimeout(() => {
+      const players = [
+        nextSong.requester,
+        ...(nextSong && nextSong.team ? nextSong.team : []),
+      ];
 
-    players.forEach((player) => {
-      const user = getUserByName(userList, player);
+      players.forEach((player) => {
+        const user = getUserByName(userList, player);
 
-      if (!user?.soundEffect) return;
-      playSoundEffect(user?.soundEffect);
-    });
+        if (!user?.soundEffect) return;
+        playSoundEffect(user?.soundEffect);
+      });
+    }, 100);
   }, []);
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQueue } from "../../context/QueueContext";
 import styles from "./PlayerPage.module.scss";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
@@ -10,7 +10,7 @@ import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 
-const countdown = 10;
+const countdown = 2;
 
 const getVideoUrl = (videoId: string) =>
   encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
@@ -24,6 +24,7 @@ const PlayerPage = () => {
   const [nextSong, setNextSong] = useState<SearchItem>();
 
   const siteTitle = import.meta.env.VITE_SITE_NAME;
+  const prevQueueLength = useRef(queue.length);
 
   useEffect(() => {
     if (!queue || queue.length == 0) {
@@ -35,15 +36,23 @@ const PlayerPage = () => {
   }, [queue]);
 
   useEffect(() => {
-    if (queue.length === 0) return;
-    if (!currentSong || currentSong !== queue[0]) setCurrentSong(queue[0]);
-
-    if (queue.length === 1) {
-      setNextSong(undefined);
-      setStartOfQueue(true);
+    if (queue.length === 0) {
+      prevQueueLength.current = 0;
       return;
     }
-    if (queue.length >= 2 && nextSong !== queue[1]) setNextSong(queue[1]);
+
+    // Show startOfQueue only if queue went from 0 → 1
+    if (prevQueueLength.current === 0 && queue.length === 1) {
+      setCurrentSong(queue[0]);
+      setNextSong(undefined);
+      setStartOfQueue(true);
+    } else {
+      // Normal queue handling
+      if (!currentSong || currentSong !== queue[0]) setCurrentSong(queue[0]);
+      if (queue.length >= 2 && nextSong !== queue[1]) setNextSong(queue[1]);
+    }
+
+    prevQueueLength.current = queue.length;
   }, [queue]);
 
   useEffect(() => {
@@ -58,6 +67,7 @@ const PlayerPage = () => {
   const handleSongChange = () => {
     removeFirstFromQueue();
     setEndOfSong(false);
+    setStartOfQueue(false);
   };
 
   return (
@@ -68,30 +78,34 @@ const PlayerPage = () => {
           onMouseEnter={() => setQueueOpen(true)}
         ></div>
         <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
-        {endOfSong && nextSong && (
+        {endOfSong && nextSong ? (
           <SongChange
             countdown={countdown}
             onCountdownEnd={handleSongChange}
             nextSong={nextSong}
+            c="1"
           />
-        )}
-        {startOfQueue && currentSong && (
+        ) : startOfQueue && currentSong ? (
           <SongChange
             countdown={countdown}
             onCountdownEnd={() => setStartOfQueue(false)}
             nextSong={currentSong}
+            c="2"
           />
-        )}
+        ) : null}
         <div className={styles.video}>
-          {queue.length > 0 && currentSong?.videoId && (
-            <VideoPlayer
-              url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
-              title={currentSong?.title}
-              next={nextSong?.title}
-              onEnded={() => setEndOfSong(true)}
-              paused={startOfQueue || endOfSong}
-            />
-          )}
+          {queue.length > 0 &&
+            currentSong?.videoId &&
+            !endOfSong &&
+            !startOfQueue && (
+              <VideoPlayer
+                url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
+                title={currentSong?.title}
+                next={nextSong?.title}
+                onEnded={() => setEndOfSong(true)}
+                paused={startOfQueue || endOfSong}
+              />
+            )}
           {queue.length == 0 && <NoSongs />}
           {queue.length > 0 && !queue[0].downloaded && (
             <LoadingSpinner multiplier={2} />

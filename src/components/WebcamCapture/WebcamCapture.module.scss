@@ -5,7 +5,7 @@
   width: var(--width);
   height: var(--width);
   border-radius: var(--width);
-  overflow: hidden;
+  // overflow: hidden;
   display: flex;
   align-items: flex-end;
 
@@ -22,11 +22,13 @@
   video {
     object-fit: cover;
     transform: scaleX(-1);
+    border-radius: var(--width);
   }
 
   .capturedImage {
     z-index: 2;
     transform: scaleX(-1);
+    border-radius: var(--width);
   }
 
   .buttons {
@@ -35,8 +37,8 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 1rem;
-    padding-bottom: 1.25rem;
+    gap: 0.5rem;
+    transform: translateY(50%);
 
     button {
       --capture-button-width: 2.5rem;
@@ -58,8 +60,9 @@
         background-color: #fff;
       }
 
-      &:nth-child(2) {
-        transform: translateY(15px);
+      &.cameraButton {
+        background-color: var(--background-color-light-3);
+        color: var(--accent-color);
       }
     }
   }

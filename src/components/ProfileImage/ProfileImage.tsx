@@ -25,12 +25,18 @@ const ProfileImage = ({
 
   return (
     <div className={classNames} onClick={() => onClick?.()}>
-      <div className={styles.head}></div>
-      <div className={styles.body}></div>
+      {!avatar && (
+        <>
+          <div className={styles.head}></div>
+          <div className={styles.body}></div>
+        </>
+      )}
 
-      {avatar && <img src={avatar} />}
+      {avatar && <img className={styles.avatar} src={avatar} />}
       {text && <span>{text}</span>}
-      {user.avatar && avatar !== "" && !text && <img src={user.avatar} />}
+      {user.avatar && avatar !== "" && !text && (
+        <img className={styles.avatar} src={user.avatar} />
+      )}
     </div>
   );
 };

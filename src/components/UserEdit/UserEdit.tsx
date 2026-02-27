@@ -9,8 +9,9 @@ import type { User } from "../../interfaces/user";
 import AudioCapture from "../AudioCapture/AudioCapture";
 
 interface UserEditProps {
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   onButtonPress?: () => void;
+  saveKeyText?: string;
+  onCancel?: () => void;
 }
 
 const blobToBase64 = async (blob: Blob | undefined): Promise<string | null> => {
@@ -25,17 +26,13 @@ const blobToBase64 = async (blob: Blob | undefined): Promise<string | null> => {
   return "data:audio/webm;base64," + btoa(binary);
 };
 
-const UserEdit = ({ onKeyDown, onButtonPress }: UserEditProps) => {
+const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const { dispatch: dispatchUserList } = useUserList();
   const { user, dispatch } = useUser();
 
   const [name, setName] = useState<string>("");
   const [image, setImage] = useState<string>(user.avatar);
   const [soundEffect, setSoundEffect] = useState<Blob | undefined>();
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    onKeyDown?.(e);
-  };
 
   const onGetUsers = (users: User[]) =>
     dispatchUserList({ type: "SET_USERS", payload: users });
@@ -47,7 +44,7 @@ const UserEdit = ({ onKeyDown, onButtonPress }: UserEditProps) => {
         id: user.id,
         name: name,
         avatar: image,
-        soundEffect: sfx ?? user.soundEffect,
+        soundEffect: sfx,
       };
 
       dispatch({
@@ -80,20 +77,28 @@ const UserEdit = ({ onKeyDown, onButtonPress }: UserEditProps) => {
       <div className={styles.profileImage}>
         <WebcamCapture onAcceptImage={setImage} image={image} />
       </div>
-      <AudioCapture
-        onAcceptSoundEffect={setSoundEffect}
-        soundEffect={soundEffect}
-        soundEffectB64={user.soundEffect}
-      />
+
       <div className={styles.input}>
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
+          label={"Name"}
           placeholder={"Name"}
-          onKeyDown={handleKeyDown}
-          onButtonPress={handleButtonPress}
-          enterKeyHint="enter"
+          // onKeyDown={handleKeyDown}
+          // onButtonPress={handleButtonPress}
+          // enterKeyHint="enter"
         />
+      </div>
+      <AudioCapture
+        onAcceptSoundEffect={setSoundEffect}
+        soundEffect={soundEffect}
+        soundEffectB64={user.soundEffect ?? undefined}
+      />
+      <div className={styles.buttons}>
+        {onCancel && <button onClick={onCancel}>Cancel</button>}
+        {handleButtonPress && (
+          <button onClick={handleButtonPress}>{saveKeyText ?? "Save"}</button>
+        )}
       </div>
     </div>
   );

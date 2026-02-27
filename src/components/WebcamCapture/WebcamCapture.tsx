@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./WebcamCapture.module.scss";
 import ProfileImage from "../ProfileImage/ProfileImage";
-import { IconX, IconCamera, IconCheck } from "@tabler/icons-react";
+import { IconX, IconCamera } from "@tabler/icons-react";
 
 interface WebcamCaptureProps {
   image?: string;
@@ -98,9 +98,16 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
     setWebcamOpen(false);
   };
 
+  useEffect(() => {
+    if (!capturedImage) return;
+
+    onAcceptImage?.(capturedImage);
+    setCapturedImage("");
+  }, [capturedImage]);
+
   return (
     <div className={styles.webcamCapture}>
-      <video ref={videoRef} autoPlay playsInline />
+      {webcamOpen && <video ref={videoRef} autoPlay playsInline />}
       {!webcamOpen && (
         <ProfileImage className={styles.absolute} avatar={image} />
       )}
@@ -108,40 +115,31 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
         <img className={styles.capturedImage} src={capturedImage} />
       )}
 
-      {!webcamOpen && !capturedImage && (
-        <div className={styles.buttons} onClick={() => setWebcamOpen(true)}>
-          <button>
+      <div className={styles.buttons}>
+        {image && (
+          <button
+            onClick={() => {
+              setCapturedImage("");
+              onAcceptImage?.("");
+            }}
+          >
+            <IconX />
+          </button>
+        )}
+        {!capturedImage && !webcamOpen && (
+          <button
+            className={styles.cameraButton}
+            onClick={() => setWebcamOpen(true)}
+          >
             <IconCamera />
           </button>
-        </div>
-      )}
-      {(webcamOpen || capturedImage) && (
-        <div className={styles.buttons}>
-          {capturedImage && (
-            <button
-              onClick={() => {
-                setCapturedImage("");
-                setWebcamOpen(true);
-              }}
-            >
-              <IconX />
-            </button>
-          )}
+        )}
+        {!capturedImage && webcamOpen && (
           <button className={styles.captureButton} onClick={capture}>
             <div className={styles.captureButtonInner}></div>
           </button>
-          {capturedImage && (
-            <button
-              onClick={() => {
-                onAcceptImage?.(capturedImage);
-                setCapturedImage("");
-              }}
-            >
-              <IconCheck />
-            </button>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
