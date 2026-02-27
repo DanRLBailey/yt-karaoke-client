@@ -97,7 +97,9 @@ const PlayerPage = () => {
           {queue.length > 0 &&
             currentSong?.videoId &&
             !endOfSong &&
-            !startOfQueue && (
+            !startOfQueue &&
+            queue.length >= 0 &&
+            currentSong.downloaded && (
               <VideoPlayer
                 url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
                 title={currentSong?.title}

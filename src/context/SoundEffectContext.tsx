@@ -32,7 +32,7 @@ export const SoundEffectProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!nextSound) return;
 
     const audio = new Audio(nextSound);
-    audio.volume = 0.75;
+    audio.volume = 0.5;
     isPlayingRef.current = true;
 
     audio.onended = () => {
