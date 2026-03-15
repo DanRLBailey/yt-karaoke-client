@@ -52,6 +52,13 @@ const Input = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (enterKeyHint === "search" && e.key === "Enter") {
+      inputRef.current?.blur();
+    }
+    onKeyDown?.(e);
+  };
+
   const onValueChange = (val: string) => {
     onChange?.(val);
     setValid(validation?.(val) ?? true);
@@ -73,11 +80,16 @@ const Input = ({
         onChange={(e) => onValueChange(e.target.value)}
         value={value}
         placeholder={placeholder}
-        onKeyDown={onKeyDown}
+        onKeyDown={handleKeyDown}
         enterKeyHint={enterKeyHint}
       />
       {(onButtonPress || enterKeyHint) && (
-        <button onClick={() => onButtonPress?.()}>
+        <button
+          onClick={() => {
+            inputRef.current?.blur();
+            onButtonPress?.();
+          }}
+        >
           {enterKeyText ?? getEnterKeyByHint()}
         </button>
       )}

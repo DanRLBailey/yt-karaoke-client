@@ -116,7 +116,7 @@ const WebcamCapture = ({ image, onAcceptImage }: WebcamCaptureProps) => {
       )}
 
       <div className={styles.buttons}>
-        {image && (
+        {image && !webcamOpen && (
           <button
             onClick={() => {
               setCapturedImage("");
