@@ -4,7 +4,7 @@
   align-items: center;
   gap: 3rem;
   flex: 1;
-  padding-top: 6rem;
+  padding-top: 10dvh;
 
   .profileImage {
     height: 15rem;
@@ -13,6 +13,10 @@
     max-height: 300px;
     max-width: 300px;
     margin-bottom: 1.25rem;
+  }
+
+  .input {
+    width: 100%;
   }
 
   .buttons {

@@ -4,7 +4,7 @@ import styles from "./InputWrapper.module.scss";
 interface InputWrapperProps {
   children: React.ReactNode;
   label?: string;
-  valid: boolean;
+  valid?: boolean;
 }
 
 const InputWrapper = ({ children, label, valid }: InputWrapperProps) => {
