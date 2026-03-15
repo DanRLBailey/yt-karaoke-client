@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import { io } from "socket.io-client";
+import { useSocket } from "../context/SocketContext";
 import type { SearchItem } from "../pages/SearchPage/SearchPage";
 import type { User } from "../interfaces/user";
 
 type UseWebhooksProps = {
-  url?: string;
   onConnect?: () => void;
   onQueue?: (update: SearchItem) => void;
   onQueueSync?: (update: SearchItem[]) => void;
@@ -14,7 +13,6 @@ type UseWebhooksProps = {
 };
 
 const useWebhooks = ({
-  url = import.meta.env.VITE_WEBHOOK_URL,
   onConnect,
   onQueue,
   onQueueSync,
@@ -22,25 +20,35 @@ const useWebhooks = ({
   onDownloadFailed,
   onAddUser,
 }: UseWebhooksProps) => {
+  const socket = useSocket();
+
   useEffect(() => {
-    const socket = io(url);
+    if (!socket) return;
 
     if (onConnect) socket.on("connect", onConnect);
-
     if (onQueue) socket.on("queue", onQueue);
-
     if (onQueueSync) socket.on("queueSync", onQueueSync);
-
     if (onDownload) socket.on("download", onDownload);
-
     if (onDownloadFailed) socket.on("downloadFailed", onDownloadFailed);
-
     if (onAddUser) socket.on("add-user", onAddUser);
 
     return () => {
-      socket.disconnect();
+      if (onConnect) socket.off("connect", onConnect);
+      if (onQueue) socket.off("queue", onQueue);
+      if (onQueueSync) socket.off("queueSync", onQueueSync);
+      if (onDownload) socket.off("download", onDownload);
+      if (onDownloadFailed) socket.off("downloadFailed", onDownloadFailed);
+      if (onAddUser) socket.off("add-user", onAddUser);
     };
-  }, []);
+  }, [
+    socket,
+    onConnect,
+    onQueue,
+    onQueueSync,
+    onDownload,
+    onDownloadFailed,
+    onAddUser,
+  ]);
 
   return <></>;
 };
