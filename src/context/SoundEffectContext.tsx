@@ -1,6 +1,5 @@
 // SoundEffectContext.tsx
 import React, { createContext, useCallback, useContext, useRef } from "react";
-
 type SoundEffectContextType = {
   playSoundEffect: (soundEffect: string) => void;
 };
@@ -21,7 +20,6 @@ export const SoundEffectProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const queueRef = useRef<string[]>([]);
   const isPlayingRef = useRef(false);
-
   const playNext = useCallback(() => {
     if (queueRef.current.length === 0) {
       isPlayingRef.current = false;
@@ -32,7 +30,7 @@ export const SoundEffectProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!nextSound) return;
 
     const audio = new Audio(nextSound);
-    audio.volume = 0.5;
+    audio.volume = 0.7;
     isPlayingRef.current = true;
 
     audio.onended = () => {

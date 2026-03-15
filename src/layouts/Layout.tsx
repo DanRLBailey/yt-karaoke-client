@@ -65,7 +65,13 @@ const Layout = ({ children }: LayoutProps) => {
   });
 
   useEffect(() => {
-    getUsers(handleUsersUpdate);
+    if (typeof window !== "undefined") {
+      const path = window.location.pathname;
+      const shouldFetchUsers = path === "/search" || path === "/host";
+      if (shouldFetchUsers) {
+        getUsers(handleUsersUpdate);
+      }
+    }
     getQueue((queue) => dispatch({ type: "SET_QUEUE", payload: queue }));
   }, [dispatch, handleUsersUpdate]);
 

@@ -4,6 +4,7 @@ import styles from "./DvdBounce.module.scss";
 interface DvdBounceProps {
   children: React.ReactNode;
   onBounce?: (color: string) => void;
+  onEnter?: () => void;
 }
 
 const BASE_SPEED = 2;
@@ -36,9 +37,10 @@ const getRandomColor = (current: string | null) => {
 
 const randomSign = (): 1 | -1 => (Math.random() < 0.5 ? -1 : 1);
 
-const DvdBounce = ({ children }: DvdBounceProps) => {
+const DvdBounce = ({ children, onEnter }: DvdBounceProps) => {
   const divRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
+  const hasEnteredRef = useRef(false);
 
   const posRef = useRef({ x: randomPos(), y: randomPos() });
   const velRef = useRef({
@@ -149,6 +151,15 @@ const DvdBounce = ({ children }: DvdBounceProps) => {
       }
 
       const bounced = hitX || hitY;
+
+      if (!hasEnteredRef.current) {
+        const isWithinBounds =
+          pos.x >= 0 && pos.y >= 0 && pos.x <= maxX && pos.y <= maxY;
+        if (isWithinBounds) {
+          hasEnteredRef.current = true;
+          onEnter?.();
+        }
+      }
 
       if (bounced && divRef.current) {
         const newColor = getRandomColor(colorRef.current);

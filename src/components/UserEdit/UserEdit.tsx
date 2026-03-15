@@ -44,7 +44,9 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
     if (!nameValid) return;
 
     const getBase64Audio = async (callback: (newUser: User) => {}) => {
-      const sfx = await blobToBase64(soundEffect);
+      const sfx = soundEffect
+        ? await blobToBase64(soundEffect)
+        : user.soundEffect ?? null;
       const newUser = {
         id: user.id,
         name: name,
@@ -100,7 +102,9 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
         />
       </div>
       <AudioCapture
-        onAcceptSoundEffect={setSoundEffect}
+        onAcceptSoundEffect={(newSoundEffect) => {
+          setSoundEffect(newSoundEffect);
+        }}
         soundEffect={soundEffect}
         soundEffectB64={user.soundEffect ?? undefined}
       />

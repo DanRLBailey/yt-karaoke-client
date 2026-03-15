@@ -67,11 +67,11 @@ const SongChange = ({
         const user = getUserByName(userList, player);
 
         if (!user?.soundEffect) return;
-        playSoundEffect(user?.soundEffect);
+        playSoundEffect(user.soundEffect);
         setSfxPlayed(true);
       });
     }, 100);
-  }, [nextSong]);
+  }, [nextSong, playSoundEffect, sfxPlayed, userList]);
 
   if (!nextSong.downloaded)
     return (

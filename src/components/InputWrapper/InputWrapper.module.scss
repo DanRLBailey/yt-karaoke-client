@@ -28,6 +28,18 @@
     font-weight: 600;
   }
 
+  select {
+    padding: 0.5rem;
+    flex: 1;
+    font-size: 16px;
+    border-radius: 50rem;
+    border: none;
+    background-color: transparent;
+    color: var(--font-color);
+    font-weight: 600;
+    appearance: none;
+  }
+
   &[data-valid="false"] {
     outline: 2px solid var(--error-color);
   }
