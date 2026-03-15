@@ -10,6 +10,7 @@ type UseWebhooksProps = {
   onDownload?: (update: SearchItem) => void;
   onDownloadFailed?: (update: SearchItem) => void;
   onAddUser?: (update: User) => void;
+  onUserUpdate?: (update: User[]) => void;
 };
 
 const useWebhooks = ({
@@ -19,6 +20,7 @@ const useWebhooks = ({
   onDownload,
   onDownloadFailed,
   onAddUser,
+  onUserUpdate,
 }: UseWebhooksProps) => {
   const socket = useSocket();
 
@@ -31,6 +33,7 @@ const useWebhooks = ({
     if (onDownload) socket.on("download", onDownload);
     if (onDownloadFailed) socket.on("downloadFailed", onDownloadFailed);
     if (onAddUser) socket.on("add-user", onAddUser);
+    if (onUserUpdate) socket.on("user-update", onUserUpdate);
 
     return () => {
       if (onConnect) socket.off("connect", onConnect);
@@ -39,6 +42,7 @@ const useWebhooks = ({
       if (onDownload) socket.off("download", onDownload);
       if (onDownloadFailed) socket.off("downloadFailed", onDownloadFailed);
       if (onAddUser) socket.off("add-user", onAddUser);
+      if (onUserUpdate) socket.off("user-update", onUserUpdate);
     };
   }, [
     socket,
@@ -48,6 +52,7 @@ const useWebhooks = ({
     onDownload,
     onDownloadFailed,
     onAddUser,
+    onUserUpdate,
   ]);
 
   return <></>;

@@ -3,10 +3,11 @@ import Input from "../Input/Input";
 import WebcamCapture from "../WebcamCapture/WebcamCapture";
 import styles from "./UserEdit.module.scss";
 import { useUser } from "../../context/UserContext";
-import { getUsers } from "../../utils/User";
+import { onboardUser as onboardUserRequest } from "../../utils/User";
 import { useUserList } from "../../context/UserListContext";
 import type { User } from "../../interfaces/user";
 import AudioCapture from "../AudioCapture/AudioCapture";
+import { useSocketId } from "../../context/SocketContext";
 
 interface UserEditProps {
   onButtonPress?: () => void;
@@ -29,6 +30,7 @@ const blobToBase64 = async (blob: Blob | undefined): Promise<string | null> => {
 const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const { dispatch: dispatchUserList } = useUserList();
   const { user, dispatch } = useUser();
+  const socketId = useSocketId();
 
   const [name, setName] = useState<string>("");
   const [nameValid, setNameValid] = useState<boolean>(false);
@@ -59,12 +61,11 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
     };
 
     const onboardUser = async (newUser: User) => {
-      const url = import.meta.env.VITE_API_URL + "/users/onboard";
-      await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-      }).then(() => getUsers(onGetUsers));
+      const payload: User = {
+        ...newUser,
+        socketId: socketId ?? newUser.socketId ?? null,
+      };
+      await onboardUserRequest(payload, onGetUsers);
     };
 
     getBase64Audio(onboardUser);

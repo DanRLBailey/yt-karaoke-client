@@ -9,6 +9,20 @@ export const getUsers = async (callback?: (users: User[]) => void) => {
   callback?.(result.users);
 };
 
+export const onboardUser = async (
+  user: User,
+  callback?: (users: User[]) => void,
+) => {
+  const url = import.meta.env.VITE_API_URL + "/users/onboard";
+  await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(user),
+  });
+
+  if (callback) await getUsers(callback);
+};
+
 export const getUserAvatarByName = (name: string) => {
   const { userList } = useUserList();
   return userList.find((u) => u.name == name)?.avatar ?? "";
