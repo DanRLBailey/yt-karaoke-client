@@ -35,7 +35,9 @@ const QrCode = ({
         fgColor="#fff"
         size={size == "md" ? 128 : 90}
       />
-      {showUrl && <span>{url.replace("http://", "")}</span>}
+      {showUrl && (
+        <span>{url.replace("http://", "").replace("https://", "")}</span>
+      )}
     </div>
   );
 };
