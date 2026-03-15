@@ -4,13 +4,12 @@ import styles from "./PlayerPage.module.scss";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
 import SongChange from "../../components/SongChange/SongChange";
 import NoSongs from "../../components/NoSongs/NoSongs";
-import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import Layout from "../../layouts/Layout";
 import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 
-const countdown = 2;
+const countdown = 20;
 
 const getVideoUrl = (videoId: string) =>
   encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
@@ -107,9 +106,6 @@ const PlayerPage = () => {
               />
             )}
           {queue.length == 0 && <NoSongs />}
-          {queue.length > 0 && !queue[0].downloaded && (
-            <LoadingSpinner multiplier={2} />
-          )}
         </div>
       </div>
     </Layout>

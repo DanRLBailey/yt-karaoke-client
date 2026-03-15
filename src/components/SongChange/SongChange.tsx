@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { getUserAvatarByName, getUserByName } from "../../utils/User";
 import { useSoundEffect } from "../../context/SoundEffectContext";
 import { useUserList } from "../../context/UserListContext";
+import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 
 const joinWithLast = (
   arr: string[],
@@ -51,8 +52,11 @@ const SongChange = ({
   const { userList } = useUserList();
 
   const [tagline] = useState<string>(randomTagline());
+  const [sfxPlayed, setSfxPlayed] = useState<boolean>(false);
 
   useEffect(() => {
+    if (!nextSong.downloaded || sfxPlayed) return;
+
     setTimeout(() => {
       const players = [
         nextSong.requester,
@@ -64,9 +68,23 @@ const SongChange = ({
 
         if (!user?.soundEffect) return;
         playSoundEffect(user?.soundEffect);
+        setSfxPlayed(true);
       });
     }, 100);
-  }, []);
+  }, [nextSong]);
+
+  if (!nextSong.downloaded)
+    return (
+      <div className={styles.songChange}>
+        <LoadingSpinner multiplier={2} />
+
+        <span className={styles.songChangeUpNext}>Up next: </span>
+        <span className={styles.songChangeTitle}>
+          {parseSongTitle(nextSong.title).song} -{" "}
+          {parseSongTitle(nextSong.title).artist}
+        </span>
+      </div>
+    );
 
   return (
     <div className={styles.songChange}>
