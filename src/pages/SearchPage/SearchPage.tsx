@@ -131,7 +131,7 @@ const SearchPage = () => {
           </div>
 
           <Input
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(val) => setSearch(val)}
             value={search}
             placeholder={`What are you singing, ${user.name}?`}
             onKeyDown={onKeyDown}
