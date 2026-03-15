@@ -60,6 +60,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         id: randomString(),
         name: "",
         avatar: "",
+        soundEffect: "",
       };
     }
 
@@ -77,6 +78,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       id: randomString(),
       name: "",
       avatar: "",
+      soundEffect: "",
     };
   };
 
