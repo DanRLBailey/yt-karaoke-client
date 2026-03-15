@@ -1,6 +1,24 @@
 .audioCapture {
   width: 100%;
 
+  .recordingProgress {
+    position: relative;
+    overflow: hidden;
+
+    & > * {
+      z-index: 1;
+    }
+
+    &::after {
+      pointer-events: none;
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(var(--accent-color-rgb), 0.2);
+      animation: recordingBar var(--recording-duration) linear forwards;
+    }
+  }
+
   .recordButton {
     &.recording {
       color: var(--accent-color);
@@ -15,6 +33,15 @@
       left: 0;
       border-radius: 50rem;
     }
+  }
+}
+
+@keyframes recordingBar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
   }
 }
 

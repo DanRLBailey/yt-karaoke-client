@@ -26,7 +26,7 @@ const AudioCapture = ({
   const streamRef = useRef<MediaStream | null>(null);
   const chunksRef = useRef<BlobPart[]>([]);
   const timeoutRef = useRef<number | null>(null);
-
+  const MAX_DURATION = 5;
   const [isRecording, setIsRecording] = useState(false);
   const [acceptedRecording, setAcceptedRecording] = useState<boolean>(
     soundEffectB64 != "" && soundEffectB64 !== undefined,
@@ -39,8 +39,6 @@ const AudioCapture = ({
   );
   const [playing, setPlaying] = useState<boolean>(false);
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer>();
-
-  const MAX_DURATION = 5;
 
   const startRecording = async () => {
     if (isRecording) return;
@@ -81,7 +79,6 @@ const AudioCapture = ({
     mediaRecorder.start();
     setIsRecording(true);
 
-    // Auto-stop after 5 seconds
     timeoutRef.current = window.setTimeout(() => {
       mediaRecorder.stop();
     }, MAX_DURATION * 1000);
@@ -98,7 +95,6 @@ const AudioCapture = ({
 
   const uploadAudio = async () => {
     if (!audioBlob) return;
-
     setAcceptedRecording(true);
     onAcceptSoundEffect?.(audioBlob);
   };
@@ -118,8 +114,14 @@ const AudioCapture = ({
     ) || "#00f";
 
   return (
-    <div className={styles.audioCapture}>
-      <InputWrapper label="Sound Effect?">
+    <div
+      className={styles.audioCapture}
+      style={{ ["--recording-duration" as any]: `${MAX_DURATION}s` }}
+    >
+      <InputWrapper
+        label="Sound Effect?"
+        className={isRecording ? styles.recordingProgress : ""}
+      >
         {!acceptedRecording && (
           <>
             <button
@@ -173,5 +175,4 @@ const AudioCapture = ({
     </div>
   );
 };
-
 export default AudioCapture;
