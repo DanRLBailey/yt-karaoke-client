@@ -27,4 +27,8 @@
     color: var(--font-color);
     font-weight: 600;
   }
+
+  &[data-valid="false"] {
+    outline: 2px solid var(--error-color);
+  }
 }

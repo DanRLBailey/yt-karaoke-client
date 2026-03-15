@@ -1,10 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconSearch } from "@tabler/icons-react";
 import InputWrapper from "../InputWrapper/InputWrapper";
 
 interface InputProps {
   value: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement, HTMLInputElement>) => void;
+  onChange?: (val: string) => void;
   label?: string;
   placeholder?: string;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
@@ -19,6 +19,8 @@ interface InputProps {
     | "send"
     | undefined;
   enterKeyText?: string;
+  validation?: (val: string) => boolean;
+  onValidChange?: (valid: boolean) => void;
 }
 
 const capitalizeFirst = (value: string): string => {
@@ -35,8 +37,11 @@ const Input = ({
   onButtonPress,
   enterKeyHint,
   enterKeyText,
+  validation,
+  onValidChange,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
+  const [valid, setValid] = useState<boolean>(validation === undefined);
 
   const getEnterKeyByHint = () => {
     switch (enterKeyHint) {
@@ -47,12 +52,25 @@ const Input = ({
     }
   };
 
+  const onValueChange = (val: string) => {
+    onChange?.(val);
+    setValid(validation?.(val) ?? true);
+  };
+
+  useEffect(() => {
+    onValidChange?.(valid);
+  }, [valid]);
+
+  useEffect(() => {
+    onValueChange(value);
+  }, [value]);
+
   return (
-    <InputWrapper label={label}>
+    <InputWrapper label={label} valid={valid}>
       <input
         ref={inputRef}
         id={label + "-input"}
-        onChange={(e) => onChange?.(e)}
+        onChange={(e) => onValueChange(e.target.value)}
         value={value}
         placeholder={placeholder}
         onKeyDown={onKeyDown}

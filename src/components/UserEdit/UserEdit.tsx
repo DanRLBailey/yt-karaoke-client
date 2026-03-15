@@ -31,6 +31,7 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const { user, dispatch } = useUser();
 
   const [name, setName] = useState<string>("");
+  const [nameValid, setNameValid] = useState<boolean>(false);
   const [image, setImage] = useState<string>(user.avatar);
   const [soundEffect, setSoundEffect] = useState<Blob | undefined>();
 
@@ -38,6 +39,8 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
     dispatchUserList({ type: "SET_USERS", payload: users });
 
   const handleButtonPress = async () => {
+    if (!nameValid) return;
+
     const getBase64Audio = async (callback: (newUser: User) => {}) => {
       const sfx = await blobToBase64(soundEffect);
       const newUser = {
@@ -72,6 +75,10 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
     setName(user.name);
   }, [user]);
 
+  const validateName = (name: string) => {
+    return name !== "";
+  };
+
   return (
     <div className={styles.userEdit}>
       <div className={styles.profileImage}>
@@ -81,12 +88,14 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
       <div className={styles.input}>
         <Input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e)}
           label={"Name"}
           placeholder={"Name"}
           // onKeyDown={handleKeyDown}
           // onButtonPress={handleButtonPress}
           // enterKeyHint="enter"
+          validation={validateName}
+          onValidChange={setNameValid}
         />
       </div>
       <AudioCapture
