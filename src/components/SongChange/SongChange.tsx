@@ -40,19 +40,15 @@ interface SongChangeProps {
   countdown: number;
   onCountdownEnd?: () => void;
   nextSong: SearchItem;
-  c?: string;
 }
 
 const SongChange = ({
   countdown,
   onCountdownEnd,
   nextSong,
-  c,
 }: SongChangeProps) => {
   const { playSoundEffect } = useSoundEffect();
   const { userList } = useUserList();
-
-  console.log(c);
 
   const [tagline] = useState<string>(randomTagline());
 

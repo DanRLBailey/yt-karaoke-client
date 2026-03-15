@@ -83,14 +83,12 @@ const PlayerPage = () => {
             countdown={countdown}
             onCountdownEnd={handleSongChange}
             nextSong={nextSong}
-            c="1"
           />
         ) : startOfQueue && currentSong ? (
           <SongChange
             countdown={countdown}
             onCountdownEnd={() => setStartOfQueue(false)}
             nextSong={currentSong}
-            c="2"
           />
         ) : null}
         <div className={styles.video}>
