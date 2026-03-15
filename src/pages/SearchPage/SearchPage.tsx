@@ -6,7 +6,12 @@ import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
 import Layout from "../../layouts/Layout";
 import type { User } from "../../interfaces/user";
-import { IconMicrophone2, IconPlaylist, IconPlus } from "@tabler/icons-react";
+import {
+  IconMicrophone2,
+  IconPlaylist,
+  IconPlus,
+  IconZoomExclamation,
+} from "@tabler/icons-react";
 import ProfileImage from "../../components/ProfileImage/ProfileImage";
 import Queue from "../../components/Queue/Queue";
 import clsx from "clsx";
@@ -156,7 +161,17 @@ const SearchPage = () => {
           </ul>
         )}
 
-        {(results == undefined || results?.items.length == 0) && (
+        {results && results?.items.length == 0 && (
+          <div className={styles.noResults}>
+            <IconZoomExclamation />
+            <span className={styles.heading}>No songs found</span>
+            <span className={styles.subHeading}>
+              Please try a different search
+            </span>
+          </div>
+        )}
+
+        {results == undefined && (
           <div className={styles.noResults}>
             <IconMicrophone2 />
             <span className={styles.heading}>Get mic-ready!</span>
