@@ -20,6 +20,7 @@ import { useNavigate } from "react-router";
 import ExpandableSongButton from "../../components/ExpandableSongButton/ExpandableSongButton";
 import { parseSongTitle } from "../../utils/Song";
 import { useNotification } from "../../context/NotificationContext";
+import { useQueue } from "../../context/QueueContext";
 
 interface Search {
   items: SearchItem[];
@@ -44,6 +45,7 @@ const SearchPage = () => {
 
   const { user } = useUser();
   const { dispatch } = useUserList();
+  const { queue } = useQueue();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const { showNotification } = useNotification();
@@ -130,9 +132,16 @@ const SearchPage = () => {
               onClick={() => navigate("/user")}
             />
             <SiteName />
-            <button onClick={() => setQueueOpen(!queueOpen)}>
-              <IconPlaylist />
-            </button>
+            <div className={styles.buttonWrapper}>
+              {queue && queue.length > 0 && (
+                <span className={styles.notificationBubble}>
+                  {queue.length}
+                </span>
+              )}
+              <button onClick={() => setQueueOpen(!queueOpen)}>
+                <IconPlaylist />
+              </button>
+            </div>
           </div>
 
           <Input

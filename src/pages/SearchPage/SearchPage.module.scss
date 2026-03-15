@@ -26,14 +26,36 @@
         height: 2rem;
       }
 
-      button {
-        padding: 0.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: transparent;
-        color: var(--svg-color);
-        border-radius: 50rem;
+      .buttonWrapper {
+        position: relative;
+
+        .notificationBubble {
+          position: absolute;
+          top: -10%;
+          right: -10%;
+          width: 50%;
+          height: 50%;
+          background-color: rgba(var(--success-color-rgb), 0.1);
+          color: var(--success-color);
+          text-shadow: var(--shadow-sm);
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.9rem;
+          font-weight: 500;
+          pointer-events: none;
+        }
+
+        button {
+          padding: 0.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: transparent;
+          color: var(--svg-color);
+          border-radius: 50rem;
+        }
       }
     }
   }

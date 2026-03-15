@@ -9,7 +9,7 @@ import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 
-const countdown = 20;
+const countdown = 2;
 
 const getVideoUrl = (videoId: string) =>
   encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
