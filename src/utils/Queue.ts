@@ -1,15 +1,23 @@
 import type { SearchItem } from "../pages/SearchPage/SearchPage";
 
-export const getQueue = async (callback?: (queue: SearchItem[]) => void) => {
-  const url = import.meta.env.VITE_API_URL + "/queue";
+export const getQueue = async (
+  roomCode: string,
+  callback?: (queue: SearchItem[]) => void,
+) => {
+  const url =
+    import.meta.env.VITE_API_URL + "/queue?roomCode=" + roomCode;
   const response = await fetch(url);
   const { result } = await response.json();
 
   callback?.(result.queue);
 };
 
-export const removeFirstFromQueue = async (callback?: () => void) => {
-  const url = import.meta.env.VITE_API_URL + "/queue";
+export const removeFirstFromQueue = async (
+  roomCode: string,
+  callback?: () => void,
+) => {
+  const url =
+    import.meta.env.VITE_API_URL + "/queue?roomCode=" + roomCode;
   const response = await fetch(url, {
     method: "DELETE",
   });
@@ -20,9 +28,15 @@ export const removeFirstFromQueue = async (callback?: () => void) => {
 
 export const removeIndexFromQueue = async (
   index: number,
+  roomCode: string,
   callback?: () => void,
 ) => {
-  const url = import.meta.env.VITE_API_URL + "/queue/" + index;
+  const url =
+    import.meta.env.VITE_API_URL +
+    "/queue/" +
+    index +
+    "?roomCode=" +
+    roomCode;
   const response = await fetch(url, {
     method: "DELETE",
   });

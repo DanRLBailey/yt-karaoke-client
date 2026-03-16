@@ -41,7 +41,7 @@ const DeletableSongButton = ({
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
       >
-        {(user.name == item.requester || location.pathname == "/host") && (
+        {(user.name == item.requester || location.pathname == "/player") && (
           <ActionButton
             classNames={clsx(styles.actionButton, expanded && styles.active)}
             onSubmit={onDelete}

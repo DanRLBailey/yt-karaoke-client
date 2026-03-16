@@ -9,6 +9,10 @@
       z-index: 1;
     }
 
+    span {
+      pointer-events: none;
+    }
+
     &::after {
       pointer-events: none;
       content: "";

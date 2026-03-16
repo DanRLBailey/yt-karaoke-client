@@ -20,13 +20,17 @@ const Layout = ({ children }: LayoutProps) => {
   const socket = useSocket();
 
   const handleUsersUpdate = useCallback(
-    (users: User[]) => dispatchUserList({ type: "SET_USERS", payload: users }),
-    [dispatchUserList],
+    (users: User[]) => {
+      const roomCode = user.roomCode ?? "";
+      const filtered = users.filter((u) => u.roomCode === roomCode);
+      dispatchUserList({ type: "SET_USERS", payload: filtered });
+    },
+    [dispatchUserList, user.roomCode],
   );
 
   const handleConnect = useCallback(() => {
     if (typeof window !== "undefined") {
-      const isHostRoute = window.location.pathname.includes("/host");
+      const isHostRoute = window.location.pathname.includes("/player");
       if (isHostRoute) return;
     }
 
@@ -41,9 +45,18 @@ const Layout = ({ children }: LayoutProps) => {
   useWebhooks({
     onConnect: handleConnect,
     onQueue: (update) => {
+      const roomCode = user.roomCode ?? "";
+      if (update.roomCode !== roomCode) return;
       dispatch({ type: "ADD", payload: update });
     },
+    onQueueSync: (update) => {
+      const roomCode = user.roomCode ?? "";
+      const filtered = update.filter((item) => item.roomCode === roomCode);
+      dispatch({ type: "SET_QUEUE", payload: filtered });
+    },
     onDownload: (update) => {
+      const roomCode = user.roomCode ?? "";
+      if (update.roomCode !== roomCode) return;
       dispatch({
         type: "DOWNLOADED",
         id: update.videoId,
@@ -51,29 +64,28 @@ const Layout = ({ children }: LayoutProps) => {
       });
     },
     onAddUser: (update) => {
-      dispatchUserList({
-        type: "ADD_USER",
-        payload: update,
-      });
+      const roomCode = user.roomCode ?? "";
+      if (update.roomCode !== roomCode) return;
+      dispatchUserList({ type: "ADD_USER", payload: update });
     },
     onUserUpdate: (update) => {
-      dispatchUserList({
-        type: "SET_USERS",
-        payload: update,
-      });
+      handleUsersUpdate(update);
     },
   });
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const path = window.location.pathname;
-      const shouldFetchUsers = path === "/search" || path === "/host";
+      const shouldFetchUsers = path === "/search" || path === "/player";
       if (shouldFetchUsers) {
-        getUsers(handleUsersUpdate);
+        getUsers(user.roomCode ?? "", handleUsersUpdate);
       }
     }
-    getQueue((queue) => dispatch({ type: "SET_QUEUE", payload: queue }));
-  }, [dispatch, handleUsersUpdate]);
+    const roomCode = user.roomCode ?? "";
+    getQueue(roomCode, (queue) =>
+      dispatch({ type: "SET_QUEUE", payload: queue }),
+    );
+  }, [dispatch, handleUsersUpdate, user.roomCode]);
 
   return <>{children}</>;
 };

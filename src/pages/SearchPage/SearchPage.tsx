@@ -36,6 +36,7 @@ export interface SearchItem {
   requester?: string;
   team?: string[];
   failed?: boolean;
+  roomCode?: string | null;
 }
 
 const SearchPage = () => {
@@ -58,6 +59,8 @@ const SearchPage = () => {
 
   useWebhooks({
     onAddUser: (update) => {
+      const roomCode = user.roomCode ?? "";
+      if (update.roomCode !== roomCode) return;
       dispatch({
         type: "ADD_USER",
         payload: update,
@@ -110,6 +113,7 @@ const SearchPage = () => {
       body: JSON.stringify({
         ...song,
         requester: user.name,
+        roomCode: user.roomCode ?? "",
         ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
     }).then(() =>

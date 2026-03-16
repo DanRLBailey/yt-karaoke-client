@@ -1,8 +1,11 @@
 import { useUserList } from "../context/UserListContext";
 import type { User } from "../interfaces/user";
 
-export const getUsers = async (callback?: (users: User[]) => void) => {
-  const url = import.meta.env.VITE_API_URL + "/users";
+export const getUsers = async (
+  roomCode: string,
+  callback?: (users: User[]) => void,
+) => {
+  const url = import.meta.env.VITE_API_URL + "/users?roomCode=" + roomCode;
   const response = await fetch(url);
   const { result } = await response.json();
 
@@ -20,7 +23,7 @@ export const onboardUser = async (
     body: JSON.stringify(user),
   });
 
-  if (callback) await getUsers(callback);
+  if (callback) await getUsers(user.roomCode ?? "", callback);
 };
 
 export const getUserAvatarByName = (name: string) => {

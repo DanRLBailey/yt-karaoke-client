@@ -12,9 +12,9 @@ import WaveSurfer from "wavesurfer.js";
 import clsx from "clsx";
 
 interface AudioCaptureProps {
-  soundEffect?: Blob;
-  soundEffectB64?: string;
-  onAcceptSoundEffect?: (soundEffect: Blob) => void;
+  soundEffect?: Blob | null;
+  soundEffectB64?: string | null;
+  onAcceptSoundEffect?: (soundEffect: Blob | null) => void;
 }
 
 const AudioCapture = ({
@@ -29,10 +29,10 @@ const AudioCapture = ({
   const MAX_DURATION = 5;
   const [isRecording, setIsRecording] = useState(false);
   const [acceptedRecording, setAcceptedRecording] = useState<boolean>(
-    soundEffectB64 != "" && soundEffectB64 !== undefined,
+    Boolean(soundEffectB64) || Boolean(soundEffect),
   );
-  const [audioBlob, setAudioBlob] = useState<Blob | undefined>(
-    soundEffect ?? undefined,
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(
+    soundEffect ?? null,
   );
   const [audioUrl, setAudioUrl] = useState<string | null>(
     soundEffectB64 ?? null,
@@ -161,9 +161,10 @@ const AudioCapture = ({
             </div>
             <button
               onClick={() => {
-                setAudioUrl("");
-                setAudioBlob(undefined);
+                setAudioUrl(null);
+                setAudioBlob(null);
                 setAcceptedRecording(false);
+                onAcceptSoundEffect?.(null);
               }}
               disabled={isRecording}
             >

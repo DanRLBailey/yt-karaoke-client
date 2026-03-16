@@ -14,7 +14,8 @@ type Action =
   | { type: "SET_USER"; payload: User }
   | { type: "SET_USER_NAME"; payload: string }
   | { type: "SET_PROFILE_IMAGE"; payload: string }
-  | { type: "SET_SOUND_EFFECT"; payload: string };
+  | { type: "SET_SOUND_EFFECT"; payload: string }
+  | { type: "SET_ROOM_CODE"; payload: string };
 
 type ContextType = {
   user: User;
@@ -39,6 +40,9 @@ const reducer = (state: State, action: Action): State => {
     case "SET_SOUND_EFFECT":
       return { ...state, soundEffect: action.payload };
 
+    case "SET_ROOM_CODE":
+      return { ...state, roomCode: action.payload };
+
     default:
       return state;
   }
@@ -61,6 +65,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         name: "",
         avatar: "",
         soundEffect: "",
+        roomCode: "",
       };
     }
 
@@ -79,6 +84,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       name: "",
       avatar: "",
       soundEffect: "",
+      roomCode: "",
     };
   };
 

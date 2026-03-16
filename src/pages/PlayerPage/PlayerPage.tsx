@@ -8,6 +8,7 @@ import Layout from "../../layouts/Layout";
 import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
+import { useUser } from "../../context/UserContext";
 
 const countdown = 2;
 
@@ -16,6 +17,7 @@ const getVideoUrl = (videoId: string) =>
 
 const PlayerPage = () => {
   const { queue } = useQueue();
+  const { user } = useUser();
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [endOfSong, setEndOfSong] = useState<boolean>(false);
   const [startOfQueue, setStartOfQueue] = useState<boolean>(false);
@@ -58,13 +60,13 @@ const PlayerPage = () => {
     if (!endOfSong) return;
 
     if (queue.length == 1) {
-      removeFirstFromQueue();
+      removeFirstFromQueue(user.roomCode ?? "");
       setEndOfSong(false);
     }
   }, [endOfSong]);
 
   const handleSongChange = () => {
-    removeFirstFromQueue();
+    removeFirstFromQueue(user.roomCode ?? "");
     setEndOfSong(false);
     setStartOfQueue(false);
   };
@@ -90,13 +92,13 @@ const PlayerPage = () => {
             nextSong={currentSong}
           />
         ) : null}
-        <div className={styles.video}>
-          {queue.length > 0 &&
-            currentSong?.videoId &&
-            !endOfSong &&
-            !startOfQueue &&
-            queue.length >= 0 &&
-            currentSong.downloaded && (
+        {queue.length > 0 &&
+          currentSong?.videoId &&
+          !endOfSong &&
+          !startOfQueue &&
+          queue.length >= 0 &&
+          currentSong.downloaded && (
+            <div className={styles.video}>
               <VideoPlayer
                 url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
                 title={currentSong?.title}
@@ -104,9 +106,9 @@ const PlayerPage = () => {
                 onEnded={() => setEndOfSong(true)}
                 paused={startOfQueue || endOfSong}
               />
-            )}
-          {queue.length == 0 && <NoSongs />}
-        </div>
+            </div>
+          )}
+        {queue.length == 0 && <NoSongs />}
       </div>
     </Layout>
   );

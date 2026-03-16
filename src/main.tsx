@@ -12,6 +12,7 @@ import UserPage from "./pages/UserPage/UserPage.tsx";
 import { SoundEffectProvider } from "./context/SoundEffectContext.tsx";
 import { StrictMode } from "react";
 import { SocketProvider } from "./context/SocketContext.tsx";
+import JoinPage from "./pages/JoinPage/JoinPage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -24,8 +25,10 @@ createRoot(document.getElementById("root")!).render(
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/:id" element={<HomePage />} />
+                    <Route path="/join" element={<JoinPage />} />
                     <Route path="/search" element={<SearchPage />} />
-                    <Route path="/host" element={<PlayerPage />} />
+                    <Route path="/player" element={<PlayerPage />} />
                     <Route path="/user" element={<UserPage />} />
                   </Routes>
                 </BrowserRouter>

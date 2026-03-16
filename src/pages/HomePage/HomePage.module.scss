@@ -12,4 +12,42 @@
     font-weight: bold;
     padding: 1rem 0.5rem;
   }
+
+  .roomInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    height: 100%;
+
+    .roomInput {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+      padding-block: 2rem;
+      min-width: 20dvw;
+
+      button {
+        color: white;
+        font-weight: bold;
+      }
+
+      &:first-child {
+        flex: 1;
+        justify-content: center;
+
+        button {
+          background-color: var(--accent-color);
+        }
+      }
+    }
+  }
+
+  @media (max-width: 992px) {
+    .roomInputs {
+      .roomInput:last-child {
+        display: none;
+      }
+    }
+  }
 }

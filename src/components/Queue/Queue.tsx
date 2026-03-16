@@ -8,6 +8,7 @@ import DeletableSongButton from "../DeletableSongButton/DeletableSongButton";
 import { removeIndexFromQueue } from "../../utils/Queue";
 import { IconMicrophone2 } from "@tabler/icons-react";
 import QrCode from "../QrCode/QrCode";
+import { useUser } from "../../context/UserContext";
 
 interface QueueProps {
   open?: boolean;
@@ -17,13 +18,16 @@ interface QueueProps {
 const Queue = ({ open, onMouseLeave }: QueueProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(open ?? false);
   const { queue, dispatch } = useQueue();
+  const { user } = useUser();
+  const roomCode = user.roomCode ?? "";
 
   const { pathname } = window.location;
-  const showQr = pathname.includes("host");
+  const showQr = pathname.includes("player");
 
   useWebhooks({
     onQueueSync: (update) => {
-      dispatch({ type: "SET_QUEUE", payload: update });
+      const filtered = update.filter((item) => item.roomCode === roomCode);
+      dispatch({ type: "SET_QUEUE", payload: filtered });
     },
   });
 
@@ -72,7 +76,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
                         item={item}
                         showThumbnail
                         showStatus
-                        onDelete={() => removeIndexFromQueue(index)}
+                        onDelete={() => removeIndexFromQueue(index, roomCode)}
                       />
                     }
                   </li>

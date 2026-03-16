@@ -4,4 +4,5 @@ export interface User {
   avatar: string;
   soundEffect: string | null;
   socketId?: string | null;
+  roomCode?: string | null;
 }

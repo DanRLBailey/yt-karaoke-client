@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import styles from "./QrCode.module.scss";
 import { QRCodeCanvas } from "qrcode.react";
+import { useUser } from "../../context/UserContext";
 
 interface QrCodeProps {
   showUrl?: boolean;
@@ -16,9 +17,10 @@ const QrCode = ({
   className,
 }: QrCodeProps) => {
   const { origin } = window.location;
-  const url = origin.includes("localhost")
-    ? "http://192.168.1.122:5173"
-    : origin;
+  const { user } = useUser();
+  const url =
+    (origin.includes("localhost") ? "http://192.168.1.122:5173" : origin) +
+    (user.roomCode ? `/${user.roomCode}` : "");
 
   return (
     <div
@@ -30,10 +32,10 @@ const QrCode = ({
       data-size={size}
     >
       <QRCodeCanvas
-        value={url}
+        value={`${url}`}
         bgColor="transparent"
         fgColor="#fff"
-        size={size == "md" ? 128 : 90}
+        size={size == "md" ? 162 : 128}
       />
       {showUrl && (
         <span>{url.replace("http://", "").replace("https://", "")}</span>

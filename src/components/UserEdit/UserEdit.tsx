@@ -35,7 +35,7 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const [name, setName] = useState<string>("");
   const [nameValid, setNameValid] = useState<boolean>(false);
   const [image, setImage] = useState<string>(user.avatar);
-  const [soundEffect, setSoundEffect] = useState<Blob | undefined>();
+  const [soundEffect, setSoundEffect] = useState<Blob | null | undefined>();
 
   const onGetUsers = (users: User[]) =>
     dispatchUserList({ type: "SET_USERS", payload: users });
@@ -44,14 +44,20 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
     if (!nameValid) return;
 
     const getBase64Audio = async (callback: (newUser: User) => {}) => {
-      const sfx = soundEffect
-        ? await blobToBase64(soundEffect)
-        : user.soundEffect ?? null;
+      let sfx: string | null;
+      if (soundEffect === null) {
+        sfx = null;
+      } else if (soundEffect) {
+        sfx = await blobToBase64(soundEffect);
+      } else {
+        sfx = user.soundEffect ?? null;
+      }
       const newUser = {
         id: user.id,
         name: name,
         avatar: image,
         soundEffect: sfx,
+        roomCode: user.roomCode ?? "",
       };
 
       dispatch({
@@ -102,11 +108,9 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
         />
       </div>
       <AudioCapture
-        onAcceptSoundEffect={(newSoundEffect) => {
-          setSoundEffect(newSoundEffect);
-        }}
+        onAcceptSoundEffect={setSoundEffect}
         soundEffect={soundEffect}
-        soundEffectB64={user.soundEffect ?? undefined}
+        soundEffectB64={soundEffect === null ? null : user.soundEffect ?? undefined}
       />
       <div className={styles.buttons}>
         {onCancel && <button onClick={onCancel}>Cancel</button>}
