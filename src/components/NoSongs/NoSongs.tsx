@@ -8,8 +8,13 @@ import { useSoundEffect } from "../../context/SoundEffectContext";
 import { useState } from "react";
 import CornerConfetti from "../CornerConfetti/CornerContetti";
 import playFanfare from "../../utils/Fanfare";
+import clsx from "clsx";
 
-const NoSongs = () => {
+interface NoSongsProps {
+  hidden?: boolean;
+}
+
+const NoSongs = ({ hidden }: NoSongsProps) => {
   const { userList } = useUserList();
   const { playSoundEffect } = useSoundEffect();
 
@@ -21,12 +26,15 @@ const NoSongs = () => {
   const qotd = import.meta.env.VITE_QOTD ?? "";
 
   const handleCornerHit = (c: typeof corner) => {
+    if (hidden) return;
+
     setConfettiTrigger((prev) => prev + 1);
     setCorner(c);
     playFanfare();
   };
+
   return (
-    <div className={styles.noSongs}>
+    <div className={clsx(styles.noSongs, hidden && styles.hidden)}>
       {qotd && (
         <DvdBounce onCornerHit={handleCornerHit}>
           <span>{qotd}</span>

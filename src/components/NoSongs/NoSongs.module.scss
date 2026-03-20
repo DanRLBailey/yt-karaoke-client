@@ -20,4 +20,9 @@
   .zIndex {
     z-index: 10;
   }
+
+  &.hidden {
+    display: none;
+    pointer-events: none;
+  }
 }

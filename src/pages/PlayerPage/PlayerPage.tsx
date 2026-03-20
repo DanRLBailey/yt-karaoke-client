@@ -108,7 +108,7 @@ const PlayerPage = () => {
               />
             </div>
           )}
-        {queue.length == 0 && <NoSongs />}
+        <NoSongs hidden={queue.length > 0} />
       </div>
     </Layout>
   );
