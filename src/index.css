@@ -114,11 +114,11 @@ button {
   transition: 0.3s ease;
   font-size: 1rem;
 }
-button:hover {
+button:hover:not[data-disabled="true"] {
   border-color: var(--accent-color);
 }
-button:focus,
-button:focus-visible {
+button:focus:not[data-disabled="true"],
+button:focus-visible:not[data-disabled="true"] {
   outline: 4px auto -webkit-focus-ring-color;
 }
 button svg {

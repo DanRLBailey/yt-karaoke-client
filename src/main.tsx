@@ -25,7 +25,7 @@ createRoot(document.getElementById("root")!).render(
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/:id" element={<HomePage />} />
+                    <Route path="/room/:id" element={<HomePage />} />
                     <Route path="/join" element={<JoinPage />} />
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/player" element={<PlayerPage />} />

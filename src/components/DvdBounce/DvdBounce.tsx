@@ -5,14 +5,15 @@ interface DvdBounceProps {
   children: React.ReactNode;
   onBounce?: (color: string) => void;
   onEnter?: () => void;
+  onCornerHit?: (corner: "tl" | "tr" | "bl" | "br") => void;
 }
 
 const BASE_SPEED = 2;
-const CORNER_RADIUS = 150;
-const CORNER_TOLERANCE = 5;
+const CORNER_TOLERANCE = 1;
 
 const randomSpeed = () => BASE_SPEED * (0.75 + Math.random() * 0.5);
 const randomPos = () => Math.random() * 500;
+const randomSign = (): 1 | -1 => (Math.random() < 0.5 ? -1 : 1);
 
 // Neon colors that pop on dark backgrounds
 const colors = [
@@ -35,9 +36,7 @@ const getRandomColor = (current: string | null) => {
   return next!;
 };
 
-const randomSign = (): 1 | -1 => (Math.random() < 0.5 ? -1 : 1);
-
-const DvdBounce = ({ children, onEnter }: DvdBounceProps) => {
+const DvdBounce = ({ children, onEnter, onCornerHit }: DvdBounceProps) => {
   const divRef = useRef<HTMLDivElement | null>(null);
   const frameRef = useRef<number | null>(null);
   const hasEnteredRef = useRef(false);
@@ -49,7 +48,13 @@ const DvdBounce = ({ children, onEnter }: DvdBounceProps) => {
   });
   const sizeRef = useRef({ width: 0, height: 0 });
   const colorRef = useRef<string | null>(null);
+  const inCornerRef = useRef(false);
+  const onCornerHitRef = useRef(onCornerHit);
   const initialColor = colors[Math.floor(Math.random() * colors.length)];
+
+  useEffect(() => {
+    onCornerHitRef.current = onCornerHit;
+  }, [onCornerHit]);
 
   useLayoutEffect(() => {
     if (!divRef.current) return;
@@ -92,21 +97,6 @@ const DvdBounce = ({ children, onEnter }: DvdBounceProps) => {
       const nextX = pos.x + vel.x;
       const nextY = pos.y + vel.y;
 
-      // Determine which corner we're heading toward
-      const targetCornerX = vel.x > 0 ? maxX : 0;
-      const targetCornerY = vel.y > 0 ? maxY : 0;
-
-      // Distance from next position to that true corner
-      const dx = targetCornerX - nextX;
-      const dy = targetCornerY - nextY;
-      const distanceToCorner = Math.sqrt(dx * dx + dy * dy);
-
-      const withinCornerRadius = distanceToCorner <= CORNER_RADIUS;
-
-      if (withinCornerRadius) {
-        // console.log("🔥 Within corner radius:", Math.round(distanceToCorner));
-      }
-
       // Apply movement
       pos.x = nextX;
       pos.y = nextY;
@@ -146,8 +136,19 @@ const DvdBounce = ({ children, onEnter }: DvdBounceProps) => {
 
       const hitCorner = (nearLeft || nearRight) && (nearTop || nearBottom);
 
-      if (hitCorner) {
-        console.log("💥 CORNER (within 5px)");
+      if (hitCorner && !inCornerRef.current) {
+        inCornerRef.current = true;
+        const corner =
+          nearTop && nearLeft
+            ? "tl"
+            : nearTop && nearRight
+              ? "tr"
+              : nearBottom && nearLeft
+                ? "bl"
+                : "br";
+        onCornerHitRef.current?.(corner);
+      } else if (!hitCorner) {
+        inCornerRef.current = false;
       }
 
       const bounced = hitX || hitY;

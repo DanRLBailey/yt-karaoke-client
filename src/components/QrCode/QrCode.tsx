@@ -20,7 +20,7 @@ const QrCode = ({
   const { user } = useUser();
   const url =
     (origin.includes("localhost") ? "http://192.168.1.122:5173" : origin) +
-    (user.roomCode ? `/${user.roomCode}` : "");
+    (user.roomCode ? `/room/${user.roomCode}` : "");
 
   return (
     <div

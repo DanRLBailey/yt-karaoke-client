@@ -67,6 +67,10 @@
     pointer-events: none;
     padding-inline: 1rem;
 
+    &.nextUp {
+      justify-content: flex-start;
+    }
+
     svg {
       color: var(--accent-color);
       width: 3rem;

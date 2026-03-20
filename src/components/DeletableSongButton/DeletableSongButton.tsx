@@ -40,6 +40,7 @@ const DeletableSongButton = ({
         showThumbnail={showThumbnail}
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
+        disabled={user.name != item.requester}
       >
         {(user.name == item.requester || location.pathname == "/player") && (
           <ActionButton

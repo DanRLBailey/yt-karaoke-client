@@ -21,6 +21,8 @@ import ExpandableSongButton from "../../components/ExpandableSongButton/Expandab
 import { parseSongTitle } from "../../utils/Song";
 import { useNotification } from "../../context/NotificationContext";
 import { useQueue } from "../../context/QueueContext";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { getQueue } from "../../utils/Queue";
 
 interface Search {
   items: SearchItem[];
@@ -43,10 +45,11 @@ const SearchPage = () => {
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<Search>();
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { user } = useUser();
   const { dispatch } = useUserList();
-  const { queue } = useQueue();
+  const { queue, dispatch: dispatchQueue } = useQueue();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const navigate = useNavigate();
   const { showNotification } = useNotification();
@@ -56,6 +59,14 @@ const SearchPage = () => {
   useEffect(() => {
     document.title = `Search - ${siteTitle}`;
   }, []);
+
+  useEffect(() => {
+    const roomCode = user.roomCode ?? "";
+    if (!roomCode) return;
+    getQueue(roomCode, (nextQueue) =>
+      dispatchQueue({ type: "SET_QUEUE", payload: nextQueue }),
+    );
+  }, [dispatchQueue, user.roomCode]);
 
   useWebhooks({
     onAddUser: (update) => {
@@ -70,12 +81,14 @@ const SearchPage = () => {
 
   const handleSearch = async () => {
     const results: Search = { items: [] };
+    setLoading(true);
 
     const url = import.meta.env.VITE_API_URL + "/search" + `?query=${search}`;
     const response = await fetch(url);
     const { result } = await response.json();
     results.items.push(...result.items);
     setResults(results);
+    setLoading(false);
     inputRef.current?.blur();
   };
 
@@ -107,6 +120,7 @@ const SearchPage = () => {
   ) => {
     const url =
       import.meta.env.VITE_API_URL + "/queue" + (addedToQueue ? "/update" : "");
+    showQueueNotification(song, addedToQueue ? "Updated" : undefined);
     await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -116,9 +130,7 @@ const SearchPage = () => {
         roomCode: user.roomCode ?? "",
         ...(bandmates && { team: bandmates.map((u) => u.name) }),
       }),
-    }).then(() =>
-      showQueueNotification(song, addedToQueue ? "Updated" : undefined),
-    );
+    });
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -155,10 +167,17 @@ const SearchPage = () => {
             onKeyDown={onKeyDown}
             onButtonPress={handleSearch}
             enterKeyHint="search"
+            showRemoveButton
           />
         </div>
 
-        {results && (
+        {loading && (
+          <div className={styles.loading}>
+            <LoadingSpinner />
+          </div>
+        )}
+
+        {!loading && results && (
           <ul className={styles.resultList}>
             {results?.items?.map((item, index) => (
               <li key={item.videoId + index}>
@@ -174,7 +193,7 @@ const SearchPage = () => {
           </ul>
         )}
 
-        {results && results?.items.length == 0 && (
+        {!loading && results && results?.items.length == 0 && (
           <div className={styles.noResults}>
             <IconZoomExclamation />
             <span className={styles.heading}>No songs found</span>
@@ -184,7 +203,7 @@ const SearchPage = () => {
           </div>
         )}
 
-        {results == undefined && (
+        {!loading && results == undefined && (
           <div className={styles.noResults}>
             <IconMicrophone2 />
             <span className={styles.heading}>Get mic-ready!</span>

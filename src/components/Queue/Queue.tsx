@@ -94,6 +94,15 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
             </span>
           </div>
         )}
+        {queue.length == 1 && (
+          <div className={clsx(styles.noResults, styles.nextUp)}>
+            <IconMicrophone2 />
+            <span className={styles.heading}>No more songs in queue</span>
+            <span className={styles.subHeading}>
+              Search for a song to add more!
+            </span>
+          </div>
+        )}
         {showQr && <QrCode showBackground={false} size="sm" />}
       </div>
     </div>

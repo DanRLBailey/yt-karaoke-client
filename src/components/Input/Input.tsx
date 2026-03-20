@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { IconSearch } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 import InputWrapper from "../InputWrapper/InputWrapper";
 
 interface InputProps {
@@ -21,6 +21,7 @@ interface InputProps {
   enterKeyText?: string;
   validation?: (val: string) => boolean;
   onValidChange?: (valid: boolean) => void;
+  showRemoveButton?: boolean;
 }
 
 const capitalizeFirst = (value: string): string => {
@@ -39,6 +40,7 @@ const Input = ({
   enterKeyText,
   validation,
   onValidChange,
+  showRemoveButton,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [valid, setValid] = useState<boolean>(validation === undefined);
@@ -83,6 +85,11 @@ const Input = ({
         onKeyDown={handleKeyDown}
         enterKeyHint={enterKeyHint}
       />
+      {value != "" && showRemoveButton && (
+        <button onClick={() => onChange?.("")}>
+          <IconX />
+        </button>
+      )}
       {(onButtonPress || enterKeyHint) && (
         <button
           onClick={() => {

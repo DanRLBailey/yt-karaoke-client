@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import styles from "./HomePage.module.scss";
 import { useEffect, useState } from "react";
 import Layout from "../../layouts/Layout";
@@ -8,6 +8,7 @@ import SplashScreen from "../../components/SplashScreen/SplashScreen";
 
 const HomePage = () => {
   let navigate = useNavigate();
+  const location = useLocation();
   const { id } = useParams();
   const siteTitle = import.meta.env.VITE_SITE_NAME;
   const { user, dispatch } = useUser();
@@ -32,10 +33,16 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!id) return;
+    if (!location.pathname.startsWith("/room/")) return;
     const normalized = normalizeRoomCode(id);
     if (normalized.length === 0) return;
     setRoomCode(normalized);
-  }, [id]);
+    dispatch({
+      type: "SET_ROOM_CODE",
+      payload: normalized,
+    });
+    setPendingJoin(true);
+  }, [id, location.pathname, dispatch]);
 
   const navigateToJoin = () => {
     const normalized = normalizeRoomCode(roomCode);

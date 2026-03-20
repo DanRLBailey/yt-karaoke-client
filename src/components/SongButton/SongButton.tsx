@@ -16,6 +16,7 @@ interface SongButtonProps {
   active?: boolean;
   onClick?: () => void;
   overlayIcon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const SongButton = ({
@@ -26,6 +27,7 @@ const SongButton = ({
   active,
   onClick,
   overlayIcon,
+  disabled,
 }: SongButtonProps) => {
   const { song, artist } = parseSongTitle(item.title);
 
@@ -34,7 +36,7 @@ const SongButton = ({
 
   const className = clsx(
     styles.songButton,
-    active && styles.active,
+    active && !disabled && styles.active,
     isLoading && styles.loading,
     isFailedDownload && styles.failedDownload,
   );
@@ -97,7 +99,7 @@ const SongButton = ({
     return (
       <div
         className={className}
-        onClick={() => !isFailedDownload && onClick?.()}
+        onClick={() => !isFailedDownload && !disabled && onClick?.()}
       >
         {content()}
         {children && children}
@@ -108,7 +110,8 @@ const SongButton = ({
   return (
     <button
       className={className}
-      onClick={() => !isFailedDownload && onClick?.()}
+      onClick={() => !isFailedDownload && !disabled && onClick?.()}
+      data-disabled={disabled}
     >
       {content()}
     </button>
