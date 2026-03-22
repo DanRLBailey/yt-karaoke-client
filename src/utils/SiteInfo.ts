@@ -5,5 +5,5 @@ export const siteName = () =>
 
 export const siteQotd = () =>
   window.location.hostname.includes("dbailey.dev")
-    ? "Quote of the day! 🚀"
+    ? "Bring your own mic! 🎤"
     : import.meta.env.VITE_QOTD;
