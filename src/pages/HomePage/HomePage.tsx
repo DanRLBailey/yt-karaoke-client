@@ -5,12 +5,12 @@ import Layout from "../../layouts/Layout";
 import Input from "../../components/Input/Input";
 import { useUser } from "../../context/UserContext";
 import SplashScreen from "../../components/SplashScreen/SplashScreen";
+import { siteName } from "../../utils/SiteInfo";
 
 const HomePage = () => {
   let navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
-  const siteTitle = import.meta.env.VITE_SITE_NAME;
   const { user, dispatch } = useUser();
   const [roomCode, setRoomCode] = useState<string>(user.roomCode ?? "");
   const [pendingJoin, setPendingJoin] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    document.title = `Home - ${siteTitle}`;
+    document.title = `Home - ${siteName()}`;
   }, []);
 
   useEffect(() => {

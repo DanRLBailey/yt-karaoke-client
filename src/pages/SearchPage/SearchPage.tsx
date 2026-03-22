@@ -23,6 +23,7 @@ import { useNotification } from "../../context/NotificationContext";
 import { useQueue } from "../../context/QueueContext";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getQueue } from "../../utils/Queue";
+import { siteName } from "../../utils/SiteInfo";
 
 interface Search {
   items: SearchItem[];
@@ -54,10 +55,8 @@ const SearchPage = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
 
-  const siteTitle = import.meta.env.VITE_SITE_NAME;
-
   useEffect(() => {
-    document.title = `Search - ${siteTitle}`;
+    document.title = `Search - ${siteName()}`;
   }, []);
 
   useEffect(() => {

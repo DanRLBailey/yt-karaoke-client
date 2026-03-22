@@ -3,13 +3,13 @@ import styles from "./JoinPage.module.scss";
 import { useEffect } from "react";
 import Layout from "../../layouts/Layout";
 import UserEdit from "../../components/UserEdit/UserEdit";
+import { siteName } from "../../utils/SiteInfo";
 
 const JoinPage = () => {
   let navigate = useNavigate();
-  const siteTitle = import.meta.env.VITE_SITE_NAME;
 
   useEffect(() => {
-    document.title = `Home - ${siteTitle}`;
+    document.title = `Home - ${siteName()}`;
   }, []);
 
   const navigateToSearch = () => {

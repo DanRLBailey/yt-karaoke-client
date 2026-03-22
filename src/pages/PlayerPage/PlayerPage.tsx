@@ -9,6 +9,7 @@ import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 import { useUser } from "../../context/UserContext";
+import { siteName } from "../../utils/SiteInfo";
 
 const countdown = 2;
 
@@ -24,16 +25,15 @@ const PlayerPage = () => {
   const [currentSong, setCurrentSong] = useState<SearchItem>();
   const [nextSong, setNextSong] = useState<SearchItem>();
 
-  const siteTitle = import.meta.env.VITE_SITE_NAME;
   const prevQueueLength = useRef(queue.length);
 
   useEffect(() => {
     if (!queue || queue.length == 0) {
-      document.title = `Player - ${siteTitle}`;
+      document.title = `Player - ${siteName()}`;
       return;
     }
 
-    document.title = `${queue[0].title} - ${siteTitle}`;
+    document.title = `${queue[0].title} - ${siteName()}`;
   }, [queue]);
 
   useEffect(() => {

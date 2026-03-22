@@ -9,6 +9,7 @@ import { useState } from "react";
 import CornerConfetti from "../CornerConfetti/CornerContetti";
 import playFanfare from "../../utils/Fanfare";
 import clsx from "clsx";
+import { siteQotd } from "../../utils/SiteInfo";
 
 interface NoSongsProps {
   hidden?: boolean;
@@ -23,7 +24,7 @@ const NoSongs = ({ hidden }: NoSongsProps) => {
     undefined,
   );
 
-  const qotd = import.meta.env.VITE_QOTD ?? "";
+  const qotd = siteQotd();
 
   const handleCornerHit = (c: typeof corner) => {
     if (hidden) return;
