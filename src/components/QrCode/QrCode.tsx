@@ -18,9 +18,7 @@ const QrCode = ({
 }: QrCodeProps) => {
   const { origin } = window.location;
   const { user } = useUser();
-  const url =
-    (origin.includes("localhost") ? "http://192.168.1.122:5173" : origin) +
-    (user.roomCode ? `/room/${user.roomCode}` : "");
+  const url = origin + (user.roomCode ? `/room/${user.roomCode}` : "");
 
   return (
     <div
