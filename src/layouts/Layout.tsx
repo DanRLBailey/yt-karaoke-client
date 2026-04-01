@@ -74,6 +74,25 @@ const Layout = ({ children }: LayoutProps) => {
   });
 
   useEffect(() => {
+    if (!socket) return;
+
+    const roomCode = user.roomCode?.trim() ?? "";
+    if (!roomCode) return;
+
+    const joinRoom = () => {
+      socket.emit("join-room", roomCode);
+    };
+
+    joinRoom();
+    socket.on("connect", joinRoom);
+
+    return () => {
+      socket.off("connect", joinRoom);
+      socket.emit("leave-room", roomCode);
+    };
+  }, [socket, user.roomCode]);
+
+  useEffect(() => {
     if (typeof window !== "undefined") {
       const path = window.location.pathname;
       const shouldFetchUsers = path === "/search" || path === "/player";

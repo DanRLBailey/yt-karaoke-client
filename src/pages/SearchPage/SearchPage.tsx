@@ -24,6 +24,7 @@ import { useQueue } from "../../context/QueueContext";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getQueue } from "../../utils/Queue";
 import { siteName } from "../../utils/SiteInfo";
+import EmojiSelector from "../../components/EmojiSelector/EmojiSelector";
 
 interface Search {
   items: SearchItem[];
@@ -139,6 +140,7 @@ const SearchPage = () => {
   return (
     <Layout>
       <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
+      <EmojiSelector />
       <div className={clsx(styles.searchPage, queueOpen && styles.noScroll)}>
         <div className={styles.headerContainer}>
           <div className={styles.header}>

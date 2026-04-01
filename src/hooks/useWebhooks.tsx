@@ -3,6 +3,13 @@ import { useSocket } from "../context/SocketContext";
 import type { SearchItem } from "../pages/SearchPage/SearchPage";
 import type { User } from "../interfaces/user";
 
+export interface EmojiReactionPayload {
+  emoji: string;
+  roomCode?: string | null;
+  user?: string | null;
+  sentAt?: number;
+}
+
 type UseWebhooksProps = {
   onConnect?: () => void;
   onQueue?: (update: SearchItem) => void;
@@ -11,6 +18,7 @@ type UseWebhooksProps = {
   onDownloadFailed?: (update: SearchItem) => void;
   onAddUser?: (update: User) => void;
   onUserUpdate?: (update: User[]) => void;
+  onEmojiReaction?: (update: EmojiReactionPayload) => void;
 };
 
 const useWebhooks = ({
@@ -21,6 +29,7 @@ const useWebhooks = ({
   onDownloadFailed,
   onAddUser,
   onUserUpdate,
+  onEmojiReaction,
 }: UseWebhooksProps) => {
   const socket = useSocket();
 
@@ -34,6 +43,7 @@ const useWebhooks = ({
     if (onDownloadFailed) socket.on("downloadFailed", onDownloadFailed);
     if (onAddUser) socket.on("add-user", onAddUser);
     if (onUserUpdate) socket.on("user-update", onUserUpdate);
+    if (onEmojiReaction) socket.on("emoji-reaction", onEmojiReaction);
 
     return () => {
       if (onConnect) socket.off("connect", onConnect);
@@ -43,6 +53,7 @@ const useWebhooks = ({
       if (onDownloadFailed) socket.off("downloadFailed", onDownloadFailed);
       if (onAddUser) socket.off("add-user", onAddUser);
       if (onUserUpdate) socket.off("user-update", onUserUpdate);
+      if (onEmojiReaction) socket.off("emoji-reaction", onEmojiReaction);
     };
   }, [
     socket,
@@ -53,6 +64,7 @@ const useWebhooks = ({
     onDownloadFailed,
     onAddUser,
     onUserUpdate,
+    onEmojiReaction,
   ]);
 
   return <></>;

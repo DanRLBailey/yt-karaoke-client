@@ -34,3 +34,53 @@
     background-color: black;
   }
 }
+
+.notification {
+  --notification-top: auto;
+  --notification-right: auto;
+  --notification-bottom: 1.5rem;
+  --notification-left: 50%;
+  --notification-transform-hidden: translate(-50%, 120%);
+  --notification-transform-active: translate(-50%, 0);
+
+  background-color: transparent;
+  border: transparent;
+  min-width: 0;
+  width: max-content;
+  max-width: 90vw;
+  box-shadow: none;
+  font-size: 3rem;
+  transition: none;
+  will-change: transform, opacity;
+
+  &[data-active="true"] {
+    animation: emoji-float 2s linear forwards;
+  }
+}
+
+@keyframes emoji-float {
+  0% {
+    transform: translateX(-50%) translateY(120%);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(-47%) translateY(25%);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateX(-53%) translateY(-70%);
+    opacity: 1;
+  }
+
+  75% {
+    transform: translateX(-48%) translateY(-170%);
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: translateX(-52%) translateY(-260%);
+    opacity: 0;
+  }
+}

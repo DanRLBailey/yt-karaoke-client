@@ -8,6 +8,7 @@ export interface NotificationProps {
   className?: string;
   subtitle?: React.ReactNode | string;
   title?: React.ReactNode | string;
+  style?: React.CSSProperties;
 }
 
 const Notification = ({
@@ -16,20 +17,26 @@ const Notification = ({
   className,
   subtitle,
   title,
+  style,
 }: NotificationProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    const startTimer = window.setTimeout(() => {
       setIsActive(active ?? false);
     }, 100);
+
+    return () => window.clearTimeout(startTimer);
   }, [active]);
 
   useEffect(() => {
-    if (isActive)
-      setTimeout(() => {
-        setIsActive(false);
-      }, 5000);
+    if (!isActive) return;
+
+    const stopTimer = window.setTimeout(() => {
+      setIsActive(false);
+    }, 5000);
+
+    return () => window.clearTimeout(stopTimer);
   }, [isActive]);
 
   return (
@@ -39,6 +46,8 @@ const Notification = ({
         isActive ? styles.active : "",
         className,
       )}
+      style={style}
+      data-active={isActive}
     >
       <div>
         {subtitle && <span className={styles.subtitle}>{subtitle}</span>}

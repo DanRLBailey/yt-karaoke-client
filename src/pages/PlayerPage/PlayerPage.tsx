@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { useQueue } from "../../context/QueueContext";
 import styles from "./PlayerPage.module.scss";
 import VideoPlayer from "../../components/VideoPlayer/VideoPlayer";
@@ -10,6 +10,10 @@ import { removeFirstFromQueue } from "../../utils/Queue";
 import type { SearchItem } from "../SearchPage/SearchPage";
 import { useUser } from "../../context/UserContext";
 import { siteName } from "../../utils/SiteInfo";
+import useWebhooks, {
+  type EmojiReactionPayload,
+} from "../../hooks/useWebhooks";
+import { useNotification } from "../../context/NotificationContext";
 
 const countdown = 2;
 
@@ -19,6 +23,7 @@ const getVideoUrl = (videoId: string) =>
 const PlayerPage = () => {
   const { queue } = useQueue();
   const { user } = useUser();
+  const { showNotification } = useNotification();
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
   const [endOfSong, setEndOfSong] = useState<boolean>(false);
   const [startOfQueue, setStartOfQueue] = useState<boolean>(false);
@@ -70,6 +75,25 @@ const PlayerPage = () => {
     setEndOfSong(false);
     setStartOfQueue(false);
   };
+
+  useWebhooks({
+    onEmojiReaction: (update: EmojiReactionPayload) => {
+      const roomCode = user.roomCode ?? "";
+      if (!update?.emoji || update.roomCode !== roomCode) return;
+      const randomLeft = Math.floor(Math.random() * 70) + 15;
+      const randomBottom = (Math.random() * 2 + 1).toFixed(2);
+
+      showNotification({
+        children: <span>{update.emoji}</span>,
+        active: true,
+        className: styles.notification,
+        style: {
+          "--notification-left": `${randomLeft}%`,
+          "--notification-bottom": `${randomBottom}rem`,
+        } as CSSProperties,
+      });
+    },
+  });
 
   return (
     <Layout>
