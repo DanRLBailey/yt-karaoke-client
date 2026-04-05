@@ -50,7 +50,7 @@ const DvdBounce = ({ children, onEnter, onCornerHit }: DvdBounceProps) => {
   const colorRef = useRef<string | null>(null);
   const inCornerRef = useRef(false);
   const onCornerHitRef = useRef(onCornerHit);
-  const initialColor = colors[Math.floor(Math.random() * colors.length)];
+  const initialColorRef = useRef(colors[Math.floor(Math.random() * colors.length)]);
 
   useEffect(() => {
     onCornerHitRef.current = onCornerHit;
@@ -70,6 +70,13 @@ const DvdBounce = ({ children, onEnter, onCornerHit }: DvdBounceProps) => {
     measure();
     window.addEventListener("resize", measure);
 
+    return () => window.removeEventListener("resize", measure);
+  }, [children]);
+
+  useLayoutEffect(() => {
+    if (!divRef.current) return;
+
+    const initialColor = initialColorRef.current;
     const shadow = `0 0 12px ${initialColor}`;
 
     colorRef.current = initialColor;
@@ -80,9 +87,7 @@ const DvdBounce = ({ children, onEnter, onCornerHit }: DvdBounceProps) => {
     if (child instanceof HTMLDivElement) {
       child.style.boxShadow = shadow;
     }
-
-    return () => window.removeEventListener("resize", measure);
-  }, [children]);
+  }, []);
 
   useEffect(() => {
     const tick = () => {
