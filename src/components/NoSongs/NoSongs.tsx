@@ -34,7 +34,7 @@ const NoSongs = ({ hidden }: NoSongsProps) => {
     playFanfare();
   };
 
-  console.log("WHOOOOOOP");
+  console.log("WHOOOOOOPs");
 
   return (
     <div className={clsx(styles.noSongs, hidden && styles.hidden)}>
