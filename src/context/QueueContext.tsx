@@ -13,6 +13,7 @@ type Action =
   | { type: "ADD"; payload: SearchItem }
   | { type: "REMOVE_FIRST" }
   | { type: "REMOVE_AT"; index: number }
+  | { type: "REMOVE_ITEM"; payload: { videoId: string; roomCode?: string | null } }
   | { type: "MOVE"; from: number; to: number }
   | { type: "DOWNLOADED"; id: string; downloaded: boolean }
   | { type: "OVERRIDE"; index: number };
@@ -43,6 +44,15 @@ const reducer = (state: State, action: Action): State => {
         ...state.slice(0, action.index),
         ...state.slice(action.index + 1),
       ];
+
+    case "REMOVE_ITEM":
+      return state.filter(
+        (item) =>
+          !(
+            item.videoId === action.payload.videoId &&
+            item.roomCode === action.payload.roomCode
+          ),
+      );
 
     case "MOVE":
       const { from, to } = action;

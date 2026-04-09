@@ -43,6 +43,10 @@ const PlayerPage = () => {
 
   useEffect(() => {
     if (queue.length === 0) {
+      setCurrentSong(undefined);
+      setNextSong(undefined);
+      setEndOfSong(false);
+      setStartOfQueue(false);
       prevQueueLength.current = 0;
       return;
     }
@@ -55,20 +59,25 @@ const PlayerPage = () => {
     } else {
       // Normal queue handling
       if (!currentSong || currentSong !== queue[0]) setCurrentSong(queue[0]);
-      if (queue.length >= 2 && nextSong !== queue[1]) setNextSong(queue[1]);
+      if (queue.length >= 2 && nextSong !== queue[1]) {
+        setNextSong(queue[1]);
+      }
+      if (queue.length < 2) {
+        setNextSong(undefined);
+      }
     }
 
     prevQueueLength.current = queue.length;
-  }, [queue]);
+  }, [currentSong, nextSong, queue]);
 
   useEffect(() => {
     if (!endOfSong) return;
 
-    if (queue.length == 1) {
+    if (queue.length <= 1) {
       removeFirstFromQueue(user.roomCode ?? "");
       setEndOfSong(false);
     }
-  }, [endOfSong]);
+  }, [endOfSong, queue.length, user.roomCode]);
 
   const handleSongChange = () => {
     removeFirstFromQueue(user.roomCode ?? "");

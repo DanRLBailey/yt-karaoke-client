@@ -8,6 +8,9 @@ import { getQueue } from "../utils/Queue";
 import { useUser } from "../context/UserContext";
 import { useSocket } from "../context/SocketContext";
 import type { User } from "../interfaces/user";
+import { useNotification } from "../context/NotificationContext";
+import { parseSongTitle } from "../utils/Song";
+import { IconAlertTriangle } from "@tabler/icons-react";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -18,6 +21,7 @@ const Layout = ({ children }: LayoutProps) => {
   const { dispatch: dispatchUserList } = useUserList();
   const { user } = useUser();
   const socket = useSocket();
+  const { showNotification } = useNotification();
 
   const handleUsersUpdate = useCallback(
     (users: User[]) => {
@@ -61,6 +65,47 @@ const Layout = ({ children }: LayoutProps) => {
         type: "DOWNLOADED",
         id: update.videoId,
         downloaded: update.downloaded ?? false,
+      });
+    },
+    onDownloadFailed: (update) => {
+      const roomCode = user.roomCode ?? "";
+      if (update.roomCode !== roomCode) return;
+
+      dispatch({
+        type: "REMOVE_ITEM",
+        payload: {
+          videoId: update.videoId,
+          roomCode: update.roomCode,
+        },
+      });
+
+      const { song, artist } = parseSongTitle(update.title);
+
+      showNotification({
+        active: true,
+        subtitle: (
+          <>
+            <IconAlertTriangle />
+            Download failed
+          </>
+        ),
+        title: song || update.title,
+        children: (
+          <>
+            <span>{artist || "This song could not be downloaded."}</span>
+            <span>It was removed from the queue.</span>
+          </>
+        ),
+        style: {
+          "--notification-right": "1rem",
+          "--notification-top": "1rem",
+          "--notification-transform-hidden": "translateX(120%)",
+          "--notification-transform-active": "translateX(0)",
+          "--notification-opacity-hidden": 0,
+          "--notification-opacity-active": 1,
+          borderColor: "var(--error-color)",
+          boxShadow: "0 0 30px rgba(var(--error-color-rgb), 0.45)",
+        } as React.CSSProperties,
       });
     },
     onAddUser: (update) => {
