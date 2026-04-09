@@ -43,7 +43,7 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const handleButtonPress = async () => {
     if (!nameValid) return;
 
-    const getBase64Audio = async (callback: (newUser: User) => {}) => {
+    const getBase64Audio = async (callback: (newUser: User) => void) => {
       let sfx: string | null;
       if (soundEffect === null) {
         sfx = null;
@@ -100,9 +100,6 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
           onChange={(e) => setName(e)}
           label={"Name"}
           placeholder={"Name"}
-          // onKeyDown={handleKeyDown}
-          // onButtonPress={handleButtonPress}
-          // enterKeyHint="enter"
           validation={validateName}
           onValidChange={setNameValid}
         />
@@ -114,9 +111,7 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
       />
       <div className={styles.buttons}>
         {onCancel && <button onClick={onCancel}>Cancel</button>}
-        {handleButtonPress && (
-          <button onClick={handleButtonPress}>{saveKeyText ?? "Save"}</button>
-        )}
+        <button onClick={handleButtonPress}>{saveKeyText ?? "Save"}</button>
       </div>
     </div>
   );

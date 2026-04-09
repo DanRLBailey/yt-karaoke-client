@@ -67,7 +67,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
             <span>Next Up</span>
             <ul>
               {queue.map((item, index) => {
-                if (index == 0) return null;
+                if (index === 0) return null;
                 return (
                   <li key={index}>
                     {
@@ -84,7 +84,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
             </ul>
           </div>
         )}
-        {queue.length == 0 && (
+        {queue.length === 0 && (
           <div className={styles.noResults}>
             <IconMicrophone2 />
             <span className={styles.heading}>No songs in queue</span>
@@ -93,7 +93,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
             </span>
           </div>
         )}
-        {queue.length == 1 && (
+        {queue.length === 1 && (
           <div className={clsx(styles.noResults, styles.nextUp)}>
             <IconMicrophone2 />
             <span className={styles.heading}>No more songs in queue</span>

@@ -14,7 +14,7 @@ interface VideoPlayerProps {
 }
 
 interface SongArtist {
-  song: String;
+  song: string;
   artist: string;
 }
 

@@ -50,5 +50,5 @@ export const checkIfItemInQueue = (
   item: SearchItem,
   queue: SearchItem[],
 ): boolean => {
-  return queue.find((q) => q.videoId == item.videoId) !== undefined;
+  return queue.find((q) => q.videoId === item.videoId) !== undefined;
 };

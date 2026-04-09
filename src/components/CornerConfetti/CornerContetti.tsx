@@ -196,34 +196,3 @@ const CornerConfetti = ({
 };
 
 export default CornerConfetti;
-
-/**
- * Usage example — overlay all four cannons on a full-screen container:
- *
- * ```tsx
- * import { useState } from 'react'
- * import CornerConfetti from './CornerConfetti'
- *
- * const App = () => {
- *   const [burst, setBurst] = useState(0)
- *   const cannonStyle: React.CSSProperties = {
- *     position: 'absolute',
- *     width: '50%',
- *     height: '50%',
- *   }
- *
- *   return (
- *     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
- *       <CornerConfetti corner="tl" trigger={burst} style={{ ...cannonStyle, top: 0, left: 0 }} />
- *       <CornerConfetti corner="tr" trigger={burst} style={{ ...cannonStyle, top: 0, right: 0 }} />
- *       <CornerConfetti corner="bl" trigger={burst} style={{ ...cannonStyle, bottom: 0, left: 0 }} />
- *       <CornerConfetti corner="br" trigger={burst} style={{ ...cannonStyle, bottom: 0, right: 0 }} />
- *
- *       <button onClick={() => setBurst(b => b + 1)}>
- *         Celebrate!
- *       </button>
- *     </div>
- *   )
- * }
- * ```
- */

@@ -127,10 +127,10 @@ const ExpandableSongButton = ({
                 key={index}
               >
                 <ProfileImage
-                  avatar={getUserAvatarByName(user.name)}
+                  avatar={getUserAvatarByName(userList, user.name)}
                   className={clsx(
                     styles.profileImage,
-                    selectedBandmates?.some((u) => u.id == user.id) &&
+                    selectedBandmates?.some((u) => u.id === user.id) &&
                       styles.active,
                   )}
                 />

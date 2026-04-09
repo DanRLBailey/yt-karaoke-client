@@ -1,4 +1,3 @@
-import { useUserList } from "../context/UserListContext";
 import type { User } from "../interfaces/user";
 
 export const getUsers = async (
@@ -26,9 +25,8 @@ export const onboardUser = async (
   if (callback) await getUsers(user.roomCode ?? "", callback);
 };
 
-export const getUserAvatarByName = (name: string) => {
-  const { userList } = useUserList();
-  return userList.find((u) => u.name == name)?.avatar ?? "";
+export const getUserAvatarByName = (userList: User[], name: string) => {
+  return userList.find((u) => u.name === name)?.avatar ?? "";
 };
 
 export const getUserByName = (userList: User[], name?: string) => {

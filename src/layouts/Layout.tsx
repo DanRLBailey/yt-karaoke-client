@@ -1,4 +1,3 @@
-// components/Layout.tsx
 import React, { useCallback, useEffect } from "react";
 import { getUsers, onboardUser } from "../utils/User";
 import { useUserList } from "../context/UserListContext";
@@ -33,10 +32,7 @@ const Layout = ({ children }: LayoutProps) => {
   );
 
   const handleConnect = useCallback(() => {
-    if (typeof window !== "undefined") {
-      const isHostRoute = window.location.pathname.includes("/player");
-      if (isHostRoute) return;
-    }
+    if (window.location.pathname.includes("/player")) return;
 
     const payload = {
       ...user,
@@ -127,12 +123,9 @@ const Layout = ({ children }: LayoutProps) => {
   }, [socket, user.roomCode]);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const path = window.location.pathname;
-      const shouldFetchUsers = path === "/search" || path === "/player";
-      if (shouldFetchUsers) {
-        getUsers(user.roomCode ?? "", handleUsersUpdate);
-      }
+    const path = window.location.pathname;
+    if (path === "/search" || path === "/player") {
+      getUsers(user.roomCode ?? "", handleUsersUpdate);
     }
     const roomCode = user.roomCode ?? "";
     getQueue(roomCode, (queue) =>

@@ -64,7 +64,6 @@ const AudioCapture = ({
 
       setAudioBlob(blob);
       setAudioUrl(URL.createObjectURL(blob));
-      uploadAudio();
 
       stream.getTracks().forEach((track) => track.stop());
 

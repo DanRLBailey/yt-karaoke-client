@@ -67,7 +67,6 @@ const useWebhooks = ({
     onEmojiReaction,
   ]);
 
-  return <></>;
 };
 
 export default useWebhooks;

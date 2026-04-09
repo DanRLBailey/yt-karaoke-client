@@ -4,6 +4,7 @@ import styles from "./SongButton.module.scss";
 import clsx from "clsx";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
 import { getUserAvatarByName } from "../../utils/User";
+import { useUserList } from "../../context/UserListContext";
 import ProfileImageRow from "../ProfileImageRow/ProfileImageRow";
 import ActionButton from "../ActionButton/ActionButton";
 import { IconPlayerPlay, IconX } from "@tabler/icons-react";
@@ -29,6 +30,7 @@ const SongButton = ({
   overlayIcon,
   disabled,
 }: SongButtonProps) => {
+  const { userList } = useUserList();
   const { song, artist } = parseSongTitle(item.title);
 
   const isLoading = !item.downloaded && showStatus;
@@ -50,7 +52,6 @@ const SongButton = ({
               <img src={item.thumbnail.url} />
             </div>
           )}
-          <span>{item.downloaded}</span>
           <div className={styles.details}>
             <span className={styles.song}>{song}</span>
             <span className={styles.artist}>{artist}</span>
@@ -58,8 +59,8 @@ const SongButton = ({
               {item.requester && (
                 <ProfileImageRow
                   avatars={[
-                    getUserAvatarByName(item.requester),
-                    ...(item.team?.map((user) => getUserAvatarByName(user)) ??
+                    getUserAvatarByName(userList, item.requester),
+                    ...(item.team?.map((user) => getUserAvatarByName(userList, user)) ??
                       ([] as string[])),
                   ]}
                   className={styles.profileImageRow}
@@ -102,8 +103,8 @@ const SongButton = ({
         onClick={() => !isFailedDownload && !disabled && onClick?.()}
       >
         {content()}
-        {children && children}
-        {overlayIcon && overlayIcon}
+        {children}
+        {overlayIcon}
       </div>
     );
 

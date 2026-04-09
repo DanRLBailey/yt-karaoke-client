@@ -40,9 +40,9 @@ const DeletableSongButton = ({
         showThumbnail={showThumbnail}
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
-        disabled={user.name != item.requester}
+        disabled={user.name !== item.requester}
       >
-        {(user.name == item.requester || location.pathname == "/player") && (
+        {(user.name === item.requester || location.pathname === "/player") && (
           <ActionButton
             classNames={clsx(styles.actionButton, expanded && styles.active)}
             onSubmit={onDelete}

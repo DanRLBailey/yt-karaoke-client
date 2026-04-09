@@ -17,7 +17,7 @@ const Countdown = ({ seconds, onCountdownEnd, className }: CountdownProps) => {
 
   useEffect(() => {
     const tick = (time: number) => {
-      if (!startRef.current) {
+      if (startRef.current === 0) {
         startRef.current = time;
       }
 

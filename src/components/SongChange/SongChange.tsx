@@ -73,6 +73,8 @@ const SongChange = ({
     }, 100);
   }, [nextSong, playSoundEffect, sfxPlayed, userList]);
 
+  const { song, artist } = parseSongTitle(nextSong.title);
+
   if (!nextSong.downloaded)
     return (
       <div className={styles.songChange}>
@@ -80,8 +82,7 @@ const SongChange = ({
 
         <span className={styles.songChangeUpNext}>Up next: </span>
         <span className={styles.songChangeTitle}>
-          {parseSongTitle(nextSong.title).song} -{" "}
-          {parseSongTitle(nextSong.title).artist}
+          {song} - {artist}
         </span>
       </div>
     );
@@ -95,12 +96,12 @@ const SongChange = ({
       />
       <div className={styles.profileImageContainer}>
         <ProfileImage
-          avatar={getUserAvatarByName(nextSong.requester ?? "")}
+          avatar={getUserAvatarByName(userList, nextSong.requester ?? "")}
           className={styles.profileImage}
         />
         {nextSong.team?.map((u, index) => (
           <ProfileImage
-            avatar={getUserAvatarByName(u ?? "")}
+            avatar={getUserAvatarByName(userList, u ?? "")}
             className={styles.profileImage}
             key={index}
           />
@@ -114,8 +115,7 @@ const SongChange = ({
       )}
       <span className={styles.songChangeUpNext}>Up next: </span>
       <span className={styles.songChangeTitle}>
-        {parseSongTitle(nextSong.title).song} -{" "}
-        {parseSongTitle(nextSong.title).artist}
+        {song} - {artist}
       </span>
     </div>
   );
