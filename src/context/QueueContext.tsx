@@ -4,7 +4,7 @@ import React, {
   useReducer,
   type ReactNode,
 } from "react";
-import type { SearchItem } from "@shared/types";
+import type { SearchItem } from "../interfaces/search";
 
 // Types
 type State = SearchItem[];

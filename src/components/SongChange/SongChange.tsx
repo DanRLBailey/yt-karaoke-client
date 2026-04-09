@@ -7,7 +7,7 @@ import { getUserAvatarByName, getUserByName } from "../../utils/User";
 import { useSoundEffect } from "../../context/SoundEffectContext";
 import { useUserList } from "../../context/UserListContext";
 import LoadingSpinner from "../LoadingSpinner/LoadingSpinner";
-import type { SearchItem } from "@shared/types";
+import type { SearchItem } from "../../interfaces/search";
 
 const joinWithLast = (
   arr: string[],

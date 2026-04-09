@@ -1,4 +1,4 @@
-import type { SearchItem } from "@shared/types";
+import type { SearchItem } from "../interfaces/search";
 
 export const getQueue = async (
   roomCode: string,

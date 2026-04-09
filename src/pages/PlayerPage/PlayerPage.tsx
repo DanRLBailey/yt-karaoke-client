@@ -13,7 +13,7 @@ import useWebhooks, {
   type EmojiReactionPayload,
 } from "../../hooks/useWebhooks";
 import { useNotification } from "../../context/NotificationContext";
-import type { SearchItem } from "@shared/types";
+import type { SearchItem } from "../../interfaces/search";
 
 const countdown = 10;
 

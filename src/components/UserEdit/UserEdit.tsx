@@ -7,7 +7,7 @@ import { onboardUser as onboardUserRequest } from "../../utils/User";
 import { useUserList } from "../../context/UserListContext";
 import AudioCapture from "../AudioCapture/AudioCapture";
 import { useSocketId } from "../../context/SocketContext";
-import type { User } from "@shared/types";
+import type { User } from "../../interfaces/user";
 
 interface UserEditProps {
   onButtonPress?: () => void;

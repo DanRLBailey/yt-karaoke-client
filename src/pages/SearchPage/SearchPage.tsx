@@ -24,7 +24,8 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getQueue } from "../../utils/Queue";
 import { siteName } from "../../utils/SiteInfo";
 import EmojiSelector from "../../components/EmojiSelector/EmojiSelector";
-import type { Search, SearchItem, User } from "@shared/types";
+import type { Search, SearchItem } from "../../interfaces/search";
+import type { User } from "../../interfaces/user";
 
 const SearchPage = () => {
   const [search, setSearch] = useState<string>("");

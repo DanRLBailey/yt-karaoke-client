@@ -10,7 +10,7 @@ import { useSocket } from "../context/SocketContext";
 import { useNotification } from "../context/NotificationContext";
 import { parseSongTitle } from "../utils/Song";
 import { IconAlertTriangle } from "@tabler/icons-react";
-import type { User } from "@shared/types";
+import type { User } from "../interfaces/user";
 
 type LayoutProps = {
   children: React.ReactNode;

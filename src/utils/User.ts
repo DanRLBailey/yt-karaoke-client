@@ -1,5 +1,5 @@
 import { useUserList } from "../context/UserListContext";
-import type { User } from "@shared/types";
+import type { User } from "../interfaces/user";
 
 export const getUsers = async (
   roomCode: string,

@@ -1,4 +1,4 @@
-import type { SearchItem } from "@shared/types";
+import type { SearchItem } from "../../interfaces/search";
 import { parseSongTitle } from "../../utils/Song";
 import styles from "./SongButton.module.scss";
 import clsx from "clsx";

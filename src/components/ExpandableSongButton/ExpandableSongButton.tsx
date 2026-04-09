@@ -10,7 +10,8 @@ import SongButton from "../SongButton/SongButton";
 import ActionButton from "../ActionButton/ActionButton";
 import { useQueue } from "../../context/QueueContext";
 import { checkIfItemInQueue } from "../../utils/Queue";
-import type { SearchItem, User } from "@shared/types";
+import type { SearchItem } from "../../interfaces/search";
+import type { User } from "../../interfaces/user";
 
 interface ExpandableSongButtonProps {
   item: SearchItem;

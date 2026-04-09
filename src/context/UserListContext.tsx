@@ -4,7 +4,7 @@ import React, {
   useReducer,
   type ReactNode,
 } from "react";
-import type { User } from "@shared/types";
+import type { User } from "../interfaces/user";
 
 // Types
 type State = User[];
