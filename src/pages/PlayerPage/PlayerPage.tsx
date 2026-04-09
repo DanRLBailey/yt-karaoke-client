@@ -15,7 +15,7 @@ import useWebhooks, {
 import { useNotification } from "../../context/NotificationContext";
 import type { SearchItem } from "@shared/types";
 
-const countdown = 2;
+const countdown = 10;
 
 const PlayerPage = () => {
   const { queue } = useQueue();
