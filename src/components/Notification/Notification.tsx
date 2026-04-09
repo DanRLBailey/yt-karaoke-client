@@ -9,6 +9,7 @@ export interface NotificationProps {
   subtitle?: React.ReactNode | string;
   title?: React.ReactNode | string;
   style?: React.CSSProperties;
+  type?: "default" | "error";
 }
 
 const Notification = ({
@@ -18,6 +19,7 @@ const Notification = ({
   subtitle,
   title,
   style,
+  type,
 }: NotificationProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
@@ -48,6 +50,7 @@ const Notification = ({
       )}
       style={style}
       data-active={isActive}
+      data-type={type}
     >
       <div>
         {subtitle && <span className={styles.subtitle}>{subtitle}</span>}

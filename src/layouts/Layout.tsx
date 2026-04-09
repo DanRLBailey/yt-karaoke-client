@@ -94,16 +94,7 @@ const Layout = ({ children }: LayoutProps) => {
             <span>It was removed from the queue.</span>
           </>
         ),
-        style: {
-          "--notification-right": "1rem",
-          "--notification-top": "1rem",
-          "--notification-transform-hidden": "translateX(120%)",
-          "--notification-transform-active": "translateX(0)",
-          "--notification-opacity-hidden": 0,
-          "--notification-opacity-active": 1,
-          borderColor: "var(--error-color)",
-          boxShadow: "0 0 30px rgba(var(--error-color-rgb), 0.45)",
-        } as React.CSSProperties,
+        type: "error",
       });
     },
     onAddUser: (update) => {

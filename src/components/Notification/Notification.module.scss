@@ -42,6 +42,20 @@
     align-items: center;
     gap: 0.5rem;
   }
+
+  &[data-type="error"] {
+    border-color: var(--error-color);
+    box-shadow: 0 0 30px rgba(var(--error-color-rgb), 0.5);
+
+    .subtitle {
+      color: var(--error-color);
+    }
+
+    & > span:last-of-type {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
 }
 
 @media (max-width: 768px) {
