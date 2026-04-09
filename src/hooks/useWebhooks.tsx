@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useSocket } from "../context/SocketContext";
-import type { SearchItem } from "../pages/SearchPage/SearchPage";
-import type { User } from "../interfaces/user";
+import type { SearchItem, User } from "@shared/types";
 
 export interface EmojiReactionPayload {
   emoji: string;

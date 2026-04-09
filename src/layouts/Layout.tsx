@@ -7,10 +7,10 @@ import { useQueue } from "../context/QueueContext";
 import { getQueue } from "../utils/Queue";
 import { useUser } from "../context/UserContext";
 import { useSocket } from "../context/SocketContext";
-import type { User } from "../interfaces/user";
 import { useNotification } from "../context/NotificationContext";
 import { parseSongTitle } from "../utils/Song";
 import { IconAlertTriangle } from "@tabler/icons-react";
+import type { User } from "@shared/types";
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -54,9 +54,7 @@ const Layout = ({ children }: LayoutProps) => {
       dispatch({ type: "ADD", payload: update });
     },
     onQueueSync: (update) => {
-      const roomCode = user.roomCode ?? "";
-      const filtered = update.filter((item) => item.roomCode === roomCode);
-      dispatch({ type: "SET_QUEUE", payload: filtered });
+      dispatch({ type: "SET_QUEUE", payload: update });
     },
     onDownload: (update) => {
       const roomCode = user.roomCode ?? "";

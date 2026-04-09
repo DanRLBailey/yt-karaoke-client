@@ -5,9 +5,9 @@ import styles from "./UserEdit.module.scss";
 import { useUser } from "../../context/UserContext";
 import { onboardUser as onboardUserRequest } from "../../utils/User";
 import { useUserList } from "../../context/UserListContext";
-import type { User } from "../../interfaces/user";
 import AudioCapture from "../AudioCapture/AudioCapture";
 import { useSocketId } from "../../context/SocketContext";
+import type { User } from "@shared/types";
 
 interface UserEditProps {
   onButtonPress?: () => void;

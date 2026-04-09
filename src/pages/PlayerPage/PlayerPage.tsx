@@ -7,18 +7,15 @@ import NoSongs from "../../components/NoSongs/NoSongs";
 import Layout from "../../layouts/Layout";
 import Queue from "../../components/Queue/Queue";
 import { removeFirstFromQueue } from "../../utils/Queue";
-import type { SearchItem } from "../SearchPage/SearchPage";
 import { useUser } from "../../context/UserContext";
 import { siteName } from "../../utils/SiteInfo";
 import useWebhooks, {
   type EmojiReactionPayload,
 } from "../../hooks/useWebhooks";
 import { useNotification } from "../../context/NotificationContext";
+import type { SearchItem } from "@shared/types";
 
 const countdown = 2;
-
-const getVideoUrl = (videoId: string) =>
-  encodeURIComponent(`https://www.youtube.com/watch?v=${videoId}`);
 
 const PlayerPage = () => {
   const { queue } = useQueue();
@@ -133,7 +130,7 @@ const PlayerPage = () => {
           currentSong.downloaded && (
             <div className={styles.video}>
               <VideoPlayer
-                url={`${import.meta.env.VITE_API_URL}/stream?url=${getVideoUrl(currentSong?.videoId)}`}
+                url={`${import.meta.env.VITE_API_URL}/stream/${currentSong.videoId}`}
                 title={currentSong?.title}
                 next={nextSong?.title}
                 onEnded={() => setEndOfSong(true)}

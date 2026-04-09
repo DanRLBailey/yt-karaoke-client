@@ -5,7 +5,7 @@ import React, {
   useReducer,
   type ReactNode,
 } from "react";
-import type { User } from "../interfaces/user";
+import type { User } from "@shared/types";
 
 // Types
 type State = User;
@@ -64,7 +64,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         id: randomString(),
         name: "",
         avatar: "",
-        soundEffect: "",
+        soundEffect: null,
         roomCode: "",
       };
     }
@@ -83,7 +83,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       id: randomString(),
       name: "",
       avatar: "",
-      soundEffect: "",
+      soundEffect: null,
       roomCode: "",
     };
   };

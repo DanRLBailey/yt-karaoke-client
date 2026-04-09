@@ -4,7 +4,7 @@ import React, {
   useReducer,
   type ReactNode,
 } from "react";
-import type { SearchItem } from "../pages/SearchPage/SearchPage";
+import type { SearchItem } from "@shared/types";
 
 // Types
 type State = SearchItem[];
@@ -13,7 +13,10 @@ type Action =
   | { type: "ADD"; payload: SearchItem }
   | { type: "REMOVE_FIRST" }
   | { type: "REMOVE_AT"; index: number }
-  | { type: "REMOVE_ITEM"; payload: { videoId: string; roomCode?: string | null } }
+  | {
+      type: "REMOVE_ITEM";
+      payload: { videoId: string; roomCode?: string | null };
+    }
   | { type: "MOVE"; from: number; to: number }
   | { type: "DOWNLOADED"; id: string; downloaded: boolean }
   | { type: "OVERRIDE"; index: number };

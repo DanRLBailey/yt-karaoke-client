@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import type { SearchItem } from "../../pages/SearchPage/SearchPage";
 import styles from "./ExpandableSongButton.module.scss";
 import clsx from "clsx";
 import ProfileImage from "../ProfileImage/ProfileImage";
@@ -7,11 +6,11 @@ import { getUserAvatarByName, getUserByName } from "../../utils/User";
 import { IconPlus, IconCheck } from "@tabler/icons-react";
 import { useUserList } from "../../context/UserListContext";
 import { useUser } from "../../context/UserContext";
-import type { User } from "../../interfaces/user";
 import SongButton from "../SongButton/SongButton";
 import ActionButton from "../ActionButton/ActionButton";
 import { useQueue } from "../../context/QueueContext";
 import { checkIfItemInQueue } from "../../utils/Queue";
+import type { SearchItem, User } from "@shared/types";
 
 interface ExpandableSongButtonProps {
   item: SearchItem;

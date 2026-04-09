@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { SearchItem } from "../../pages/SearchPage/SearchPage";
+import type { SearchItem } from "@shared/types";
 import styles from "./DeletableSongButton.module.scss";
 import clsx from "clsx";
 import { IconTrash } from "@tabler/icons-react";

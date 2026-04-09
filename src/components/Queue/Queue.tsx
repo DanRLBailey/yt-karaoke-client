@@ -26,8 +26,7 @@ const Queue = ({ open, onMouseLeave }: QueueProps) => {
 
   useWebhooks({
     onQueueSync: (update) => {
-      const filtered = update.filter((item) => item.roomCode === roomCode);
-      dispatch({ type: "SET_QUEUE", payload: filtered });
+      dispatch({ type: "SET_QUEUE", payload: update });
     },
   });
 

@@ -5,7 +5,6 @@ import Input from "../../components/Input/Input";
 import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
 import Layout from "../../layouts/Layout";
-import type { User } from "../../interfaces/user";
 import {
   IconMicrophone2,
   IconPlaylist,
@@ -25,23 +24,7 @@ import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { getQueue } from "../../utils/Queue";
 import { siteName } from "../../utils/SiteInfo";
 import EmojiSelector from "../../components/EmojiSelector/EmojiSelector";
-
-interface Search {
-  items: SearchItem[];
-}
-
-export interface SearchItem {
-  videoId: string;
-  title: string;
-  publishedAt: string;
-  thumbnail: { url: string };
-  channelTitle: string;
-  downloaded?: boolean;
-  requester?: string;
-  team?: string[];
-  failed?: boolean;
-  roomCode?: string | null;
-}
+import type { Search, SearchItem, User } from "@shared/types";
 
 const SearchPage = () => {
   const [search, setSearch] = useState<string>("");
