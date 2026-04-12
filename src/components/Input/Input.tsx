@@ -22,6 +22,7 @@ interface InputProps {
   validation?: (val: string) => boolean;
   onValidChange?: (valid: boolean) => void;
   showRemoveButton?: boolean;
+  searchDisabled?: boolean;
 }
 
 const capitalizeFirst = (value: string): string => {
@@ -41,6 +42,7 @@ const Input = ({
   validation,
   onValidChange,
   showRemoveButton,
+  searchDisabled,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [valid, setValid] = useState<boolean>(validation === undefined);
@@ -55,6 +57,8 @@ const Input = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (searchDisabled) return;
+
     if (enterKeyHint === "search" && e.key === "Enter") {
       inputRef.current?.blur();
     }
@@ -96,6 +100,7 @@ const Input = ({
             inputRef.current?.blur();
             onButtonPress?.();
           }}
+          disabled={searchDisabled}
         >
           {enterKeyText ?? getEnterKeyByHint()}
         </button>

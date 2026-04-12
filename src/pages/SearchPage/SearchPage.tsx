@@ -153,6 +153,7 @@ const SearchPage = () => {
             onButtonPress={handleSearch}
             enterKeyHint="search"
             showRemoveButton
+            searchDisabled={!search}
           />
         </div>
 
