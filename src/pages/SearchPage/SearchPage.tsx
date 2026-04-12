@@ -200,7 +200,6 @@ const SearchPage = () => {
               Search for a song to add to the queue
             </span>
             <button
-              className={styles.subHeading}
               onClick={() => {
                 setSearch("Random");
                 handleSearch("Random");
