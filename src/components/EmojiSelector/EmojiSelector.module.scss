@@ -46,6 +46,7 @@
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
     opacity: 0;
     pointer-events: none;
+    user-select: none;
     transform: translate(-50%, -50%) rotate(calc(var(--angle) - 90deg))
       translateX(calc(var(--radius) * 0.55))
       rotate(calc(-1 * (var(--angle) - 90deg))) scale(0.7);

@@ -6,6 +6,7 @@ import React, {
   type ReactNode,
 } from "react";
 import type { User } from "../interfaces/user";
+import { DEFAULT_EMOJIS } from "../interfaces/user";
 
 // Types
 type State = User;
@@ -66,13 +67,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         avatar: "",
         soundEffect: null,
         roomCode: "",
+        emojis: DEFAULT_EMOJIS,
       };
     }
 
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        return JSON.parse(stored) as State;
+        const parsed = JSON.parse(stored) as State;
+        return { emojis: DEFAULT_EMOJIS, ...parsed };
       } catch {
         // corrupted storage, reset it
         localStorage.removeItem(STORAGE_KEY);
@@ -85,6 +88,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       avatar: "",
       soundEffect: null,
       roomCode: "",
+      emojis: DEFAULT_EMOJIS,
     };
   };
 

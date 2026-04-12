@@ -63,11 +63,14 @@ const SearchPage = () => {
     },
   });
 
-  const handleSearch = async () => {
+  const handleSearch = async (searchString?: string) => {
     const results: Search = { items: [] };
     setLoading(true);
 
-    const url = import.meta.env.VITE_API_URL + "/search" + `?query=${search}`;
+    const url =
+      import.meta.env.VITE_API_URL +
+      "/search" +
+      `?query=${searchString ?? search}`;
     const response = await fetch(url);
     const { result } = await response.json();
     results.items.push(...result.items);
@@ -196,6 +199,15 @@ const SearchPage = () => {
             <span className={styles.subHeading}>
               Search for a song to add to the queue
             </span>
+            <button
+              className={styles.subHeading}
+              onClick={() => {
+                setSearch("Random");
+                handleSearch("Random");
+              }}
+            >
+              Need inspiration?
+            </button>
           </div>
         )}
       </div>

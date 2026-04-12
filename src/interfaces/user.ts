@@ -5,4 +5,7 @@ export interface User {
   soundEffect: string | null;
   socketId?: string | null;
   roomCode?: string | null;
+  emojis?: string[];
 }
+
+export const DEFAULT_EMOJIS = ["😃", "👏", "🎉", "🔥"];

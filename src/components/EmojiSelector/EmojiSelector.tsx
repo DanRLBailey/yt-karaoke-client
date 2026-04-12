@@ -3,13 +3,13 @@ import styles from "./EmojiSelector.module.scss";
 import { IconMoodSmile } from "@tabler/icons-react";
 import { useSocket } from "../../context/SocketContext";
 import { useUser } from "../../context/UserContext";
+import { DEFAULT_EMOJIS } from "../../interfaces/user";
 
 const EmojiSelector = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const emojis = ["😃", "👏", "🎉", "🔥"];
-
   const socket = useSocket();
   const { user } = useUser();
+  const emojis = user.emojis?.length ? user.emojis : DEFAULT_EMOJIS;
 
   const sendReaction = (emoji: string) => {
     const roomCode = user.roomCode?.trim();

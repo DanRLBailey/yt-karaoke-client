@@ -8,6 +8,8 @@ import { useUserList } from "../../context/UserListContext";
 import AudioCapture from "../AudioCapture/AudioCapture";
 import { useSocketId } from "../../context/SocketContext";
 import type { User } from "../../interfaces/user";
+import { DEFAULT_EMOJIS } from "../../interfaces/user";
+import EMOJI_CATEGORIES from "../../assets/emojis.json";
 
 interface UserEditProps {
   onButtonPress?: () => void;
@@ -36,6 +38,18 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
   const [nameValid, setNameValid] = useState<boolean>(false);
   const [image, setImage] = useState<string>(user.avatar);
   const [soundEffect, setSoundEffect] = useState<Blob | null | undefined>();
+  const [emojis, setEmojis] = useState<string[]>(user.emojis ?? DEFAULT_EMOJIS);
+  const [activeSlot, setActiveSlot] = useState<number | null>(null);
+const handleSlotClick = (index: number) => {
+    setActiveSlot((prev) => (prev === index ? null : index));
+  };
+
+  const handleEmojiPick = (emoji: string) => {
+    if (activeSlot === null) return;
+    setEmojis((prev) => prev.map((e, i) => (i === activeSlot ? emoji : e)));
+    setActiveSlot(null);
+  };
+
 
   const onGetUsers = (users: User[]) =>
     dispatchUserList({ type: "SET_USERS", payload: users });
@@ -58,6 +72,7 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
         avatar: image,
         soundEffect: sfx,
         roomCode: user.roomCode ?? "",
+        emojis,
       };
 
       dispatch({
@@ -112,6 +127,45 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
           soundEffect === null ? null : (user.soundEffect ?? undefined)
         }
       />
+      <div className={styles.emojiPicker}>
+        <label className={styles.emojiLabel}>Emoji Reactions</label>
+        <div className={styles.emojiSlots}>
+          {emojis.map((emoji, i) => (
+            <button
+              key={i}
+              className={`${styles.emojiSlot} ${activeSlot === i ? styles.active : ""}`}
+              onClick={() => handleSlotClick(i)}
+              aria-label={`Emoji slot ${i + 1}: ${emoji}`}
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+        {activeSlot !== null && (
+          <div className={styles.emojiBackdrop} onClick={() => setActiveSlot(null)} />
+        )}
+        {activeSlot !== null && (
+          <div className={styles.emojiPopup}>
+            {EMOJI_CATEGORIES.map((group) => (
+              <div key={group.category} className={styles.emojiCategory}>
+                <p className={styles.emojiCategoryLabel}>{group.category}</p>
+                <div className={styles.emojiGrid}>
+                  {group.emojis.map((emoji, i) => (
+                    <button
+                      key={i}
+                      className={styles.emojiOption}
+                      onClick={() => handleEmojiPick(emoji)}
+                      aria-label={emoji}
+                    >
+                      {emoji}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div className={styles.buttons}>
         {onCancel && <button onClick={onCancel}>Cancel</button>}
         <button onClick={handleButtonPress}>{saveKeyText ?? "Save"}</button>

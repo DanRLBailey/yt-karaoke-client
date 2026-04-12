@@ -115,6 +115,11 @@
     .subHeading {
       opacity: 0.4;
     }
+
+    button {
+      margin-block-start: 1rem;
+      pointer-events: all;
+    }
   }
 }
 
