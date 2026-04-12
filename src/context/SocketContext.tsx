@@ -57,12 +57,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({
     setSocket(newSocket);
     const handleConnect = () => setSocketId(newSocket.id ?? null);
     newSocket.on("connect", handleConnect);
-    const handleUnload = () => {
-      newSocket.disconnect();
-    };
-    window.addEventListener("beforeunload", handleUnload);
     return () => {
-      window.removeEventListener("beforeunload", handleUnload);
       newSocket.off("connect", handleConnect);
       newSocket.disconnect();
     };
