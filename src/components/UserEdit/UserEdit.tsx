@@ -102,12 +102,15 @@ const UserEdit = ({ onButtonPress, saveKeyText, onCancel }: UserEditProps) => {
           placeholder={"Name"}
           validation={validateName}
           onValidChange={setNameValid}
+          charLimit={32}
         />
       </div>
       <AudioCapture
         onAcceptSoundEffect={setSoundEffect}
         soundEffect={soundEffect}
-        soundEffectB64={soundEffect === null ? null : user.soundEffect ?? undefined}
+        soundEffectB64={
+          soundEffect === null ? null : (user.soundEffect ?? undefined)
+        }
       />
       <div className={styles.buttons}>
         {onCancel && <button onClick={onCancel}>Cancel</button>}

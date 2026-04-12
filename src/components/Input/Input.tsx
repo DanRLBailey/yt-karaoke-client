@@ -23,6 +23,7 @@ interface InputProps {
   onValidChange?: (valid: boolean) => void;
   showRemoveButton?: boolean;
   searchDisabled?: boolean;
+  charLimit?: number;
 }
 
 const capitalizeFirst = (value: string): string => {
@@ -43,6 +44,7 @@ const Input = ({
   onValidChange,
   showRemoveButton,
   searchDisabled,
+  charLimit,
 }: InputProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [valid, setValid] = useState<boolean>(validation === undefined);
@@ -66,8 +68,12 @@ const Input = ({
   };
 
   const onValueChange = (val: string) => {
-    onChange?.(val);
-    setValid(validation?.(val) ?? true);
+    let newVal = val;
+    if (charLimit && newVal.length > charLimit)
+      newVal = newVal.slice(0, charLimit);
+
+    onChange?.(newVal);
+    setValid(validation?.(newVal) ?? true);
   };
 
   useEffect(() => {
