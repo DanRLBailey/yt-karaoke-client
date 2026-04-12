@@ -43,7 +43,13 @@
       .emojiSlot {
         font-size: 1.75rem;
         border: 2px solid transparent;
-        padding: 0.25rem;
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
         cursor: pointer;
         transition: border-color 0.15s;
 
