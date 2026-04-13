@@ -137,7 +137,6 @@
     margin: 0;
     padding: 0;
     padding-bottom: 2rem;
-
   }
 
   .artistRow {
@@ -183,6 +182,7 @@
       z-index: 4;
       background-color: var(--background-color);
       color: var(--accent-color);
+      border-radius: 0;
 
       svg {
         opacity: 1;
