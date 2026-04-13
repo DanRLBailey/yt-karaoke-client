@@ -130,6 +130,7 @@ const PlayerPage = () => {
           currentSong.downloaded && (
             <div className={styles.video}>
               <VideoPlayer
+                key={currentSong.videoId}
                 url={`${import.meta.env.VITE_API_URL}/stream/${currentSong.videoId}`}
                 title={currentSong?.title}
                 next={nextSong?.title}

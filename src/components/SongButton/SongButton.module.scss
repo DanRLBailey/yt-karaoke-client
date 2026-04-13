@@ -62,8 +62,11 @@
       .artist {
         font-size: 0.75rem;
         opacity: 0.6;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      }
+
+      .channel {
+        font-size: 0.7rem;
+        opacity: 0.5;
       }
 
       .users {
@@ -99,5 +102,20 @@
 
   &.failedDownload {
     cursor: not-allowed;
+  }
+
+  &.compact {
+    padding: 0.4rem;
+
+    .content {
+      .details {
+        padding: 0;
+        gap: 0rem;
+
+        .song {
+          font-size: 0.9rem;
+        }
+      }
+    }
   }
 }

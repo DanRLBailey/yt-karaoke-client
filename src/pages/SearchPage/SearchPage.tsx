@@ -6,6 +6,7 @@ import { useUserList } from "../../context/UserListContext";
 import useWebhooks from "../../hooks/useWebhooks";
 import Layout from "../../layouts/Layout";
 import {
+  IconBooks,
   IconMicrophone2,
   IconPlaylist,
   IconPlus,
@@ -62,6 +63,10 @@ const SearchPage = () => {
       });
     },
   });
+
+  useEffect(() => {
+    if (!search) setResults(undefined);
+  }, [search]);
 
   const handleSearch = async (searchString?: string) => {
     const results: Search = { items: [] };
@@ -136,15 +141,20 @@ const SearchPage = () => {
               onClick={() => navigate("/user")}
             />
             <SiteName />
-            <div className={styles.buttonWrapper}>
-              {queue && queue.length > 0 && (
-                <span className={styles.notificationBubble}>
-                  {queue.length}
-                </span>
-              )}
-              <button onClick={() => setQueueOpen(!queueOpen)}>
-                <IconPlaylist />
+            <div className={styles.headerButtons}>
+              <button onClick={() => navigate("/catalogue")}>
+                <IconBooks />
               </button>
+              <div className={styles.buttonWrapper}>
+                {queue && queue.length > 0 && (
+                  <span className={styles.notificationBubble}>
+                    {queue.length}
+                  </span>
+                )}
+                <button onClick={() => setQueueOpen(!queueOpen)}>
+                  <IconPlaylist />
+                </button>
+              </div>
             </div>
           </div>
 

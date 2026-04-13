@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./VideoPlayer.module.scss";
 import clsx from "clsx";
 import { IconPlayerTrackNext, IconPlayerPlay } from "@tabler/icons-react";
@@ -26,6 +26,7 @@ const VideoPlayer = ({
   paused,
 }: VideoPlayerProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [currentShown, setCurrentShown] = useState<boolean>(false);
   const [nextShown, setNextShown] = useState<boolean>(false);
@@ -45,6 +46,26 @@ const VideoPlayer = ({
 
   const songShownMin = 5;
   const songNextMax = 95;
+
+  const handleCanPlay = () => {
+    videoRef.current?.play().catch(() => {});
+  };
+
+  const handleError = useCallback(() => {
+    if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
+    retryTimeoutRef.current = setTimeout(() => {
+      const video = videoRef.current;
+      if (!video) return;
+      video.load();
+      video.play().catch(() => {});
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
+    };
+  }, []);
 
   const handleTimeUpdate = () => {
     const video = videoRef.current;
@@ -95,6 +116,8 @@ const VideoPlayer = ({
         autoPlay={!paused}
         controls
         src={url}
+        onCanPlay={handleCanPlay}
+        onError={handleError}
         onTimeUpdate={handleTimeUpdate}
         onEnded={onEnded}
         onMouseEnter={() => setHover(true)}

@@ -26,6 +26,22 @@
         height: 2rem;
       }
 
+      .headerButtons {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+
+        > button {
+          padding: 0.5rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: transparent;
+          color: var(--svg-color);
+          border-radius: 50rem;
+        }
+      }
+
       .buttonWrapper {
         position: relative;
 

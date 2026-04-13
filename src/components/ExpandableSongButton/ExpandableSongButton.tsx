@@ -21,6 +21,7 @@ interface ExpandableSongButtonProps {
   showStatus?: boolean;
   active?: boolean;
   hasDelete?: boolean;
+  compact?: boolean;
 }
 
 const ExpandableSongButton = ({
@@ -30,6 +31,7 @@ const ExpandableSongButton = ({
   showThumbnail,
   showStatus,
   active,
+  compact,
 }: ExpandableSongButtonProps) => {
   const { user } = useUser();
   const { userList } = useUserList();
@@ -86,7 +88,7 @@ const ExpandableSongButton = ({
     <div className={className}>
       <SongButton
         item={item}
-        showThumbnail={showThumbnail}
+        showThumbnail={showThumbnail && !compact}
         showStatus={showStatus}
         onClick={() => setExpanded(!expanded)}
         overlayIcon={
@@ -100,6 +102,7 @@ const ExpandableSongButton = ({
             />
           )
         }
+        compact={compact}
       >
         {!addedToQueue && (
           <ActionButton

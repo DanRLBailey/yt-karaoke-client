@@ -18,6 +18,7 @@ interface SongButtonProps {
   onClick?: () => void;
   overlayIcon?: React.ReactNode;
   disabled?: boolean;
+  compact?: boolean;
 }
 
 const SongButton = ({
@@ -29,6 +30,7 @@ const SongButton = ({
   onClick,
   overlayIcon,
   disabled,
+  compact,
 }: SongButtonProps) => {
   const { userList } = useUserList();
   const { song, artist } = parseSongTitle(item.title);
@@ -41,6 +43,7 @@ const SongButton = ({
     active && !disabled && styles.active,
     isLoading && styles.loading,
     isFailedDownload && styles.failedDownload,
+    compact && styles.compact,
   );
 
   const content = () => {
@@ -55,13 +58,17 @@ const SongButton = ({
           <div className={styles.details}>
             <span className={styles.song}>{song}</span>
             <span className={styles.artist}>{artist}</span>
+            {compact && (
+              <span className={styles.channel}>{item.channelTitle}</span>
+            )}
             <div className={styles.users}>
               {item.requester && (
                 <ProfileImageRow
                   avatars={[
                     getUserAvatarByName(userList, item.requester),
-                    ...(item.team?.map((user) => getUserAvatarByName(userList, user)) ??
-                      ([] as string[])),
+                    ...(item.team?.map((user) =>
+                      getUserAvatarByName(userList, user),
+                    ) ?? ([] as string[])),
                   ]}
                   className={styles.profileImageRow}
                 />

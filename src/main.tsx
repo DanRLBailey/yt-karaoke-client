@@ -13,6 +13,7 @@ import { SoundEffectProvider } from "./context/SoundEffectContext.tsx";
 import { StrictMode } from "react";
 import { SocketProvider } from "./context/SocketContext.tsx";
 import JoinPage from "./pages/JoinPage/JoinPage.tsx";
+import CataloguePage from "./pages/CataloguePage/CataloguePage.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -30,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
                     <Route path="/search" element={<SearchPage />} />
                     <Route path="/player" element={<PlayerPage />} />
                     <Route path="/user" element={<UserPage />} />
+                    <Route path="/catalogue" element={<CataloguePage />} />
                   </Routes>
                 </BrowserRouter>
               </SoundEffectProvider>

@@ -13,7 +13,7 @@ const UserPage = () => {
   }, []);
 
   const navigateToSearch = () => {
-    navigate("/search");
+    navigate(-1);
   };
 
   return (
