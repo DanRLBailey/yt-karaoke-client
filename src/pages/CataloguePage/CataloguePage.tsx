@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useUser } from "../../context/UserContext";
 import styles from "./CataloguePage.module.scss";
 import { useUserList } from "../../context/UserListContext";
@@ -70,6 +70,10 @@ const CataloguePage = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingArtist, setLoadingArtist] = useState<string | null>(null);
   const [queueOpen, setQueueOpen] = useState<boolean>(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  const headerRef = useRef<HTMLDivElement>(null);
+  const expandedArtistRef = useRef<HTMLLIElement | null>(null);
 
   const { user } = useUser();
   const { dispatch } = useUserList();
@@ -105,20 +109,46 @@ const CataloguePage = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setHeaderHeight(el.offsetHeight));
+    ro.observe(el);
+    setHeaderHeight(el.offsetHeight);
+    return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!expandedArtist || loadingArtist) return;
+    const el = expandedArtistRef.current;
+    const root = document.getElementById("root");
+    if (!el || !root) return;
+    const elTop = el.getBoundingClientRect().top;
+    const rootTop = root.getBoundingClientRect().top;
+    root.scrollTo({ top: root.scrollTop + elTop - rootTop - headerHeight, behavior: "smooth" });
+  }, [expandedArtist, loadingArtist, headerHeight]);
+
   const handleGroupClick = (group: string[]) => {
     setActiveGroup(group);
     setExpandedArtist(null);
     setArtistFilter("");
     setSearchParams({ letter: group[0] });
+    document.getElementById("root")?.scrollTo({ top: 0, behavior: "instant" });
   };
 
   const visibleArtists = artistFilter.trim()
-    ? Object.values(artistsByLetter)
-        .flat()
-        .filter((artist) =>
-          artist.toLowerCase().includes(artistFilter.toLowerCase()),
-        )
-        .sort((a, b) => a.localeCompare(b))
+    ? (() => {
+        const q = artistFilter.toLowerCase();
+        return Object.values(artistsByLetter)
+          .flat()
+          .filter((artist) => artist.toLowerCase().includes(q))
+          .sort((a, b) => {
+            const aStarts = a.toLowerCase().startsWith(q);
+            const bStarts = b.toLowerCase().startsWith(q);
+            if (aStarts !== bStarts) return aStarts ? -1 : 1;
+            return a.localeCompare(b);
+          });
+      })()
     : activeGroup.flatMap((letter) => artistsByLetter[letter] ?? []);
 
   const handleArtistClick = async (artist: string) => {
@@ -180,7 +210,7 @@ const CataloguePage = () => {
     <Layout>
       <Queue open={queueOpen} onMouseLeave={setQueueOpen} />
       <div className={clsx(styles.cataloguePage, queueOpen && styles.noScroll)}>
-        <div className={styles.headerContainer}>
+        <div className={styles.headerContainer} ref={headerRef}>
           <div className={styles.header}>
             <ProfileImage
               className={styles.profileImage}
@@ -244,12 +274,13 @@ const CataloguePage = () => {
                 const songs = songCache[artist];
 
                 return (
-                  <li key={artist}>
+                  <li key={artist} ref={isExpanded ? expandedArtistRef : null}>
                     <button
                       className={clsx(
                         styles.artistRow,
                         isExpanded && styles.expanded,
                       )}
+                      style={isExpanded ? { top: headerHeight } : undefined}
                       onClick={() => handleArtistClick(artist)}
                     >
                       {isExpanded ? <IconChevronDown /> : <IconChevronRight />}

@@ -137,6 +137,7 @@
     margin: 0;
     padding: 0;
     padding-bottom: 2rem;
+
   }
 
   .artistRow {
@@ -178,6 +179,9 @@
     }
 
     &.expanded {
+      position: sticky;
+      z-index: 4;
+      background-color: var(--background-color);
       color: var(--accent-color);
 
       svg {
