@@ -193,7 +193,7 @@
   .artistSongsWrapper {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.2s ease;
+    // transition: grid-template-rows 0.2s ease;
 
     &.artistSongsOpen {
       grid-template-rows: 1fr;
